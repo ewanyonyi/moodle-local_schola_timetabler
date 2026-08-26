@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage reusable Schedule Templates for local_schola_slots with a user-friendly UI.
+ * Manage reusable Schedule Templates for local_schola_timetabler with a user-friendly UI.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,12 +27,12 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
 $action = optional_param('action', '', PARAM_ALPHA);
 $id     = optional_param('id', 0, PARAM_INT);
 
-$url = new moodle_url('/local/schola_slots/templates.php');
+$url = new moodle_url('/local/schola_timetabler/templates.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
 $PAGE->set_title('Schedule Templates');
@@ -42,7 +42,7 @@ $PAGE->set_heading('Manage Schedule Templates');
 // Action: Delete Template
 // -------------------------------------------------------------------
 if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_slots_templates', ['id' => $id]);
+    $DB->delete_records('local_schola_timetabler_templates', ['id' => $id]);
     redirect($url, 'Schedule template deleted successfully.');
 }
 
@@ -50,15 +50,15 @@ if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
 // Action: Apply Template to Active Time Slots
 // -------------------------------------------------------------------
 if ($action === 'apply' && $id > 0 && confirm_sesskey()) {
-    $template = $DB->get_record('local_schola_slots_templates', ['id' => $id]);
+    $template = $DB->get_record('local_schola_timetabler_templates', ['id' => $id]);
     if ($template && !empty($template->slots_json)) {
         $slotsdata = json_decode($template->slots_json, true);
         if (is_array($slotsdata)) {
-            $DB->delete_records('local_schola_slots_slots');
+            $DB->delete_records('local_schola_timetabler_slots');
             $count = 0;
             foreach ($slotsdata as $s) {
                 $day = isset($s['dayofweek']) ? (int)$s['dayofweek'] : 1;
-                $DB->insert_record('local_schola_slots_slots', (object)[
+                $DB->insert_record('local_schola_timetabler_slots', (object)[
                     'dayofweek' => $day,
                     'starttime' => $s['starttime'] ?? '08:00',
                     'endtime'   => $s['endtime'] ?? '09:30',
@@ -67,7 +67,7 @@ if ($action === 'apply' && $id > 0 && confirm_sesskey()) {
                 $count++;
             }
 
-            $slotsurl = new moodle_url('/local/schola_slots/slots.php');
+            $slotsurl = new moodle_url('/local/schola_timetabler/slots.php');
             redirect($slotsurl, "Template '{$template->name}' applied successfully! {$count} time slots configured.");
         }
     }
@@ -79,7 +79,7 @@ if ($action === 'apply' && $id > 0 && confirm_sesskey()) {
 // -------------------------------------------------------------------
 $edittemplate = null;
 if ($action === 'edit' && $id > 0) {
-    $edittemplate = $DB->get_record('local_schola_slots_templates', ['id' => $id]);
+    $edittemplate = $DB->get_record('local_schola_timetabler_templates', ['id' => $id]);
 }
 
 if ($data = data_submitted() && confirm_sesskey() && optional_param('save_template', 0, PARAM_INT)) {
@@ -145,11 +145,11 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('save_templa
 
         if ($templateid > 0) {
             $record->id = $templateid;
-            $DB->update_record('local_schola_slots_templates', $record);
+            $DB->update_record('local_schola_timetabler_templates', $record);
             redirect($url, "Schedule template '{$name}' updated successfully.");
         } else {
             $record->timecreated = $now;
-            $DB->insert_record('local_schola_slots_templates', $record);
+            $DB->insert_record('local_schola_timetabler_templates', $record);
             redirect($url, "Schedule template '{$name}' created successfully.");
         }
     }
@@ -157,7 +157,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('save_templa
 
 echo $OUTPUT->header();
 
-echo \local_schola_slots\output\renderer::render_nav_header('templates');
+echo \local_schola_timetabler\output\renderer::render_nav_header('templates');
 
 // -------------------------------------------------------------------
 // Friendly Template Builder Form Card
@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // -------------------------------------------------------------------
 // Saved Schedule Templates Repository Table
 // -------------------------------------------------------------------
-$templates = $DB->get_records('local_schola_slots_templates', null, 'name ASC');
+$templates = $DB->get_records('local_schola_timetabler_templates', null, 'name ASC');
 
 echo html_writer::start_div('d-flex align-items-center justify-content-between mb-3');
 echo html_writer::tag('h4', 'Saved Schedule Templates (' . count($templates) . ')', ['class' => 'mb-0 font-weight-bold']);

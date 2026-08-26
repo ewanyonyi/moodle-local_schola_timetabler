@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots\licensing;
+namespace local_schola_timetabler\licensing;
 
 /**
- * License manager for local_schola_slots commercial tier enforcement.
+ * License manager for local_schola_timetabler commercial tier enforcement.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -49,7 +49,7 @@ class license_manager {
      * @return string Checkout URL.
      */
     public static function get_checkout_url(): string {
-        $url = get_config('local_schola_slots', 'checkout_url');
+        $url = get_config('local_schola_timetabler', 'checkout_url');
         if (!empty($url)) {
             return trim((string)$url);
         }
@@ -62,7 +62,7 @@ class license_manager {
      * @return string License key string.
      */
     public static function get_license_key(): string {
-        return get_config('local_schola_slots', 'license_key') ?: '';
+        return get_config('local_schola_timetabler', 'license_key') ?: '';
     }
 
     /**
@@ -77,9 +77,9 @@ class license_manager {
             return false;
         }
 
-        $lastcheck = (int)get_config('local_schola_slots', 'license_last_check');
-        $cachedvalid = (bool)get_config('local_schola_slots', 'license_cached_valid');
-        $cachedkey = get_config('local_schola_slots', 'license_cached_key');
+        $lastcheck = (int)get_config('local_schola_timetabler', 'license_last_check');
+        $cachedvalid = (bool)get_config('local_schola_timetabler', 'license_cached_valid');
+        $cachedkey = get_config('local_schola_timetabler', 'license_cached_key');
 
         // Return cached result if key matches and cache TTL is fresh.
         if ($cachedkey === $licensekey && (time() - $lastcheck) < self::CACHE_TTL) {
@@ -100,9 +100,9 @@ class license_manager {
         $isvalid = !empty($data['valid']) && ($data['valid'] === true);
 
         // Update local cache.
-        set_config('license_last_check', time(), 'local_schola_slots');
-        set_config('license_cached_valid', $isvalid ? 1 : 0, 'local_schola_slots');
-        set_config('license_cached_key', $licensekey, 'local_schola_slots');
+        set_config('license_last_check', time(), 'local_schola_timetabler');
+        set_config('license_cached_valid', $isvalid ? 1 : 0, 'local_schola_timetabler');
+        set_config('license_cached_key', $licensekey, 'local_schola_timetabler');
 
         return $isvalid;
     }

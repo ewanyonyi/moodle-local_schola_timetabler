@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage venues and rooms for local_schola_slots.
+ * Manage venues and rooms for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,16 +27,16 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
 $action = optional_param('action', '', PARAM_ALPHANUMEXT);
 $id = optional_param('id', 0, PARAM_INT);
 
-$url = new moodle_url('/local/schola_slots/rooms.php');
+$url = new moodle_url('/local/schola_timetabler/rooms.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title(get_string('manage_rooms', 'local_schola_slots'));
-$PAGE->set_heading(get_string('manage_rooms', 'local_schola_slots'));
+$PAGE->set_title(get_string('manage_rooms', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('manage_rooms', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
 // Action: Download Sample CSV Template
@@ -59,7 +59,7 @@ if ($action === 'download_template') {
 // Action: Delete Single Room
 // -------------------------------------------------------------------
 if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_slots_rooms', ['id' => $id]);
+    $DB->delete_records('local_schola_timetabler_rooms', ['id' => $id]);
     redirect($url, 'Room deleted successfully.');
 }
 
@@ -67,7 +67,7 @@ if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
 // Action: Import Rooms from CSV File
 // -------------------------------------------------------------------
 if ($action === 'import_csv' && confirm_sesskey()) {
-    if (!\local_schola_slots\licensing\license_manager::can_batch_import_rooms()) {
+    if (!\local_schola_timetabler\licensing\license_manager::can_batch_import_rooms()) {
         redirect(
             $url,
             'Batch CSV Room Import Feature Locked: CSV/Excel bulk room import is exclusive to Pro University. Please upgrade your license key to unlock batch importing.',
@@ -116,7 +116,7 @@ if ($action === 'import_csv' && confirm_sesskey()) {
                         'capacity' => $capacity,
                         'is_lab' => $islab,
                     ];
-                    $DB->insert_record('local_schola_slots_rooms', $record);
+                    $DB->insert_record('local_schola_timetabler_rooms', $record);
                     $imported++;
                 } else {
                     $skipped++;
@@ -136,7 +136,7 @@ if ($action === 'import_csv' && confirm_sesskey()) {
 
 $editroom = null;
 if ($action === 'edit' && $id > 0) {
-    $editroom = $DB->get_record('local_schola_slots_rooms', ['id' => $id]);
+    $editroom = $DB->get_record('local_schola_timetabler_rooms', ['id' => $id]);
 }
 
 // -------------------------------------------------------------------
@@ -157,10 +157,10 @@ if ($data = data_submitted() && confirm_sesskey() && empty($action)) {
 
         if ($editid > 0) {
             $record->id = $editid;
-            $DB->update_record('local_schola_slots_rooms', $record);
+            $DB->update_record('local_schola_timetabler_rooms', $record);
             redirect($url, 'Room updated successfully.');
         } else {
-            $DB->insert_record('local_schola_slots_rooms', $record);
+            $DB->insert_record('local_schola_timetabler_rooms', $record);
             redirect($url, 'Room added successfully.');
         }
     }
@@ -168,14 +168,14 @@ if ($data = data_submitted() && confirm_sesskey() && empty($action)) {
 
 echo $OUTPUT->header();
 
-echo \local_schola_slots\output\renderer::render_nav_header('rooms');
+echo \local_schola_timetabler\output\renderer::render_nav_header('rooms');
 
-$cardheader = $editroom ? get_string('edit_campus_room', 'local_schola_slots') : get_string('add_single_room', 'local_schola_slots');
-$btnlabel = $editroom ? get_string('update_room', 'local_schola_slots') : get_string('save_room', 'local_schola_slots');
+$cardheader = $editroom ? get_string('edit_campus_room', 'local_schola_timetabler') : get_string('add_single_room', 'local_schola_timetabler');
+$btnlabel = $editroom ? get_string('update_room', 'local_schola_timetabler') : get_string('save_room', 'local_schola_timetabler');
 
 $templateurl = new moodle_url($url, ['action' => 'download_template']);
 
-$canimport = \local_schola_slots\licensing\license_manager::can_batch_import_rooms();
+$canimport = \local_schola_timetabler\licensing\license_manager::can_batch_import_rooms();
 
 // -------------------------------------------------------------------
 // Grid Row: Single Room Form (Left) & CSV Import Card (Right - Pro Tier Only)
@@ -299,7 +299,7 @@ echo html_writer::end_div(); // row
 // -------------------------------------------------------------------
 // Component: Configured Campus Venues Table
 // -------------------------------------------------------------------
-$rooms = $DB->get_records('local_schola_slots_rooms', null, 'id DESC');
+$rooms = $DB->get_records('local_schola_timetabler_rooms', null, 'id DESC');
 
 echo html_writer::start_div('card border-0 shadow-sm bg-white rounded-3');
 echo html_writer::start_div('card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center');
@@ -309,7 +309,7 @@ echo html_writer::end_div();
 echo html_writer::start_div('card-body p-4');
 
 if (empty($rooms)) {
-    echo html_writer::div(get_string('no_rooms', 'local_schola_slots'), 'alert alert-info rounded-3 text-center p-4 fs-6');
+    echo html_writer::div(get_string('no_rooms', 'local_schola_timetabler'), 'alert alert-info rounded-3 text-center p-4 fs-6');
 } else {
     $table = new html_table();
     $table->head = ['ID', 'Room Name', 'Capacity', 'Type', 'Actions'];

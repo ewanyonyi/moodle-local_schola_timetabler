@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Help, Documentation & User Guide for local_schola_slots.
+ * Help, Documentation & User Guide for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,32 +25,32 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_schola_slots\licensing\license_manager;
+use local_schola_timetabler\licensing\license_manager;
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
-$url = new moodle_url('/local/schola_slots/help.php');
+$url = new moodle_url('/local/schola_timetabler/help.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Help & Documentation — Schola Slots');
+$PAGE->set_title('Help & Documentation — Schola Timetabler');
 $PAGE->set_heading('Help & User Documentation');
 
 echo $OUTPUT->header();
 
 // Render navigation header bar with 'help' active
-echo \local_schola_slots\output\renderer::render_nav_header('help');
+echo \local_schola_timetabler\output\renderer::render_nav_header('help');
 
 $ispro       = license_manager::is_pro();
 $tiername    = license_manager::get_tier_name();
-$roomsurl    = new moodle_url('/local/schola_slots/rooms.php');
-$profilesurl = new moodle_url('/local/schola_slots/profiles.php');
-$slotsurl    = new moodle_url('/local/schola_slots/slots.php');
-$breaksurl   = new moodle_url('/local/schola_slots/breaks.php');
-$indexurl    = new moodle_url('/local/schola_slots/index.php');
-$schedurl    = new moodle_url('/local/schola_slots/schedules.php');
-$setturl     = new moodle_url('/admin/settings.php', ['section' => 'local_schola_slots_settings']);
+$roomsurl    = new moodle_url('/local/schola_timetabler/rooms.php');
+$profilesurl = new moodle_url('/local/schola_timetabler/profiles.php');
+$slotsurl    = new moodle_url('/local/schola_timetabler/slots.php');
+$breaksurl   = new moodle_url('/local/schola_timetabler/breaks.php');
+$indexurl    = new moodle_url('/local/schola_timetabler/index.php');
+$schedurl    = new moodle_url('/local/schola_timetabler/schedules.php');
+$setturl     = new moodle_url('/admin/settings.php', ['section' => 'local_schola_timetabler_settings']);
 
 echo '
 <div class="row g-4 mb-4">
@@ -61,7 +61,7 @@ echo '
             <div class="row align-items-center position-relative" style="z-index: 2;">
                 <div class="col-lg-8">
                     <span class="badge bg-success text-white font-monospace text-uppercase px-3 py-1 rounded-pill mb-2">SCHOLA SLOTS ENGINE</span>
-                    <h2 class="fw-bold text-white mb-2">Schola Slots Administrator User Guide</h2>
+                    <h2 class="fw-bold text-white mb-2">Schola Timetabler Administrator User Guide</h2>
                     <p class="text-light opacity-75 lead mb-3">
                         Learn how to configure campus venues, set up bell schedule time profiles, batch-import slots via CSV,
                         generate conflict-free timetables, and manage versioned schedules.
@@ -317,7 +317,7 @@ echo '
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
                 <div class="accordion-body text-muted small">
-                    Navigate to <a href="' . $setturl->out(false) . '" class="fw-bold">Site Administration &rarr; Schola Slots Settings</a>
+                    Navigate to <a href="' . $setturl->out(false) . '" class="fw-bold">Site Administration &rarr; Schola Timetabler Settings</a>
                     and enter your commercial Pro License Key. Once validated, solver requests are routed off-server to the high-performance
                     Rust Cloud Microservice, processing multi-thousand course matrices in under 50ms.
                 </div>

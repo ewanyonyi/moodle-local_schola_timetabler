@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage Institutional Schedule Profiles for local_schola_slots.
+ * Manage Institutional Schedule Profiles for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,17 +25,17 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_schola_slots\profile_manager;
+use local_schola_timetabler\profile_manager;
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
 $action = optional_param('action', '', PARAM_ALPHANUMEXT);
 $pkey   = optional_param('profile', '', PARAM_ALPHANUMEXT);
 
-$url      = new moodle_url('/local/schola_slots/profiles.php');
-$slotsurl = new moodle_url('/local/schola_slots/slots.php');
+$url      = new moodle_url('/local/schola_timetabler/profiles.php');
+$slotsurl = new moodle_url('/local/schola_timetabler/slots.php');
 
 $PAGE->set_url($url);
 $PAGE->set_context($context);
@@ -159,7 +159,7 @@ if (($action === 'edit_profile' || $action === 'add_profile') && (!empty($pkey) 
 
 echo $OUTPUT->header();
 
-echo \local_schola_slots\output\renderer::render_nav_header('profiles');
+echo \local_schola_timetabler\output\renderer::render_nav_header('profiles');
 
 // -------------------------------------------------------------------
 // Form View: Edit / Create Schedule Profile Form Card
@@ -204,14 +204,14 @@ if ($editingprofile) {
 
     // Color Theme
     echo html_writer::start_div('col-md-2');
-    echo html_writer::tag('label', get_string('color_theme', 'local_schola_slots'), ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('color_theme', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     $themeoptions = [
-        'primary' => get_string('theme_primary', 'local_schola_slots'),
-        'success' => get_string('theme_success', 'local_schola_slots'),
-        'info'    => get_string('theme_info', 'local_schola_slots'),
-        'purple'  => get_string('theme_purple', 'local_schola_slots'),
-        'warning' => get_string('theme_warning', 'local_schola_slots'),
-        'dark'    => get_string('theme_dark', 'local_schola_slots'),
+        'primary' => get_string('theme_primary', 'local_schola_timetabler'),
+        'success' => get_string('theme_success', 'local_schola_timetabler'),
+        'info'    => get_string('theme_info', 'local_schola_timetabler'),
+        'purple'  => get_string('theme_purple', 'local_schola_timetabler'),
+        'warning' => get_string('theme_warning', 'local_schola_timetabler'),
+        'dark'    => get_string('theme_dark', 'local_schola_timetabler'),
     ];
     echo html_writer::select($themeoptions, 'theme', $editingprofile['theme'] ?? 'primary', false, ['class' => 'form-select p-2']);
     echo html_writer::end_div();

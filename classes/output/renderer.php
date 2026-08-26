@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots\output;
+namespace local_schola_timetabler\output;
 
-use local_schola_slots\licensing\license_manager;
+use local_schola_timetabler\licensing\license_manager;
 use plugin_renderer_base;
 
 /**
- * Output renderer for local_schola_slots.
+ * Output renderer for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -37,24 +37,24 @@ class renderer extends plugin_renderer_base {
      * @return string Rendered HTML header bar.
      */
     public static function render_nav_header(string $activepage = 'index', bool $showclearall = false, string $scheduletype = 'all'): string {
-        $indexurl = new \moodle_url('/local/schola_slots/index.php');
-        $roomsurl = new \moodle_url('/local/schola_slots/rooms.php');
-        $profilesurl = new \moodle_url('/local/schola_slots/profiles.php');
-        $slotsurl = new \moodle_url('/local/schola_slots/slots.php');
-        $breaksurl = new \moodle_url('/local/schola_slots/breaks.php');
-        $schedulesurl = new \moodle_url('/local/schola_slots/schedules.php');
-        $helpurl = new \moodle_url('/local/schola_slots/help.php');
-        $generateurl = new \moodle_url('/local/schola_slots/schedules.php', ['open_modal' => 1]);
+        $indexurl = new \moodle_url('/local/schola_timetabler/index.php');
+        $roomsurl = new \moodle_url('/local/schola_timetabler/rooms.php');
+        $profilesurl = new \moodle_url('/local/schola_timetabler/profiles.php');
+        $slotsurl = new \moodle_url('/local/schola_timetabler/slots.php');
+        $breaksurl = new \moodle_url('/local/schola_timetabler/breaks.php');
+        $schedulesurl = new \moodle_url('/local/schola_timetabler/schedules.php');
+        $helpurl = new \moodle_url('/local/schola_timetabler/help.php');
+        $generateurl = new \moodle_url('/local/schola_timetabler/schedules.php', ['open_modal' => 1]);
 
-        $helplabel = get_string_manager()->string_exists('nav_help', 'local_schola_slots')
-            ? get_string('nav_help', 'local_schola_slots')
+        $helplabel = get_string_manager()->string_exists('nav_help', 'local_schola_timetabler')
+            ? get_string('nav_help', 'local_schola_timetabler')
             : 'Help & Guide';
         if (str_starts_with($helplabel, '[[') && str_ends_with($helplabel, ']]')) {
             $helplabel = 'Help & Guide';
         }
 
-        $profileslabel = get_string_manager()->string_exists('nav_profiles', 'local_schola_slots')
-            ? get_string('nav_profiles', 'local_schola_slots')
+        $profileslabel = get_string_manager()->string_exists('nav_profiles', 'local_schola_timetabler')
+            ? get_string('nav_profiles', 'local_schola_timetabler')
             : 'Profiles';
         if (str_starts_with($profileslabel, '[[') && str_ends_with($profileslabel, ']]')) {
             $profileslabel = 'Profiles';
@@ -63,12 +63,12 @@ class renderer extends plugin_renderer_base {
         $slotslabel = 'Slots';
 
         $navitems = [
-            'index'     => ['label' => get_string('nav_overview', 'local_schola_slots'), 'url' => $indexurl],
-            'rooms'     => ['label' => get_string('nav_rooms', 'local_schola_slots'), 'url' => $roomsurl],
+            'index'     => ['label' => get_string('nav_overview', 'local_schola_timetabler'), 'url' => $indexurl],
+            'rooms'     => ['label' => get_string('nav_rooms', 'local_schola_timetabler'), 'url' => $roomsurl],
             'profiles'  => ['label' => $profileslabel, 'url' => $profilesurl],
             'slots'     => ['label' => $slotslabel, 'url' => $slotsurl],
-            'breaks'    => ['label' => get_string('nav_breaks', 'local_schola_slots'), 'url' => $breaksurl],
-            'schedules' => ['label' => get_string('nav_schedules', 'local_schola_slots'), 'url' => $schedulesurl],
+            'breaks'    => ['label' => get_string('nav_breaks', 'local_schola_timetabler'), 'url' => $breaksurl],
+            'schedules' => ['label' => get_string('nav_schedules', 'local_schola_timetabler'), 'url' => $schedulesurl],
             'help'      => ['label' => $helplabel, 'url' => $helpurl],
         ];
 
@@ -88,7 +88,7 @@ class renderer extends plugin_renderer_base {
         // Action Buttons Group (Only show Generate Timetable button when on schedules or index page)
         $html .= \html_writer::start_div('d-flex align-items-center gap-2 flex-wrap');
         if ($activepage === 'schedules' || $activepage === 'index') {
-            $html .= \html_writer::link($generateurl, get_string('generate_timetable', 'local_schola_slots'), [
+            $html .= \html_writer::link($generateurl, get_string('generate_timetable', 'local_schola_timetabler'), [
                 'class'          => 'btn btn-success font-weight-bold px-3 py-2 shadow-sm',
                 'data-bs-toggle' => 'modal',
                 'data-bs-target' => '#generateTimetableModal',
@@ -100,9 +100,9 @@ class renderer extends plugin_renderer_base {
         if ($showclearall) {
             $clearurl = new \moodle_url($schedulesurl, ['action' => 'clearall', 'type' => $scheduletype, 'sesskey' => sesskey()]);
             $cleartitle = ($scheduletype !== 'all')
-                ? get_string('clear_timetables', 'local_schola_slots') . ' (' . strtoupper($scheduletype) . ')'
-                : get_string('clear_timetables', 'local_schola_slots');
-            $confirmmsg = s(get_string('confirm_clear_timetables', 'local_schola_slots'));
+                ? get_string('clear_timetables', 'local_schola_timetabler') . ' (' . strtoupper($scheduletype) . ')'
+                : get_string('clear_timetables', 'local_schola_timetabler');
+            $confirmmsg = s(get_string('confirm_clear_timetables', 'local_schola_timetabler'));
             $html .= \html_writer::link($clearurl, $cleartitle, [
                 'class' => 'btn btn-outline-danger font-weight-bold px-3 py-2',
                 'onclick' => 'return confirm("' . $confirmmsg . '");',
@@ -130,20 +130,20 @@ class renderer extends plugin_renderer_base {
         $isstarter = ($tier === license_manager::TIER_STARTER);
         $iscommunity = ($tier === license_manager::TIER_STARTER);
 
-        $indexurl = new \moodle_url('/local/schola_slots/index.php');
-        $roomsurl = new \moodle_url('/local/schola_slots/rooms.php');
-        $slotsurl = new \moodle_url('/local/schola_slots/slots.php');
-        $schedulesurl = new \moodle_url('/local/schola_slots/schedules.php');
-        $settingsurl = new \moodle_url('/admin/settings.php', ['section' => 'local_schola_slots_settings']);
+        $indexurl = new \moodle_url('/local/schola_timetabler/index.php');
+        $roomsurl = new \moodle_url('/local/schola_timetabler/rooms.php');
+        $slotsurl = new \moodle_url('/local/schola_timetabler/slots.php');
+        $schedulesurl = new \moodle_url('/local/schola_timetabler/schedules.php');
+        $settingsurl = new \moodle_url('/admin/settings.php', ['section' => 'local_schola_timetabler_settings']);
         $tasksurl = new \moodle_url('/admin/settings.php', ['section' => 'scheduledtasks']);
-        $generateurl = new \moodle_url('/local/schola_slots/index.php', [
+        $generateurl = new \moodle_url('/local/schola_timetabler/index.php', [
             'action' => 'generate',
             'sesskey' => sesskey(),
         ]);
 
         $coursecount = $DB->count_records_select('course', 'id > 1 AND visible = 1');
-        $roomcount = $DB->count_records('local_schola_slots_rooms');
-        $schedulecount = $DB->count_records('local_schola_slots_schedules');
+        $roomcount = $DB->count_records('local_schola_timetabler_rooms');
+        $schedulecount = $DB->count_records('local_schola_timetabler_schedules');
 
         $maxcourses = license_manager::get_max_courses();
         $maxcourseslabel = ($maxcourses === 0) ? 'Unlimited' : $maxcourses;
@@ -178,6 +178,6 @@ class renderer extends plugin_renderer_base {
             'is_course_exceeded' => $iscourseexceeded,
         ];
 
-        return $this->render_from_template('local_schola_slots/dashboard', $contextdata);
+        return $this->render_from_template('local_schola_timetabler/dashboard', $contextdata);
     }
 }

@@ -1,6 +1,6 @@
-# Schola Slots Moodle Plugin — Administrator & User Guide
+# Schola Timetabler Moodle Plugin — Administrator & User Guide
 
-Welcome to the **Schola Slots** administrator user guide. This document provides step-by-step instructions for Moodle Administrators, Academic Schedulers, and Department Heads to set up campus venues, configure time slots, protect break windows, and generate conflict-free weekly timetables.
+Welcome to the **Schola Timetabler** administrator user guide. This document provides step-by-step instructions for Moodle Administrators, Academic Schedulers, and Department Heads to set up campus venues, configure time slots, protect break windows, and generate conflict-free weekly timetables.
 
 ---
 
@@ -23,7 +23,7 @@ Welcome to the **Schola Slots** administrator user guide. This document provides
 
 ## 🌟 Introduction
 
-**Schola Slots** is an automated scheduling solution integrated directly into Moodle. It eliminates manual scheduling conflicts for:
+**Schola Timetabler** is an automated scheduling solution integrated directly into Moodle. It eliminates manual scheduling conflicts for:
 * **Weekly Class Schedules**: Recurring lectures, laboratory practicals, and tutorial sessions.
 * **Examination Windows**: Midterm and final exam matrix scheduling with room capacity enforcement.
 
@@ -42,24 +42,24 @@ Before generating your first timetable, ensure the following steps are completed
 ## 🚀 5-Step Timetabling Workflow
 
 ### Step 1: Campus Venues & Room Management
-Navigate to **Schola Slots ➔ Rooms**.
+Navigate to **Schola Timetabler ➔ Rooms**.
 1. **Add Rooms**: Click **Add New Room** and enter a **Room Name** (e.g. *Lecture Hall 101*, *Science Lab B*) and **Seating Capacity**.
 2. **Laboratory Toggle**: Check the *Laboratory / Computer Studio* toggle for rooms requiring specialized equipment or computers.
 3. **Virtual Spaces**: Rooms named with *Online*, *Virtual*, or *Zoom* are automatically flagged for remote delivery.
 
 ### Step 2: Profiles & Time Slot Configuration
-Navigate to **Schola Slots ➔ Profiles & Slots**.
+Navigate to **Schola Timetabler ➔ Profiles & Slots**.
 1. **Apply Presets**: Choose a schedule profile (*University Standard*, *3-Hour Block*, *High School 45-min*) to auto-populate period slots.
 2. **Custom Slots**: Manually add specific day and time combinations (e.g., *Monday 08:00–09:30*).
 3. **Batch Import**: Upload a CSV file to import all institutional time slots at once.
 
 ### Step 3: Tea Break & Lunch Window Protection
-Navigate to **Schola Slots ➔ Breaks**.
+Navigate to **Schola Timetabler ➔ Breaks**.
 1. **Define Break Windows**: Set institutional morning tea breaks (e.g., *10:30–11:00*) and lunch break windows (e.g., *13:00–14:00*).
 2. **Conflict Avoidance**: The solver automatically locks these period slots as occupied blockouts so no lectures or exams are assigned during break times.
 
 ### Step 4: Generating Timetables (Class vs Exam)
-Navigate to **Schola Slots ➔ Timetables** and click **Generate Timetable**.
+Navigate to **Schola Timetabler ➔ Timetables** and click **Generate Timetable**.
 1. **Title**: Enter a descriptive name (e.g., *Semester I 2026 Schedule*, *Final Exam Matrix*).
 2. **Profile / Type**:
    - **Regular Class Schedule**: For weekly recurring course lectures and labs.
@@ -71,7 +71,7 @@ Navigate to **Schola Slots ➔ Timetables** and click **Generate Timetable**.
    - **Append Mode**: Keeps active schedules locked and schedules new courses around them.
 
 ### Step 5: Timetable Studio (View, Filter, Export & Print)
-Navigate to **Schola Slots ➔ Timetables**.
+Navigate to **Schola Timetabler ➔ Timetables**.
 - **Filter Grids**: Switch view perspectives by **Department**, **Campus Venue**, or **Instructor**.
 - **CSV Export**: Download full schedule assignments for institutional record-keeping.
 - **Print PDF**: Generate clean, printable schedule grids for posting on campus notice boards.
@@ -104,7 +104,7 @@ dayofweek, starttime, endtime, type
 ## ⚡ Pro Cloud Acceleration Setup
 
 For institutions with large course matrices (> 50 courses, > 25 rooms):
-1. Go to **Site Administration ➔ Plugins ➔ Local plugins ➔ Schola Slots Settings**.
+1. Go to **Site Administration ➔ Plugins ➔ Local plugins ➔ Schola Timetabler Settings**.
 2. Enter your commercial **Pro License Key** from [scholaslots.com](https://scholaslots.com).
 3. Click **Save Changes**.
 4. Once active, solver requests route to the off-server high-speed Cloud Engine, processing complex timetables in under 50ms.
@@ -128,4 +128,4 @@ For institutions with large course matrices (> 50 courses, > 25 rooms):
 
 - **Support Email**: [wanyonyi.d.emanuel@gmail.com](mailto:wanyonyi.d.emanuel@gmail.com)
 - **Official Website**: [https://scholaslots.com](https://scholaslots.com)
-- **Issue Tracker**: [https://github.com/ewanyonyi/moodle-local_schola_slots/issues](https://github.com/ewanyonyi/moodle-local_schola_slots/issues)
+- **Issue Tracker**: [https://github.com/ewanyonyi/moodle-local_schola_timetabler/issues](https://github.com/ewanyonyi/moodle-local_schola_timetabler/issues)

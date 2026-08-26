@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/schola_slots/db" VERSION="20260814" COMMENT="Schema for unified course and exam timetabler">
+<XMLDB PATH="local/schola_timetabler/db" VERSION="20260814" COMMENT="Schema for unified course and exam timetabler">
   <TABLES>
     <!-- Physical Campus Infrastructure -->
-    <TABLE NAME="local_schola_slots_rooms" COMMENT="Campus rooms and capabilities">
+    <TABLE NAME="local_schola_timetabler_rooms" COMMENT="Campus rooms and capabilities">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true"/>
@@ -15,7 +15,7 @@
     </TABLE>
 
     <!-- Master Time Slots (Classes and Exams) -->
-    <TABLE NAME="local_schola_slots_slots" COMMENT="Available time windows">
+    <TABLE NAME="local_schola_timetabler_slots" COMMENT="Available time windows">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="class" COMMENT="class or exam"/>
@@ -31,7 +31,7 @@
     </TABLE>
 
     <!-- Unified Schedule Persistence -->
-    <TABLE NAME="local_schola_slots_schedules" COMMENT="Generated master schedule">
+    <TABLE NAME="local_schola_timetabler_schedules" COMMENT="Generated master schedule">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="schedule_type" TYPE="char" LENGTH="50" NOTNULL="true" COMMENT="class, exam, spring, fall, summer, custom"/>
@@ -49,7 +49,7 @@
     </TABLE>
 
     <!-- Reusable Schedule Templates -->
-    <TABLE NAME="local_schola_slots_templates" COMMENT="Saved reusable schedule templates">
+    <TABLE NAME="local_schola_timetabler_templates" COMMENT="Saved reusable schedule templates">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true"/>

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots\privacy;
+namespace local_schola_timetabler\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -23,9 +23,9 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 
 /**
- * Privacy API provider implementation for local_schola_slots.
+ * Privacy API provider implementation for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -38,9 +38,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      * @return collection Updated collection.
      */
     public static function get_metadata(collection $collection): collection {
-        // Table local_schola_slots_schedules
+        // Table local_schola_timetabler_schedules
         $collection->add_database_table(
-            'local_schola_slots_schedules',
+            'local_schola_timetabler_schedules',
             [
                 'courseid'  => 'privacy:metadata:schedules:courseid',
                 'quizid'    => 'privacy:metadata:schedules:quizid',
@@ -60,7 +60,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             'privacy:metadata:lemonsqueezy'
         );
 
-        // External disclosure: Schola Slots Cloud Solver Engine
+        // External disclosure: Schola Timetabler Cloud Solver Engine
         $collection->add_external_location_link(
             'solver_service',
             [
@@ -84,7 +84,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $sql = "SELECT c.id
                   FROM {context} c
                   JOIN {course} cr ON cr.id = c.instanceid AND c.contextlevel = :contextlevel
-                  JOIN {local_schola_slots_schedules} s ON s.courseid = cr.id
+                  JOIN {local_schola_timetabler_schedules} s ON s.courseid = cr.id
                  WHERE s.teacherid = :userid";
         $contextlist->add_from_sql($sql, [
             'contextlevel' => CONTEXT_COURSE,
@@ -106,7 +106,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         }
 
         $sql = "SELECT teacherid AS userid
-                  FROM {local_schola_slots_schedules}
+                  FROM {local_schola_timetabler_schedules}
                  WHERE courseid = :courseid AND teacherid > 0";
         $userlist->add_from_sql('userid', $sql, ['courseid' => $context->instanceid]);
     }
@@ -126,7 +126,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 continue;
             }
 
-            $schedules = $DB->get_records('local_schola_slots_schedules', [
+            $schedules = $DB->get_records('local_schola_timetabler_schedules', [
                 'courseid'  => $context->instanceid,
                 'teacherid' => $userid,
             ]);
@@ -142,7 +142,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 }
 
                 \core_privacy\local\request\writer::with_context($context)->export_data(
-                    [get_string('pluginname', 'local_schola_slots')],
+                    [get_string('pluginname', 'local_schola_timetabler')],
                     (object)['schedules' => $exportdata]
                 );
             }
@@ -159,7 +159,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         global $DB;
 
         if ($context->contextlevel == CONTEXT_COURSE) {
-            $DB->delete_records('local_schola_slots_schedules', ['courseid' => $context->instanceid]);
+            $DB->delete_records('local_schola_timetabler_schedules', ['courseid' => $context->instanceid]);
         }
     }
 
@@ -175,7 +175,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
             if ($context->contextlevel == CONTEXT_COURSE) {
-                $DB->delete_records('local_schola_slots_schedules', [
+                $DB->delete_records('local_schola_timetabler_schedules', [
                     'courseid'  => $context->instanceid,
                     'teacherid' => $userid,
                 ]);
@@ -205,6 +205,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         [$insql, $inparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $inparams['courseid'] = $context->instanceid;
 
-        $DB->delete_records_select('local_schola_slots_schedules', "courseid = :courseid AND teacherid {$insql}", $inparams);
+        $DB->delete_records_select('local_schola_timetabler_schedules', "courseid = :courseid AND teacherid {$insql}", $inparams);
     }
 }

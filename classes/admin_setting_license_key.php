@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots;
+namespace local_schola_timetabler;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -24,7 +24,7 @@ require_once($CFG->libdir . '/adminlib.php');
 /**
  * Custom admin setting element for Cloud Solver API Key / License Key with inline Save button.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +34,7 @@ class admin_setting_license_key extends \admin_setting {
      */
     public function __construct() {
         parent::__construct(
-            'local_schola_slots/license_key',
+            'local_schola_timetabler/license_key',
             'Cloud Solver API Key',
             'Optional. Enter your Cloud Solver API key to connect off-server high-performance solver services.',
             ''
@@ -47,7 +47,7 @@ class admin_setting_license_key extends \admin_setting {
      * @return mixed Setting value string or false.
      */
     public function get_setting() {
-        return get_config('local_schola_slots', 'license_key');
+        return get_config('local_schola_timetabler', 'license_key');
     }
 
     /**
@@ -61,7 +61,7 @@ class admin_setting_license_key extends \admin_setting {
             return '';
         }
         $data = trim((string)$data);
-        set_config('license_key', $data, 'local_schola_slots');
+        set_config('license_key', $data, 'local_schola_timetabler');
         return '';
     }
 
@@ -84,7 +84,7 @@ class admin_setting_license_key extends \admin_setting {
         $html = '<div class="form-item row mb-3 align-items-center" id="admin-' . $this->name . '">';
         $html .= '<div class="form-label col-sm-3 text-sm-right">';
         $html .= '<label for="' . $id . '" class="form-label font-weight-bold mb-0">' . s($this->visiblename) . '</label>';
-        $html .= '<div class="small text-muted">local_schola_slots | license_key</div>';
+        $html .= '<div class="small text-muted">local_schola_timetabler | license_key</div>';
         $html .= '</div>';
         $html .= '<div class="form-setting col-sm-9">';
         $html .= '<div class="input-group" style="max-width: 550px;">';
