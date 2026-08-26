@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * View, edit, delete and export generated timetables for local_schola_slots.
+ * View, edit, delete and export generated timetables for local_schola_timetabler.
  * Supports multi-timetable profiles (Class vs Exam schedules) and departmental filtering.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,7 +28,7 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
 $action       = optional_param('action', '', PARAM_ALPHA);
 $id           = optional_param('id', 0, PARAM_INT);
@@ -48,26 +48,26 @@ $urlparams = [
 if (!empty($titleparam)) {
     $urlparams['title'] = $titleparam;
 }
-$url = new moodle_url('/local/schola_slots/schedules.php', $urlparams);
+$url = new moodle_url('/local/schola_timetabler/schedules.php', $urlparams);
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title(get_string('manage_schedules', 'local_schola_slots'));
-$PAGE->set_heading(get_string('manage_schedules', 'local_schola_slots'));
+$PAGE->set_title(get_string('manage_schedules', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('manage_schedules', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
 // Action: Clear Timetable Group or All
 // -------------------------------------------------------------------
 if (($action === 'cleargroup' || $action === 'clearall') && confirm_sesskey()) {
-    $hastitlecol = $DB->get_manager()->field_exists('local_schola_slots_schedules', 'title');
+    $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
     if (!empty($titleparam) && $scheduletype !== 'all' && $hastitlecol) {
-        $DB->delete_records('local_schola_slots_schedules', ['schedule_type' => $scheduletype, 'title' => $titleparam]);
-        redirect(new moodle_url('/local/schola_slots/schedules.php'), "Timetable '{$titleparam}' cleared successfully.");
+        $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $titleparam]);
+        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), "Timetable '{$titleparam}' cleared successfully.");
     } else if ($scheduletype !== 'all') {
-        $DB->delete_records('local_schola_slots_schedules', ['schedule_type' => $scheduletype]);
-        redirect(new moodle_url('/local/schola_slots/schedules.php'), strtoupper($scheduletype) . ' timetables cleared successfully.');
+        $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
+        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), strtoupper($scheduletype) . ' timetables cleared successfully.');
     } else {
-        $DB->delete_records('local_schola_slots_schedules');
-        redirect(new moodle_url('/local/schola_slots/schedules.php'), 'All generated timetables cleared successfully.');
+        $DB->delete_records('local_schola_timetabler_schedules');
+        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), 'All generated timetables cleared successfully.');
     }
 }
 
@@ -75,7 +75,7 @@ if (($action === 'cleargroup' || $action === 'clearall') && confirm_sesskey()) {
 // Action: Delete Single Schedule Entry
 // -------------------------------------------------------------------
 if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_slots_schedules', ['id' => $id]);
+    $DB->delete_records('local_schola_timetabler_schedules', ['id' => $id]);
     redirect($url, 'Schedule allocation deleted successfully.');
 }
 
@@ -84,7 +84,7 @@ if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
 // -------------------------------------------------------------------
 if ($action === 'setstrategy' && confirm_sesskey()) {
     $strat = optional_param('strategy', 'balanced', PARAM_ALPHA);
-    set_config('day_distribution', $strat, 'local_schola_slots');
+    set_config('day_distribution', $strat, 'local_schola_timetabler');
     redirect($url, 'Day distribution strategy updated successfully.');
 }
 
@@ -93,7 +93,7 @@ if ($action === 'setstrategy' && confirm_sesskey()) {
 // -------------------------------------------------------------------
 $editschedule = null;
 if ($action === 'edit' && $id > 0) {
-    $editschedule = $DB->get_record('local_schola_slots_schedules', ['id' => $id]);
+    $editschedule = $DB->get_record('local_schola_timetabler_schedules', ['id' => $id]);
 }
 
 if ($data = data_submitted() && confirm_sesskey() && optional_param('submitedit', 0, PARAM_INT)) {
@@ -105,7 +105,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('submitedit'
     if ($editid > 0 && $newroomid > 0 && $newslotid > 0) {
         // Conflict Check: Room conflict
         $roomconflict = $DB->get_record_sql(
-            "SELECT id FROM {local_schola_slots_schedules} WHERE id != :id AND roomid = :roomid AND slotid = :slotid",
+            "SELECT id FROM {local_schola_timetabler_schedules} WHERE id != :id AND roomid = :roomid AND slotid = :slotid",
             ['id' => $editid, 'roomid' => $newroomid, 'slotid' => $newslotid]
         );
 
@@ -113,7 +113,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('submitedit'
         $teacherconflict = false;
         if ($newteacherid > 0) {
             $teacherconflict = $DB->get_record_sql(
-                "SELECT id FROM {local_schola_slots_schedules} WHERE id != :id AND teacherid = :teacherid AND slotid = :slotid",
+                "SELECT id FROM {local_schola_timetabler_schedules} WHERE id != :id AND teacherid = :teacherid AND slotid = :slotid",
                 ['id' => $editid, 'teacherid' => $newteacherid, 'slotid' => $newslotid]
             );
         }
@@ -129,7 +129,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('submitedit'
                 'slotid' => $newslotid,
                 'teacherid' => $newteacherid,
             ];
-            $DB->update_record('local_schola_slots_schedules', $rec);
+            $DB->update_record('local_schola_timetabler_schedules', $rec);
             redirect($url, 'Schedule allocation updated successfully.');
         }
     }
@@ -137,7 +137,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('submitedit'
 
 echo $OUTPUT->header();
 
-echo \local_schola_slots\output\renderer::render_nav_header('schedules', true, $scheduletype);
+echo \local_schola_timetabler\output\renderer::render_nav_header('schedules', true, $scheduletype);
 
 $days = [
     1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday',
@@ -161,14 +161,14 @@ if ($editschedule) {
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'schedid', 'value' => $editschedule->id]);
 
     // Room options
-    $allrooms = $DB->get_records('local_schola_slots_rooms', null, 'name ASC');
+    $allrooms = $DB->get_records('local_schola_timetabler_rooms', null, 'name ASC');
     $roomopts = [];
     foreach ($allrooms as $r) {
         $roomopts[$r->id] = $r->name . ' (Cap: ' . $r->capacity . ')';
     }
 
     // Slot options
-    $allslots = $DB->get_records('local_schola_slots_slots', null, 'dayofweek ASC, starttime ASC');
+    $allslots = $DB->get_records('local_schola_timetabler_slots', null, 'dayofweek ASC, starttime ASC');
     $slotopts = [];
     foreach ($allslots as $sl) {
         $dname = $days[$sl->dayofweek] ?? 'Day ' . $sl->dayofweek;
@@ -221,60 +221,60 @@ if ($editschedule) {
 }
 
 // Fetch options for filter dropdowns
-$allrooms = $DB->get_records('local_schola_slots_rooms', null, 'name ASC');
-$roomoptions = [0 => get_string('all_campus_venues', 'local_schola_slots')];
+$allrooms = $DB->get_records('local_schola_timetabler_rooms', null, 'name ASC');
+$roomoptions = [0 => get_string('all_campus_venues', 'local_schola_timetabler')];
 foreach ($allrooms as $r) {
     $roomoptions[$r->id] = $r->name . ' (' . $r->capacity . ' seats)';
 }
 
 $allteachers = $DB->get_records_sql("SELECT DISTINCT u.id, u.firstname, u.lastname
                                       FROM {user} u
-                                      JOIN {local_schola_slots_schedules} s ON s.teacherid = u.id
+                                      JOIN {local_schola_timetabler_schedules} s ON s.teacherid = u.id
                                   ORDER BY u.lastname ASC");
-$teacheroptions = [0 => get_string('all_faculty_members', 'local_schola_slots')];
+$teacheroptions = [0 => get_string('all_faculty_members', 'local_schola_timetabler')];
 foreach ($allteachers as $t) {
     $teacheroptions[$t->id] = fullname($t);
 }
 
 // Categories / Departments filter options
 $categories = $DB->get_records_menu('course_categories', null, 'name ASC', 'id, name');
-$catoptions = [0 => get_string('all_departments_filter', 'local_schola_slots')] + $categories;
+$catoptions = [0 => get_string('all_departments_filter', 'local_schola_timetabler')] + $categories;
 
 // Type filter options
 $typefilteroptions = [
-    'all'   => get_string('profile_all_timetables', 'local_schola_slots'),
-    'class' => get_string('profile_class_only', 'local_schola_slots'),
-    'exam'  => get_string('profile_exam_only', 'local_schola_slots'),
+    'all'   => get_string('profile_all_timetables', 'local_schola_timetabler'),
+    'class' => get_string('profile_class_only', 'local_schola_timetabler'),
+    'exam'  => get_string('profile_exam_only', 'local_schola_timetabler'),
 ];
 
 // Strategy options
-$currentstrategy = get_config('local_schola_slots', 'day_distribution') ?: 'balanced';
+$currentstrategy = get_config('local_schola_timetabler', 'day_distribution') ?: 'balanced';
 $strategyoptions = [
-    'balanced'   => get_string('strategy_balanced', 'local_schola_slots'),
-    'mon_to_sat' => get_string('strategy_6day', 'local_schola_slots'),
-    'mon_to_thu' => get_string('strategy_4day', 'local_schola_slots'),
-    'frontload'  => get_string('strategy_frontload', 'local_schola_slots'),
+    'balanced'   => get_string('strategy_balanced', 'local_schola_timetabler'),
+    'mon_to_sat' => get_string('strategy_6day', 'local_schola_timetabler'),
+    'mon_to_thu' => get_string('strategy_4day', 'local_schola_timetabler'),
+    'frontload'  => get_string('strategy_frontload', 'local_schola_timetabler'),
 ];
 
 // Summary counts
-$classcount = $DB->count_records('local_schola_slots_schedules', ['schedule_type' => 'class']);
-$examcount  = $DB->count_records('local_schola_slots_schedules', ['schedule_type' => 'exam']);
+$classcount = $DB->count_records('local_schola_timetabler_schedules', ['schedule_type' => 'class']);
+$examcount  = $DB->count_records('local_schola_timetabler_schedules', ['schedule_type' => 'exam']);
 $totalcount = $classcount + $examcount;
 $viewgrid   = optional_param('viewgrid', 0, PARAM_INT);
 
 // -------------------------------------------------------------------
 // Build List of Saved Generated Timetables (for Timetable Studio view)
 // -------------------------------------------------------------------
-$hastitlecol = $DB->get_manager()->field_exists('local_schola_slots_schedules', 'title');
-$hastimecol  = $DB->get_manager()->field_exists('local_schola_slots_schedules', 'timecreated');
+$hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
+$hastimecol  = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'timecreated');
 
 $groupsql = $hastitlecol
     ? "SELECT MIN(id) AS id, schedule_type, COALESCE(title, '') AS title, " . ($hastimecol ? "MAX(timecreated)" : "0") . " AS timecreated
-       FROM {local_schola_slots_schedules}
+       FROM {local_schola_timetabler_schedules}
        GROUP BY schedule_type, COALESCE(title, '')
        ORDER BY MIN(id) ASC"
     : "SELECT MIN(id) AS id, schedule_type, '' AS title, 0 AS timecreated
-       FROM {local_schola_slots_schedules}
+       FROM {local_schola_timetabler_schedules}
        GROUP BY schedule_type
        ORDER BY MIN(id) ASC";
 
@@ -297,9 +297,9 @@ foreach ($groups as $g) {
         $wparams  = ['stype' => $stype];
     }
 
-    $ccourses = $DB->count_records_sql("SELECT COUNT(DISTINCT courseid) FROM {local_schola_slots_schedules} WHERE {$wherestr}", $wparams);
-    $crooms   = $DB->count_records_sql("SELECT COUNT(DISTINCT roomid) FROM {local_schola_slots_schedules} WHERE {$wherestr}", $wparams);
-    $cslots   = $DB->count_records_sql("SELECT COUNT(DISTINCT slotid) FROM {local_schola_slots_schedules} WHERE {$wherestr}", $wparams);
+    $ccourses = $DB->count_records_sql("SELECT COUNT(DISTINCT courseid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
+    $crooms   = $DB->count_records_sql("SELECT COUNT(DISTINCT roomid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
+    $cslots   = $DB->count_records_sql("SELECT COUNT(DISTINCT slotid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
 
     $dateformatted = (!empty($g->timecreated) && $g->timecreated > 0)
         ? userdate($g->timecreated, '%Y-%m-%d %H:%M')
@@ -319,7 +319,7 @@ foreach ($groups as $g) {
 }
 
 $savedtimetablescount = count($savedschedules);
-$generateurl = new moodle_url('/local/schola_slots/index.php', ['action' => 'generate', 'sesskey' => sesskey()]);
+$generateurl = new moodle_url('/local/schola_timetabler/index.php', ['action' => 'generate', 'sesskey' => sesskey()]);
 
 $showdetails = ($viewgrid > 0 || $id > 0);
 
@@ -327,9 +327,9 @@ if (!$showdetails) {
     // -------------------------------------------------------------------
     // Timetable Listing View (Studio Masterlist)
     // -------------------------------------------------------------------
-    $totalroomscount = $DB->count_records('local_schola_slots_rooms');
-    $iscloudactive = class_exists('\local_schola_slots\licensing\license_manager')
-        && \local_schola_slots\licensing\license_manager::is_pro();
+    $totalroomscount = $DB->count_records('local_schola_timetabler_rooms');
+    $iscloudactive = class_exists('\local_schola_timetabler\licensing\license_manager')
+        && \local_schola_timetabler\licensing\license_manager::is_pro();
     $solverstat = $iscloudactive ? 'Cloud Rust' : 'Native PHP';
     $solversubtext = $iscloudactive
         ? 'High-concurrency Rust optimization service'
@@ -428,7 +428,7 @@ if (!$showdetails) {
             if (!empty($sched->raw_title)) {
                 $gridtargetparams['title'] = $sched->raw_title;
             }
-            $gridtargeturl = new moodle_url('/local/schola_slots/schedules.php', $gridtargetparams);
+            $gridtargeturl = new moodle_url('/local/schola_timetabler/schedules.php', $gridtargetparams);
 
             $deltargetparams = [
                 'action'  => 'cleargroup',
@@ -438,7 +438,7 @@ if (!$showdetails) {
             if (!empty($sched->raw_title)) {
                 $deltargetparams['title'] = $sched->raw_title;
             }
-            $deltargeturl = new moodle_url('/local/schola_slots/schedules.php', $deltargetparams);
+            $deltargeturl = new moodle_url('/local/schola_timetabler/schedules.php', $deltargetparams);
 
             $badgestyle = $typestyles[$sched->type] ?? $typestyles['custom'];
 
@@ -488,10 +488,10 @@ if (!$showdetails) {
     // -------------------------------------------------------------------
     // Timetable Details View (Matrix Grid & Filter Toolbar)
     // -------------------------------------------------------------------
-    $csvexporturl = new moodle_url('/local/schola_slots/export.php', [
+    $csvexporturl = new moodle_url('/local/schola_timetabler/export.php', [
         'action' => 'csv', 'roomid' => $roomid, 'teacherid' => $teacherid, 'type' => $scheduletype, 'categoryid' => $categoryid,
     ]);
-    $pdfexporturl = new moodle_url('/local/schola_slots/export.php', [
+    $pdfexporturl = new moodle_url('/local/schola_timetabler/export.php', [
         'action' => 'print', 'roomid' => $roomid, 'teacherid' => $teacherid, 'type' => $scheduletype, 'categoryid' => $categoryid, 'autoprint' => 1,
     ]);
 
@@ -512,11 +512,11 @@ if (!$showdetails) {
     $typelabel = ($scheduletype === 'all') ? 'CLASS SCHEDULE' : strtoupper($scheduletype) . ' SCHEDULE';
     echo html_writer::tag('span', $typelabel, ['class' => 'badge-class-schedule']);
     echo html_writer::end_div();
-    $subtext = 'Generated by Schola Slots Engine on 2026-08-19 13:27 via Off-Server Rust Constraint Satisfaction Service';
+    $subtext = 'Generated by Schola Timetabler Engine on 2026-08-19 13:27 via Off-Server Rust Constraint Satisfaction Service';
     echo html_writer::tag('p', $subtext, ['class' => 'text-muted small mb-0 mt-1']);
     echo html_writer::end_div();
 
-    // Action buttons (Exact Schola Slots Rust brand colors & buttons)
+    // Action buttons (Exact Schola Timetabler Rust brand colors & buttons)
     echo html_writer::start_div('d-flex flex-wrap align-items-center gap-2');
     echo html_writer::link($pdfexporturl, '<i class="fa fa-print me-1"></i> Save to PDF', ['class' => 'btn btn-emerald d-inline-flex align-items-center', 'target' => '_blank']);
     echo html_writer::link($csvexporturl, '<i class="fa fa-download me-1"></i> Export CSV', ['class' => 'btn btn-outline-slate d-inline-flex align-items-center']);
@@ -606,7 +606,7 @@ if (!$showdetails) {
         $where[] = 's.schedule_type = :stype';
         $params['stype'] = $scheduletype;
     }
-    if (!empty($titleparam) && $DB->get_manager()->field_exists('local_schola_slots_schedules', 'title')) {
+    if (!empty($titleparam) && $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title')) {
         $where[] = 's.title = :stitle';
         $params['stitle'] = $titleparam;
     }
@@ -627,10 +627,10 @@ if (!$showdetails) {
     $sql = "SELECT s.id, s.schedule_type, c.shortname AS coursecode, c.fullname AS coursename,
                r.name AS roomname, r.id AS room_id, sl.dayofweek, sl.starttime, sl.endtime,
                u.firstname, u.lastname
-          FROM {local_schola_slots_schedules} s
+          FROM {local_schola_timetabler_schedules} s
           JOIN {course} c ON c.id = s.courseid
-          JOIN {local_schola_slots_rooms} r ON r.id = s.roomid
-          JOIN {local_schola_slots_slots} sl ON sl.id = s.slotid
+          JOIN {local_schola_timetabler_rooms} r ON r.id = s.roomid
+          JOIN {local_schola_timetabler_slots} sl ON sl.id = s.slotid
           LEFT JOIN {user} u ON u.id = s.teacherid
           {$wherestr}
       ORDER BY sl.dayofweek ASC, sl.starttime ASC, r.name ASC";
@@ -638,17 +638,17 @@ if (!$showdetails) {
     $schedules = $DB->get_records_sql($sql, $params);
 
     if (empty($schedules)) {
-        echo html_writer::div(get_string('no_schedules', 'local_schola_slots'), 'alert alert-info rounded-3 p-4');
+        echo html_writer::div(get_string('no_schedules', 'local_schola_timetabler'), 'alert alert-info rounded-3 p-4');
     } else {
         // -------------------------------------------------------------------
-        // Schola Slots Rust Mirrored Institutional Grid Matrix View
+        // Schola Timetabler Rust Mirrored Institutional Grid Matrix View
         // -------------------------------------------------------------------
         $roomwhere = ($roomid > 0) ? ['id' => $roomid] : null;
-        $allrooms = $DB->get_records('local_schola_slots_rooms', $roomwhere, 'name ASC');
+        $allrooms = $DB->get_records('local_schola_timetabler_rooms', $roomwhere, 'name ASC');
         $roomslist = array_values($allrooms);
         $numrooms = count($roomslist);
 
-        $allslots = $DB->get_records('local_schola_slots_slots', null, 'starttime ASC');
+        $allslots = $DB->get_records('local_schola_timetabler_slots', null, 'starttime ASC');
         $timeblocks = [];
         $breakwindows = [];
         foreach ($allslots as $sl) {
@@ -887,7 +887,7 @@ if (!function_exists('schola_get_string')) {
      * @return string Localized or fallback text.
      */
     function schola_get_string(string $identifier, string $fallback): string {
-        $str = get_string($identifier, 'local_schola_slots');
+        $str = get_string($identifier, 'local_schola_timetabler');
         if (strpos($str, '[[') === 0 || strpos($str, 'a_slots:') !== false) {
             return $fallback;
         }
@@ -924,7 +924,7 @@ echo '
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form method="post" action="' . (new moodle_url('/local/schola_slots/index.php'))->out(false) . '">
+      <form method="post" action="' . (new moodle_url('/local/schola_timetabler/index.php'))->out(false) . '">
         <input type="hidden" name="sesskey" value="' . sesskey() . '">
         <input type="hidden" name="action" value="generate">
         <div class="modal-body p-4 bg-light">

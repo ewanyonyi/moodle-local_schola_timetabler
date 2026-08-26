@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Export and Print engine for local_schola_slots.
+ * Export and Print engine for local_schola_timetabler.
  * Supports CSV file download and print-ready HTML/PDF views.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -29,7 +29,7 @@ require_once(__DIR__ . '/../../config.php');
 require_login();
 if (class_exists('context_system')) {
     $context = context_system::instance();
-    require_capability('local/schola_slots:manage', $context);
+    require_capability('local/schola_timetabler:manage', $context);
 }
 
 $action       = optional_param('action', 'print', PARAM_ALPHA);
@@ -68,10 +68,10 @@ $wherestr = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 $sql = "SELECT s.id, s.schedule_type, c.shortname AS coursecode, c.fullname AS coursename,
                r.name AS roomname, sl.dayofweek, sl.starttime, sl.endtime,
                u.firstname, u.lastname
-          FROM {local_schola_slots_schedules} s
+          FROM {local_schola_timetabler_schedules} s
           JOIN {course} c ON c.id = s.courseid
-          JOIN {local_schola_slots_rooms} r ON r.id = s.roomid
-          JOIN {local_schola_slots_slots} sl ON sl.id = s.slotid
+          JOIN {local_schola_timetabler_rooms} r ON r.id = s.roomid
+          JOIN {local_schola_timetabler_slots} sl ON sl.id = s.slotid
           LEFT JOIN {user} u ON u.id = s.teacherid
           {$wherestr}
       ORDER BY sl.dayofweek ASC, sl.starttime ASC, r.name ASC";
@@ -113,12 +113,12 @@ if ($action === 'csv') {
 // -------------------------------------------------------------------
 $autoprint = optional_param('autoprint', 0, PARAM_INT);
 $site = get_site();
-$currentstrategy = get_config('local_schola_slots', 'day_distribution') ?: 'balanced';
+$currentstrategy = get_config('local_schola_timetabler', 'day_distribution') ?: 'balanced';
 $maxday = ($currentstrategy === 'mon_to_sat') ? 6 : 5;
 $matrixdays = array_slice($days, 0, $maxday, true);
 
 // Extract unique time windows from configured slots & schedules
-$allslots = $DB->get_records('local_schola_slots_slots', null, 'starttime ASC');
+$allslots = $DB->get_records('local_schola_timetabler_slots', null, 'starttime ASC');
 $timeblocks = [];
 $breakwindows = [];
 foreach ($allslots as $sl) {
@@ -146,7 +146,7 @@ foreach ($schedules as $s) {
 }
 
 $cssurl = (new moodle_url('/theme/styles.php/boost/1/all'))->out(false);
-$csvurl = new moodle_url('/local/schola_slots/export.php', [
+$csvurl = new moodle_url('/local/schola_timetabler/export.php', [
     'action' => 'csv',
     'type' => $scheduletype,
     'categoryid' => $categoryid,

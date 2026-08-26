@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main admin dashboard and timetable generation view for local_schola_slots.
+ * Main admin dashboard and timetable generation view for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,19 +27,19 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
-$PAGE->set_url(new moodle_url('/local/schola_slots/index.php'));
+$PAGE->set_url(new moodle_url('/local/schola_timetabler/index.php'));
 $PAGE->set_context($context);
-$PAGE->set_title(get_string('pluginname', 'local_schola_slots'));
-$PAGE->set_heading(get_string('pluginname', 'local_schola_slots'));
+$PAGE->set_title(get_string('pluginname', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('pluginname', 'local_schola_timetabler'));
 
 $action = optional_param('action', '', PARAM_ALPHA);
 
 // Schema auto-migration check for title & timecreated columns
 global $DB;
 $dbman = $DB->get_manager();
-$schedtable = new xmldb_table('local_schola_slots_schedules');
+$schedtable = new xmldb_table('local_schola_timetabler_schedules');
 if ($dbman->table_exists($schedtable)) {
     $fieldtitle = new xmldb_field('title', XMLDB_TYPE_CHAR, '100', null, false, false, null);
     if (!$dbman->field_exists($schedtable, $fieldtitle)) {
@@ -76,12 +76,12 @@ if ($action === 'generate' && confirm_sesskey()) {
     }
 
     $courses = $DB->get_records_select('course', $select, $params, 'id ASC');
-    $slots   = $DB->get_records('local_schola_slots_slots');
-    $rooms   = $DB->get_records('local_schola_slots_rooms');
+    $slots   = $DB->get_records('local_schola_timetabler_slots');
+    $rooms   = $DB->get_records('local_schola_timetabler_rooms');
 
     if (empty($rooms)) {
         redirect(
-            new moodle_url('/local/schola_slots/rooms.php'),
+            new moodle_url('/local/schola_timetabler/rooms.php'),
             'Please configure at least one room before generating timetables.',
             null,
             \core\output\notification::NOTIFY_WARNING
@@ -90,7 +90,7 @@ if ($action === 'generate' && confirm_sesskey()) {
 
     if (empty($slots)) {
         redirect(
-            new moodle_url('/local/schola_slots/slots.php'),
+            new moodle_url('/local/schola_timetabler/slots.php'),
             'Please configure time slots before generating timetables.',
             null,
             \core\output\notification::NOTIFY_WARNING
@@ -99,7 +99,7 @@ if ($action === 'generate' && confirm_sesskey()) {
 
     if (empty($courses)) {
         redirect(
-            new moodle_url('/local/schola_slots/index.php'),
+            new moodle_url('/local/schola_timetabler/index.php'),
             'No active courses found in the selected department category.',
             null,
             \core\output\notification::NOTIFY_WARNING
@@ -108,25 +108,25 @@ if ($action === 'generate' && confirm_sesskey()) {
 
     // Strict License Plan Capacity & Feature Enforcement
     $coursecount = count($courses);
-    $maxcourses = \local_schola_slots\licensing\license_manager::get_max_courses();
-    $tiername = \local_schola_slots\licensing\license_manager::get_tier_name();
+    $maxcourses = \local_schola_timetabler\licensing\license_manager::get_max_courses();
+    $tiername = \local_schola_timetabler\licensing\license_manager::get_tier_name();
 
     if ($maxcourses > 0 && $coursecount > $maxcourses) {
         $msg = "License Capacity Exceeded: Your institution has {$coursecount} active courses, but your {$tiername} " .
             "plan is limited to {$maxcourses} courses. Please upgrade to Pro University to unlock unlimited scheduling.";
         redirect(
-            new moodle_url('/local/schola_slots/index.php'),
+            new moodle_url('/local/schola_timetabler/index.php'),
             $msg,
             null,
             \core\output\notification::NOTIFY_ERROR
         );
     }
 
-    if ($scheduletype === 'exam' && !\local_schola_slots\licensing\license_manager::can_solve_exams()) {
+    if ($scheduletype === 'exam' && !\local_schola_timetabler\licensing\license_manager::can_solve_exams()) {
         $msg = "Examination Timetabling Feature Locked: Examination schedule generation requires a Starter or " .
             "Pro University plan. Please upgrade your license key to unlock exam scheduling.";
         redirect(
-            new moodle_url('/local/schola_slots/index.php'),
+            new moodle_url('/local/schola_timetabler/index.php'),
             $msg,
             null,
             \core\output\notification::NOTIFY_ERROR
@@ -134,13 +134,13 @@ if ($action === 'generate' && confirm_sesskey()) {
     }
 
     try {
-        $solver = new \local_schola_slots\algorithm\solver($slots, $rooms);
+        $solver = new \local_schola_timetabler\algorithm\solver($slots, $rooms);
         $solver->set_slot_type(($scheduletype === 'exam') ? 'exam' : 'class');
         $solver->load_courses($courses);
 
         if ($genmode === 'append') {
             // Load ALL existing schedule entries as hard occupied blockouts
-            $existingschedules = $DB->get_records('local_schola_slots_schedules');
+            $existingschedules = $DB->get_records('local_schola_timetabler_schedules');
             $solver->load_existing_schedules($existingschedules);
         } else if ($genmode === 'overwrite_all') {
             // Overwrite ALL mode: Delete all schedules of selected type
@@ -149,18 +149,18 @@ if ($action === 'generate' && confirm_sesskey()) {
                 if (!empty($catcourseids)) {
                     [$insql, $inparams] = $DB->get_in_or_equal($catcourseids, SQL_PARAMS_NAMED);
                     $inparams['stype'] = $scheduletype;
-                    $DB->delete_records_select('local_schola_slots_schedules', "schedule_type = :stype AND courseid {$insql}", $inparams);
+                    $DB->delete_records_select('local_schola_timetabler_schedules', "schedule_type = :stype AND courseid {$insql}", $inparams);
                 }
             } else {
-                $DB->delete_records('local_schola_slots_schedules', ['schedule_type' => $scheduletype]);
+                $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
             }
 
             // Load remaining non-deleted schedules as occupied blockouts
-            $othersexisting = $DB->get_records_select('local_schola_slots_schedules', 'schedule_type != :stype', ['stype' => $scheduletype]);
+            $othersexisting = $DB->get_records_select('local_schola_timetabler_schedules', 'schedule_type != :stype', ['stype' => $scheduletype]);
             $solver->load_existing_schedules($othersexisting);
         } else {
             // Version mode (default): Save as new named version or replace version with same title
-            $hastitlecol = $DB->get_manager()->field_exists('local_schola_slots_schedules', 'title');
+            $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
             if ($hastitlecol && !empty($rawtitle)) {
                 if ($categoryid > 0) {
                     $catcourseids = array_keys($courses);
@@ -168,10 +168,10 @@ if ($action === 'generate' && confirm_sesskey()) {
                         [$insql, $inparams] = $DB->get_in_or_equal($catcourseids, SQL_PARAMS_NAMED);
                         $inparams['stype']  = $scheduletype;
                         $inparams['stitle'] = $rawtitle;
-                        $DB->delete_records_select('local_schola_slots_schedules', "schedule_type = :stype AND title = :stitle AND courseid {$insql}", $inparams);
+                        $DB->delete_records_select('local_schola_timetabler_schedules', "schedule_type = :stype AND title = :stitle AND courseid {$insql}", $inparams);
                     }
                 } else {
-                    $DB->delete_records('local_schola_slots_schedules', ['schedule_type' => $scheduletype, 'title' => $rawtitle]);
+                    $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $rawtitle]);
                 }
             } else {
                 if ($categoryid > 0) {
@@ -179,10 +179,10 @@ if ($action === 'generate' && confirm_sesskey()) {
                     if (!empty($catcourseids)) {
                         [$insql, $inparams] = $DB->get_in_or_equal($catcourseids, SQL_PARAMS_NAMED);
                         $inparams['stype'] = $scheduletype;
-                        $DB->delete_records_select('local_schola_slots_schedules', "schedule_type = :stype AND courseid {$insql}", $inparams);
+                        $DB->delete_records_select('local_schola_timetabler_schedules', "schedule_type = :stype AND courseid {$insql}", $inparams);
                     }
                 } else {
-                    $DB->delete_records('local_schola_slots_schedules', ['schedule_type' => $scheduletype]);
+                    $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
                 }
             }
         }
@@ -201,7 +201,7 @@ if ($action === 'generate' && confirm_sesskey()) {
                 $teacherid = (int)($sched['teacher_id'] ?? 0);
 
                 if ($courseid > 0 && $roomid > 0 && $slotid > 0) {
-                    $DB->insert_record('local_schola_slots_schedules', (object)[
+                    $DB->insert_record('local_schola_timetabler_schedules', (object)[
                         'schedule_type' => $scheduletype,
                         'title'        => $rawtitle,
                         'courseid'     => $courseid,
@@ -214,14 +214,14 @@ if ($action === 'generate' && confirm_sesskey()) {
                 }
             }
             redirect(
-                new moodle_url('/local/schola_slots/schedules.php', ['type' => $scheduletype, 'title' => $rawtitle, 'categoryid' => $categoryid]),
+                new moodle_url('/local/schola_timetabler/schedules.php', ['type' => $scheduletype, 'title' => $rawtitle, 'categoryid' => $categoryid]),
                 "Timetable '{$rawtitle}' generated successfully as a named version! {$count} course sessions assigned conflict-free.",
                 null,
                 \core\output\notification::NOTIFY_SUCCESS
             );
         } else {
             redirect(
-                new moodle_url('/local/schola_slots/index.php'),
+                new moodle_url('/local/schola_timetabler/index.php'),
                 "Notice: Solver could not assign all courses without conflicts. Try adding more rooms or time slots.",
                 null,
                 \core\output\notification::NOTIFY_ERROR
@@ -229,7 +229,7 @@ if ($action === 'generate' && confirm_sesskey()) {
         }
     } catch (\Exception $e) {
         redirect(
-            new moodle_url('/local/schola_slots/index.php'),
+            new moodle_url('/local/schola_timetabler/index.php'),
             "Error running timetable generator: " . $e->getMessage(),
             null,
             \core\output\notification::NOTIFY_ERROR
@@ -238,20 +238,20 @@ if ($action === 'generate' && confirm_sesskey()) {
 }
 
 echo $OUTPUT->header();
-echo \local_schola_slots\output\renderer::render_nav_header('index');
+echo \local_schola_timetabler\output\renderer::render_nav_header('index');
 
-$output = $PAGE->get_renderer('local_schola_slots');
+$output = $PAGE->get_renderer('local_schola_timetabler');
 echo $output->render_dashboard([]);
 
 // -------------------------------------------------------------------
 // Multi-Timetable Generator Options Card
 // -------------------------------------------------------------------
 echo html_writer::start_div('card border-0 shadow-sm my-4 bg-white');
-$cardheading = html_writer::tag('h5', get_string('csp_generator_heading', 'local_schola_slots'), ['class' => 'mb-0 font-weight-bold']);
+$cardheading = html_writer::tag('h5', get_string('csp_generator_heading', 'local_schola_timetabler'), ['class' => 'mb-0 font-weight-bold']);
 echo html_writer::div($cardheading, 'card-header bg-dark text-white p-3');
 echo html_writer::start_div('card-body p-4');
 
-echo html_writer::start_tag('form', ['method' => 'post', 'action' => (new moodle_url('/local/schola_slots/index.php'))->out(false)]);
+echo html_writer::start_tag('form', ['method' => 'post', 'action' => (new moodle_url('/local/schola_timetabler/index.php'))->out(false)]);
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'action', 'value' => 'generate']);
 
@@ -264,7 +264,7 @@ if (!function_exists('schola_get_string')) {
      * @return string Localized or fallback text.
      */
     function schola_get_string(string $identifier, string $fallback): string {
-        $str = get_string($identifier, 'local_schola_slots');
+        $str = get_string($identifier, 'local_schola_timetabler');
         if (strpos($str, '[[') === 0 || strpos($str, 'a_slots:') !== false) {
             return $fallback;
         }
@@ -324,9 +324,9 @@ echo html_writer::end_div();
 echo html_writer::end_div();
 
 echo html_writer::start_div('mt-4 pt-3 border-top d-flex align-items-center justify-content-between flex-wrap gap-2');
-$btnlabel = get_string('run_solver_button', 'local_schola_slots');
+$btnlabel = get_string('run_solver_button', 'local_schola_timetabler');
 echo html_writer::tag('button', $btnlabel, ['type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm fs-6']);
-echo html_writer::tag('span', get_string('conflict_prevention_notice', 'local_schola_slots'), ['class' => 'text-muted small']);
+echo html_writer::tag('span', get_string('conflict_prevention_notice', 'local_schola_timetabler'), ['class' => 'text-muted small']);
 echo html_writer::end_div();
 
 echo html_writer::end_tag('form');

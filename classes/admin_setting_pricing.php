@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots;
+namespace local_schola_timetabler;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -24,7 +24,7 @@ require_once($CFG->libdir . '/adminlib.php');
 /**
  * Custom admin setting element to render clean System Performance & Cloud Solver Information.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +34,7 @@ class admin_setting_pricing extends \admin_setting {
      */
     public function __construct() {
         $this->nosave = true;
-        parent::__construct('local_schola_slots/commercial_plans', '', '', '');
+        parent::__construct('local_schola_timetabler/commercial_plans', '', '', '');
     }
 
     /**
@@ -73,11 +73,11 @@ class admin_setting_pricing extends \admin_setting {
      * @return string Rendered HTML.
      */
     public function output_html($data, $query = '') {
-        $licensekey = get_config('local_schola_slots', 'license_key');
+        $licensekey = get_config('local_schola_timetabler', 'license_key');
         $licensekey = trim((string)$licensekey);
 
         $iscloudactive = !empty($licensekey);
-        $checkouturl = \local_schola_slots\licensing\license_manager::get_checkout_url();
+        $checkouturl = \local_schola_timetabler\licensing\license_manager::get_checkout_url();
 
         $statuscard = '';
         if ($iscloudactive) {

@@ -1,7 +1,7 @@
-# CAPSTONE PROJECT SPECIFICATION: Moodle Academic & Exam Timetabler (`local_schola_slots`)
+# CAPSTONE PROJECT SPECIFICATION: Moodle Academic & Exam Timetabler (`local_schola_timetabler`)
 
 ## Executive Summary
-**`local_schola_slots`** is an enterprise-grade, fully self-contained Moodle local plugin designed to solve both **routine course/class scheduling** (weekly recurring lectures, labs, seminars) and **exam timetabling** (midterms, finals) directly inside a Moodle server environment.
+**`local_schola_timetabler`** is an enterprise-grade, fully self-contained Moodle local plugin designed to solve both **routine course/class scheduling** (weekly recurring lectures, labs, seminars) and **exam timetabling** (midterms, finals) directly inside a Moodle server environment.
 
 The solution provides an on-premise native PHP solver engine adhering strictly to Moodle Frankensytle standards, GPL-3.0 licensing, and GDPR privacy compliance, with optional cloud solver acceleration (scholaslots.com) for large university workloads.
 
@@ -25,7 +25,7 @@ The solution provides an on-premise native PHP solver engine adhering strictly t
 ## 2. Directory & Component Architecture
 
 ```text
-moodle/local/schola_slots/
+moodle/local/schola_timetabler/
 ├── classes/
 │   ├── algorithm/
 │   │   └── solver.php               # Native PHP Constraint Solver Engine
@@ -36,13 +36,13 @@ moodle/local/schola_slots/
 │   └── privacy/
 │       └── provider.php             # GDPR Privacy API Compliance
 ├── db/
-│   ├── access.php                   # Capability Definitions (local/schola_slots:manage)
+│   ├── access.php                   # Capability Definitions (local/schola_timetabler:manage)
 │   ├── install.xml                  # XMLDB Database Schema
 │   ├── tasks.php                    # Task Registration
 │   └── upgrade.php                  # Database Upgrade Handler
 ├── lang/
 │   └── en/
-│       └── local_schola_slots.php # English Language Strings
+│       └── local_schola_timetabler.php # English Language Strings
 ├── templates/
 │   └── dashboard.mustache           # HTML/Mustache Admin Interface
 ├── index.php                        # Admin Controller View
@@ -57,7 +57,7 @@ moodle/local/schola_slots/
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/schola_slots/db" VERSION="20260812" COMMENT="Schema for unified course and exam timetabler">
+<XMLDB PATH="local/schola_timetabler/db" VERSION="20260812" COMMENT="Schema for unified course and exam timetabler">
   <TABLES>
     <!-- Physical Campus Infrastructure -->
     <TABLE NAME="local_ss_rooms" COMMENT="Campus rooms and capabilities">
@@ -115,7 +115,7 @@ moodle/local/schola_slots/
 <?php
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_schola_slots'; 
+$plugin->component = 'local_schola_timetabler'; 
 $plugin->version   = 2026081200;              // YYYYMMDDXX format
 $plugin->requires  = 2024042200;              // Minimum Moodle 4.4+
 $plugin->maturity  = MATURITY_STABLE;
@@ -128,7 +128,7 @@ $plugin->release   = '1.0.0';
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    'local/schola_slots:manage' => [
+    'local/schola_timetabler:manage' => [
         'riskbitmask' => RISK_CONFIG | RISK_DATALOSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -141,7 +141,7 @@ $capabilities = [
 
 ### 4.3 Native PHP Solver Engine (`classes/algorithm/solver.php`)
 ```php
-namespace local_schola_slots\algorithm;
+namespace local_schola_timetabler\algorithm;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -239,12 +239,12 @@ class solver {
 
 ### 4.4 Background Task Processor (`classes/task/generate_timetable.php`)
 ```php
-namespace local_schola_slots\task;
+namespace local_schola_timetabler\task;
 
 defined('MOODLE_INTERNAL') || die();
 
 use core\task\adhoc_task;
-use local_schola_slots\algorithm\solver;
+use local_schola_timetabler\algorithm\solver;
 
 class generate_timetable extends adhoc_task {
 
@@ -312,7 +312,7 @@ class generate_timetable extends adhoc_task {
    ```
 2. **Execute Moodle Code Checker (PHPCS):**
    ```bash
-   vendor/bin/phpcs --standard=moodle local/schola_slots
+   vendor/bin/phpcs --standard=moodle local/schola_timetabler
    ```
 3. **Execute Solver Task in Background CLI:**
    ```bash

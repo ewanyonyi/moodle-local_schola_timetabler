@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage Active Time Slots & Bell Schedule for local_schola_slots.
+ * Manage Active Time Slots & Bell Schedule for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,15 +27,15 @@ require_once(__DIR__ . '/../../config.php');
 
 require_login();
 $context = context_system::instance();
-require_capability('local/schola_slots:manage', $context);
+require_capability('local/schola_timetabler:manage', $context);
 
 $action = optional_param('action', '', PARAM_ALPHANUMEXT);
 $id     = optional_param('id', 0, PARAM_INT);
 
-$url = new moodle_url('/local/schola_slots/slots.php');
+$url = new moodle_url('/local/schola_timetabler/slots.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Time Slots Management — Schola Slots');
+$PAGE->set_title('Time Slots Management — Schola Timetabler');
 $PAGE->set_heading('Time Slots Management');
 
 // -------------------------------------------------------------------
@@ -43,7 +43,7 @@ $PAGE->set_heading('Time Slots Management');
 // -------------------------------------------------------------------
 if ($action === 'sample_csv') {
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename="schola_slots_time_slots_sample.csv"');
+    header('Content-Disposition: attachment; filename="schola_timetabler_time_slots_sample.csv"');
     $out = fopen('php://output', 'w');
     fputcsv($out, ['dayofweek', 'starttime', 'endtime', 'type']);
     fputcsv($out, [1, '08:00', '09:00', 'class']);
@@ -66,7 +66,7 @@ if ($action === 'sample_csv') {
 // Action: Delete Single Time Slot
 // -------------------------------------------------------------------
 if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_slots_slots', ['id' => $id]);
+    $DB->delete_records('local_schola_timetabler_slots', ['id' => $id]);
     redirect($url, 'Time slot deleted successfully.');
 }
 
@@ -74,7 +74,7 @@ if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
 // Action: Clear All Slots
 // -------------------------------------------------------------------
 if ($action === 'clearall' && confirm_sesskey()) {
-    $DB->delete_records('local_schola_slots_slots');
+    $DB->delete_records('local_schola_timetabler_slots');
     redirect($url, 'All time slots cleared successfully.');
 }
 
@@ -103,7 +103,7 @@ if ($action === 'import_csv' && confirm_sesskey() && data_submitted()) {
 
                 if ($dayidx !== null && $startidx !== null && $endidx !== null) {
                     if ($wipeexisting) {
-                        $DB->delete_records('local_schola_slots_slots');
+                        $DB->delete_records('local_schola_timetabler_slots');
                     }
 
                     $inserted = 0;
@@ -134,7 +134,7 @@ if ($action === 'import_csv' && confirm_sesskey() && data_submitted()) {
 
                         $stype = in_array($rawtype, ['class', 'lab', 'break', 'exam']) ? $rawtype : 'class';
 
-                        $DB->insert_record('local_schola_slots_slots', (object)[
+                        $DB->insert_record('local_schola_timetabler_slots', (object)[
                             'dayofweek' => $daynum,
                             'starttime' => date('H:i', strtotime("2026-01-01 " . $rawstart)),
                             'endtime'   => date('H:i', strtotime("2026-01-01 " . $rawend)),
@@ -174,7 +174,7 @@ if ($action === 'build_bell_schedule' && confirm_sesskey()) {
     $wipeexisting = optional_param('wipe_existing', 1, PARAM_INT);
 
     if ($wipeexisting) {
-        $DB->delete_records('local_schola_slots_slots');
+        $DB->delete_records('local_schola_timetabler_slots');
     }
 
     $inserted = 0;
@@ -191,7 +191,7 @@ if ($action === 'build_bell_schedule' && confirm_sesskey()) {
         while ($currsec < $endsec) {
             // Check Morning Tea Break
             if ($tstartsec && $tendsec && $currsec >= $tstartsec && $currsec < $tendsec) {
-                $DB->insert_record('local_schola_slots_slots', (object)[
+                $DB->insert_record('local_schola_timetabler_slots', (object)[
                     'dayofweek' => $day,
                     'starttime' => date('H:i', $tstartsec),
                     'endtime'   => date('H:i', $tendsec),
@@ -204,7 +204,7 @@ if ($action === 'build_bell_schedule' && confirm_sesskey()) {
 
             // Check Lunch Break
             if ($lstartsec && $lendsec && $currsec >= $lstartsec && $currsec < $lendsec) {
-                $DB->insert_record('local_schola_slots_slots', (object)[
+                $DB->insert_record('local_schola_timetabler_slots', (object)[
                     'dayofweek' => $day,
                     'starttime' => date('H:i', $lstartsec),
                     'endtime'   => date('H:i', $lendsec),
@@ -228,7 +228,7 @@ if ($action === 'build_bell_schedule' && confirm_sesskey()) {
                 $nextsec = $lstartsec;
             }
 
-            $DB->insert_record('local_schola_slots_slots', (object)[
+            $DB->insert_record('local_schola_timetabler_slots', (object)[
                 'dayofweek' => $day,
                 'starttime' => date('H:i', $currsec),
                 'endtime'   => date('H:i', $nextsec),
@@ -247,7 +247,7 @@ if ($action === 'build_bell_schedule' && confirm_sesskey()) {
 // -------------------------------------------------------------------
 $editslot = null;
 if ($action === 'edit' && $id > 0) {
-    $editslot = $DB->get_record('local_schola_slots_slots', ['id' => $id]);
+    $editslot = $DB->get_record('local_schola_timetabler_slots', ['id' => $id]);
 }
 
 if ($data = data_submitted() && confirm_sesskey() && optional_param('save_slot', 0, PARAM_INT)) {
@@ -267,10 +267,10 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('save_slot',
 
         if ($editslotid > 0) {
             $record->id = $editslotid;
-            $DB->update_record('local_schola_slots_slots', $record);
+            $DB->update_record('local_schola_timetabler_slots', $record);
             redirect($url, 'Time slot updated successfully.');
         } else {
-            $DB->insert_record('local_schola_slots_slots', $record);
+            $DB->insert_record('local_schola_timetabler_slots', $record);
             redirect($url, 'Time slot added successfully.');
         }
     }
@@ -278,7 +278,7 @@ if ($data = data_submitted() && confirm_sesskey() && optional_param('save_slot',
 
 echo $OUTPUT->header();
 
-echo \local_schola_slots\output\renderer::render_nav_header('slots');
+echo \local_schola_timetabler\output\renderer::render_nav_header('slots');
 
 // -------------------------------------------------------------------
 // Component 1: Batch CSV Import for Time Slots
@@ -475,7 +475,7 @@ if ($editslot) {
 // -------------------------------------------------------------------
 // Component 4: Visual Daily Bell Schedule Summary Table
 // -------------------------------------------------------------------
-$slots = $DB->get_records('local_schola_slots_slots', null, 'dayofweek ASC, starttime ASC');
+$slots = $DB->get_records('local_schola_timetabler_slots', null, 'dayofweek ASC, starttime ASC');
 
 echo html_writer::start_div('d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2');
 echo html_writer::tag('h4', 'Active Bell Schedule Windows (' . count($slots) . ' Time Slots)', ['class' => 'mb-0 font-weight-bold']);

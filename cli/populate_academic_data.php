@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Schola Slots CLI Data Population Script - Institutional Scale
+ * Schola Timetabler CLI Data Population Script - Institutional Scale
  *
  * Populates Moodle with substantial data representing a busy educational institution:
  * Faculties, Courses, Quizzes (Exams), Teachers, Students, Course Enrollments,
  * Campus Rooms (Auditoriums, Labs, Lecture Halls), and Master Time Slots.
  *
- * @package    local_schola_slots
- * @copyright  2026 Schola Slots Team
+ * @package    local_schola_timetabler
+ * @copyright  2026 Schola Timetabler Team
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -50,13 +50,13 @@ $CFG->noemailever = true;
 ]);
 
 if ($options['help']) {
-    $help = "Schola Slots Test Data Generator CLI (Busy Institution Scale)
+    $help = "Schola Timetabler Test Data Generator CLI (Busy Institution Scale)
 
 Populates Moodle with departments, courses, exams, teachers, students,
 course enrollments, and campus infrastructure (rooms & time slots).
 
 Usage:
-  php local/schola_slots/cli/populate_academic_data.php [options]
+  php local/schola_timetabler/cli/populate_academic_data.php [options]
 
 Options:
   -h, --help           Show this help message.
@@ -68,13 +68,13 @@ Options:
       --slots=20       Number of time slots to populate (default: 20).
 
 Example:
-  php local/schola_slots/cli/populate_academic_data.php --courses=100 --teachers=50 --students=500
+  php local/schola_timetabler/cli/populate_academic_data.php --courses=100 --teachers=50 --students=500
 ";
     echo $help;
     exit(0);
 }
 
-cli_heading("Schola Slots - Institutional Scale Data Generator");
+cli_heading("Schola Timetabler - Institutional Scale Data Generator");
 
 global $DB;
 
@@ -87,9 +87,9 @@ $generator = new testing_data_generator();
 // Clear option handling
 if ($options['clear']) {
     cli_writeln("Cleaning up previous timetabler infrastructure data and test courses...");
-    $DB->delete_records('local_schola_slots_schedules');
-    $DB->delete_records('local_schola_slots_rooms');
-    $DB->delete_records('local_schola_slots_slots');
+    $DB->delete_records('local_schola_timetabler_schedules');
+    $DB->delete_records('local_schola_timetabler_rooms');
+    $DB->delete_records('local_schola_timetabler_slots');
 
     $selectsql = "id > 1 AND (shortname LIKE 'CS%' OR shortname LIKE 'MATH%' OR shortname LIKE 'ENG%' " .
         "OR shortname LIKE 'PHYS%' OR shortname LIKE 'BUS%' OR shortname LIKE 'MED%' " .
@@ -244,7 +244,7 @@ cli_writeln("  + Configured {$numcourses} courses with 2 exams each and active s
 // ---------------------------------------------------------
 // 4. Populate Campus Infrastructure (Rooms)
 // ---------------------------------------------------------
-cli_writeln("\n[4/5] Populating Campus Rooms (local_schola_slots_rooms)...");
+cli_writeln("\n[4/5] Populating Campus Rooms (local_schola_timetabler_rooms)...");
 
 $allrooms = [
     // Major Auditoriums
@@ -289,9 +289,9 @@ $numrooms = min((int)$options['rooms'], count($allrooms));
 $addedrooms = 0;
 for ($r = 0; $r < $numrooms; $r++) {
     $roomdata = $allrooms[$r];
-    $existing = $DB->get_record('local_schola_slots_rooms', ['name' => $roomdata['name']]);
+    $existing = $DB->get_record('local_schola_timetabler_rooms', ['name' => $roomdata['name']]);
     if (!$existing) {
-        $DB->insert_record('local_schola_slots_rooms', (object)$roomdata);
+        $DB->insert_record('local_schola_timetabler_rooms', (object)$roomdata);
         $addedrooms++;
     }
 }
@@ -300,7 +300,7 @@ cli_writeln("  + Campus infrastructure populated: {$numrooms} rooms in total.");
 // ---------------------------------------------------------
 // 5. Populate Master Time Slots (Slots)
 // ---------------------------------------------------------
-cli_writeln("\n[5/5] Populating Master Time Slots (local_schola_slots_slots)...");
+cli_writeln("\n[5/5] Populating Master Time Slots (local_schola_timetabler_slots)...");
 
 $allslots = [];
 
@@ -358,7 +358,7 @@ for ($d = 0; $d < 5; $d++) {
 $numslots = min((int)($options['slots'] ?? 50), count($allslots));
 for ($s = 0; $s < $numslots; $s++) {
     $slotdata = $allslots[$s];
-    $existing = $DB->get_record('local_schola_slots_slots', [
+    $existing = $DB->get_record('local_schola_timetabler_slots', [
         'type'      => $slotdata['type'],
         'starttime' => $slotdata['starttime'],
         'endtime'   => $slotdata['endtime'],
@@ -366,7 +366,7 @@ for ($s = 0; $s < $numslots; $s++) {
         'exactdate' => $slotdata['exactdate'],
     ]);
     if (!$existing) {
-        $DB->insert_record('local_schola_slots_slots', (object)$slotdata);
+        $DB->insert_record('local_schola_timetabler_slots', (object)$slotdata);
     }
 }
 cli_writeln("  + Master schedule time slots populated: {$numslots} active time windows.");
@@ -377,6 +377,6 @@ cli_writeln("  - Academic Faculties: " . count($categoryids));
 cli_writeln("  - Faculty (Teachers): {$numteachers} (Login: faculty_1 / Password: Password123!)");
 cli_writeln("  - Students Enrolled:  {$numstudents} (Login: student_1 / Password: Password123!)");
 cli_writeln("  - Total Courses:      {$numcourses} (with ~" . ($numcourses * 2) . " total exams)");
-cli_writeln("  - Total Campus Rooms: " . $DB->count_records('local_schola_slots_rooms'));
-cli_writeln("  - Total Time Slots:   " . $DB->count_records('local_schola_slots_slots'));
+cli_writeln("  - Total Campus Rooms: " . $DB->count_records('local_schola_timetabler_rooms'));
+cli_writeln("  - Total Time Slots:   " . $DB->count_records('local_schola_timetabler_slots'));
 cli_writeln("\nYour Moodle instance now represents a busy academic institution!");

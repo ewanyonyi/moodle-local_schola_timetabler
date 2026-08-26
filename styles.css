@@ -1,4 +1,4 @@
-/* local_schola_slots custom styling */
+/* local_schola_timetabler custom styling */
 
 .att-profile-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -294,7 +294,7 @@
     border-radius: 8px !important;
 }
 
-/* Schola Slots Rust Matrix Grid Architectural Styling */
+/* Schola Timetabler Rust Matrix Grid Architectural Styling */
 .day-banner-cell {
     background-color: #f1f5f9 !important;
     color: #0f172a !important;
@@ -348,7 +348,7 @@
     opacity: 0.9 !important;
 }
 
-/* Brand Buttons matching Schola Slots Rust design */
+/* Brand Buttons matching Schola Timetabler Rust design */
 .btn-emerald {
     background-color: #059669 !important;
     border-color: #059669 !important;
@@ -414,7 +414,7 @@
     border-color: #94a3b8 !important;
 }
 
-/* Badges matching Schola Slots Rust brand colors */
+/* Badges matching Schola Timetabler Rust brand colors */
 .badge-fitness-score {
     background-color: #ecfdf5 !important;
     color: #047857 !important;
@@ -457,27 +457,27 @@
     border-radius: 4px !important;
 }
 
-/* Tighten top spacing between main page navigation and page heading for Schola Slots */
-#page.path-local-schola_slots #page-header,
-body.path-local-schola_slots #page-header,
-.path-local-schola_slots #page-header {
+/* Tighten top spacing between main page navigation and page heading for Schola Timetabler */
+#page.path-local-schola_timetabler #page-header,
+body.path-local-schola_timetabler #page-header,
+.path-local-schola_timetabler #page-header {
     margin-top: 0.25rem !important;
     padding-top: 0.25rem !important;
     margin-bottom: 0.75rem !important;
     padding-bottom: 0 !important;
 }
 
-#page.path-local-schola_slots #page-header .h2,
-#page.path-local-schola_slots #page-header h2,
-.path-local-schola_slots #page-header .page-header-headings h1 {
+#page.path-local-schola_timetabler #page-header .h2,
+#page.path-local-schola_timetabler #page-header h2,
+.path-local-schola_timetabler #page-header .page-header-headings h1 {
     margin-top: 0 !important;
     margin-bottom: 0.25rem !important;
 }
 
-#page.path-local-schola_slots #page-content,
-.path-local-schola_slots #page-content,
-.path-local-schola_slots #region-main-box,
-.path-local-schola_slots #region-main {
+#page.path-local-schola_timetabler #page-content,
+.path-local-schola_timetabler #page-content,
+.path-local-schola_timetabler #region-main-box,
+.path-local-schola_timetabler #region-main {
     padding-top: 0 !important;
     margin-top: 0 !important;
 }

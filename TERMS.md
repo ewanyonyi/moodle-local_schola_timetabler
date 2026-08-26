@@ -1,14 +1,14 @@
-# Schola Slots Moodle Plugin — Terms of Sale & Subscription Agreement
+# Schola Timetabler Moodle Plugin — Terms of Sale & Subscription Agreement
 
 **Last Updated:** August 22, 2026  
-**Plugin Identifier:** `local_schola_slots`  
+**Plugin Identifier:** `local_schola_timetabler`  
 **Publisher / Controller:** Emanuel Dickson Wanyonyi (<wanyonyi.d.emanuel@gmail.com>)
 
 ---
 
 ## 1. Overview & Dual Licensing Terms
 
-**Schola Slots** is provided under a dual licensing framework:
+**Schola Timetabler** is provided under a dual licensing framework:
 
 1. **Starter Edition (Free Open Source)**:
    - Licensed under **GNU General Public License v3.0 (GPLv3)**.

@@ -17,47 +17,38 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Restore structure definition for local_schola_slots course plugin data.
+ * Backup structure definition for local_schola_timetabler course plugin data.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class restore_local_schola_slots_plugin extends restore_local_plugin {
+class backup_local_schola_timetabler_plugin extends backup_local_plugin {
     /**
-     * Define the course restore structure for local_schola_slots.
+     * Define the course backup structure for local_schola_timetabler.
      *
-     * @return array
+     * @return backup_plugin_element
      */
     protected function define_course_plugin_structure() {
-        $paths = [];
+        $plugin = $this->get_plugin_element();
 
-        $paths[] = new restore_path_element(
-            'local_schola_slots_schedule',
-            $this->get_pathfor('/schedules/schedule')
-        );
+        $pluginwrapper = new backup_nested_element($this->get_recommended_name());
 
-        return $paths;
-    }
+        $schedules = new backup_nested_element('schedules');
 
-    /**
-     * Process schedule element during restore.
-     *
-     * @param array $data Parsed schedule data.
-     * @return void
-     */
-    public function process_local_schola_slots_schedule($data) {
-        global $DB;
+        $schedule = new backup_nested_element('schedule', ['id'], [
+            'schedule_type', 'quizid', 'roomid', 'slotid', 'teacherid',
+        ]);
 
-        $data = (object)$data;
-        $oldid = $data->id;
+        $plugin->add_child($pluginwrapper);
+        $pluginwrapper->add_child($schedules);
+        $schedules->add_child($schedule);
 
-        $data->courseid = $this->get_courseid();
-        $data->teacherid = $this->get_mappingid('user', $data->teacherid);
+        $schedule->set_source_table('local_schola_timetabler_schedules', ['courseid' => backup::VAR_COURSEID]);
 
-        $newitemid = $DB->insert_record('local_schola_slots_schedules', $data);
+        $schedule->annotate_ids('user', 'teacherid');
 
-        $this->set_mapping('local_schola_slots_schedule', $oldid, $newitemid);
+        return $plugin;
     }
 }

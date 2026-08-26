@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_schola_slots;
+namespace local_schola_timetabler;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Institutional Schedule Profile Manager for local_schola_slots.
+ * Institutional Schedule Profile Manager for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -146,7 +146,7 @@ class profile_manager {
      */
     public static function get_profiles(): array {
         $defaults = self::get_default_profiles();
-        $customjson = get_config('local_schola_slots', 'schedule_profiles');
+        $customjson = get_config('local_schola_timetabler', 'schedule_profiles');
         if (empty($customjson)) {
             return $defaults;
         }
@@ -166,7 +166,7 @@ class profile_manager {
      * @return bool
      */
     public static function save_profiles(array $profiles): bool {
-        return set_config('schedule_profiles', json_encode($profiles), 'local_schola_slots');
+        return set_config('schedule_profiles', json_encode($profiles), 'local_schola_timetabler');
     }
 
     /**
@@ -298,7 +298,7 @@ class profile_manager {
     }
 
     /**
-     * Apply profile time windows to active time slots in database (`local_schola_slots_slots`).
+     * Apply profile time windows to active time slots in database (`local_schola_timetabler_slots`).
      *
      * @param string $key
      * @return int Number of inserted time slots
@@ -313,10 +313,10 @@ class profile_manager {
 
         $slots = self::generate_slots_for_profile($profile);
 
-        $DB->delete_records('local_schola_slots_slots');
+        $DB->delete_records('local_schola_timetabler_slots');
         $inserted = 0;
         foreach ($slots as $s) {
-            $DB->insert_record('local_schola_slots_slots', (object)$s);
+            $DB->insert_record('local_schola_timetabler_slots', (object)$s);
             $inserted++;
         }
 

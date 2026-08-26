@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * English language strings for local_schola_slots.
+ * English language strings for local_schola_timetabler.
  *
- * @package     local_schola_slots
+ * @package     local_schola_timetabler
  * @copyright   2026 Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @author      Emanuel Dickson Wanyonyi <wanyonyi.d.emanuel@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -55,7 +55,7 @@ $string['capacity'] = 'Capacity';
 $string['class_schedules'] = 'Class Schedules';
 $string['class_schedules_only'] = 'Class Schedules Only';
 $string['clear_timetables'] = 'Clear Timetables';
-$string['cloud_offline_limit_err'] = 'Schola Slots Cloud Solver Acceleration Engine is currently unreachable. Large institutional datasets (> 50 courses) require active Cloud Engine connectivity. Please check your cloud server connection at scholaslots.com or contact support@scholaslots.com.';
+$string['cloud_offline_limit_err'] = 'Schola Timetabler Cloud Solver Acceleration Engine is currently unreachable. Large institutional datasets (> 50 courses) require active Cloud Engine connectivity. Please check your cloud server connection at scholaslots.com or contact support@scholaslots.com.';
 $string['col_action'] = 'ACTION';
 $string['col_break_title'] = 'BREAK TITLE';
 $string['col_day_window'] = 'DAY WINDOW';
@@ -101,7 +101,7 @@ $string['lunch_break'] = 'Lunch Break';
 $string['manage_rooms'] = 'Rooms';
 $string['manage_schedules'] = 'View Generated Timetables';
 $string['manage_slots'] = 'Manage Time Slots';
-$string['manage_timetabler'] = 'Manage Schola Slots';
+$string['manage_timetabler'] = 'Manage Schola Timetabler';
 $string['master_list'] = 'Master List';
 $string['monday_only'] = 'Monday Only';
 $string['nav_breaks'] = 'Breaks';
@@ -117,9 +117,9 @@ $string['no_schedules'] = 'No timetables generated yet. Run the solver engine fr
 $string['no_slots'] = 'No time slots configured yet. Add timetable periods below.';
 $string['overwrite_all_mode'] = 'Overwrite ALL Timetables of Selected Type';
 $string['overwrite_existing_mode'] = 'Overwrite Existing Timetables of Selected Type';
-$string['pluginname'] = 'Schola Slots';
+$string['pluginname'] = 'Schola Timetabler';
 $string['print_pdf'] = 'Print / Save to PDF';
-$string['privacy:metadata'] = 'The Schola Slots plugin stores schedule assignment records linking courses, rooms, slots, and instructors, and optionally interfaces with external solver and licensing APIs.';
+$string['privacy:metadata'] = 'The Schola Timetabler plugin stores schedule assignment records linking courses, rooms, slots, and instructors, and optionally interfaces with external solver and licensing APIs.';
 $string['privacy:metadata:lemonsqueezy'] = 'Communicates with LemonSqueezy API to validate commercial license key status.';
 $string['privacy:metadata:lemonsqueezy:license_key'] = 'The commercial license key configured by site administrators.';
 $string['privacy:metadata:schedules'] = 'Stores generated timetable assignments linking courses, rooms, time slots, and assigned instructors.';
@@ -128,7 +128,7 @@ $string['privacy:metadata:schedules:quizid'] = 'The ID of the examination quiz (
 $string['privacy:metadata:schedules:roomid'] = 'The ID of the campus venue assigned.';
 $string['privacy:metadata:schedules:slotid'] = 'The ID of the time slot assigned.';
 $string['privacy:metadata:schedules:teacherid'] = 'The ID of the assigned lecturer or instructor.';
-$string['privacy:metadata:solver_service'] = 'Communicates with Schola Slots Cloud Acceleration Solver service at scholaslots.com to compute high-performance conflict-free schedules.';
+$string['privacy:metadata:solver_service'] = 'Communicates with Schola Timetabler Cloud Acceleration Solver service at scholaslots.com to compute high-performance conflict-free schedules.';
 $string['privacy:metadata:solver_service:courseid'] = 'The ID of the course being scheduled.';
 $string['privacy:metadata:solver_service:lecturer_id'] = 'The ID of the instructor assigned to the course.';
 $string['profile_all_timetables'] = 'Profile: All Timetables';
@@ -143,7 +143,7 @@ $string['saturday_only'] = 'Saturday Only';
 $string['save_changes'] = 'Save Changes';
 $string['save_room'] = 'Save Room';
 $string['schedule_class_badge'] = 'CLASS';
-$string['schola_slots:manage'] = 'Manage Schola Slots plugin settings and timetables';
+$string['schola_timetabler:manage'] = 'Manage Schola Timetabler plugin settings and timetables';
 $string['search_break_placeholder'] = 'Search break title or day...';
 $string['select_csv_file'] = 'Select CSV / Text File';
 $string['showing_items'] = 'Showing {$a} items';

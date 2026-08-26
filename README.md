@@ -1,6 +1,6 @@
-# Schola Slots Moodle Plugin (`local_schola_slots`)
+# Schola Timetabler Moodle Plugin (`local_schola_timetabler`)
 
-**`Schola Slots`** is an enterprise-grade Moodle local plugin designed to generate conflict-free schedules for both **weekly course sessions** (lectures, labs) and **examination windows** (midterms, finals).
+**`Schola Timetabler`** is an enterprise-grade Moodle local plugin designed to generate conflict-free schedules for both **weekly course sessions** (lectures, labs) and **examination windows** (midterms, finals).
 
 This plugin is available on the **Moodle Marketplace** under dual licensing:
 * **Starter Edition (Free Open Source)**: Built-in native PHP solver engine for up to 50 active courses and 25 campus rooms under GPLv3.
@@ -12,16 +12,16 @@ This plugin is available on the **Moodle Marketplace** under dual licensing:
 
 * **Official Website**: [https://scholaslots.com](https://scholaslots.com)
 * **Customer Support Email**: [wanyonyi.d.emanuel@gmail.com](mailto:wanyonyi.d.emanuel@gmail.com)
-* **Repository**: [https://github.com/ewanyonyi/moodle-local_schola_slots](https://github.com/ewanyonyi/moodle-local_schola_slots)
+* **Repository**: [https://github.com/ewanyonyi/moodle-local_schola_timetabler](https://github.com/ewanyonyi/moodle-local_schola_timetabler)
 
 ---
 
 ## 📜 Licensing & Cloud Acceleration
 
-`local_schola_slots` is published as a Moodle Marketplace submission:
+`local_schola_timetabler` is published as a Moodle Marketplace submission:
 
 * **Native On-Premise Engine (Free / Community)**: Full weekly class timetabling, examination schedule generation, room/venue capacity management, bell schedule wizard, and CLI data generator running entirely on your Moodle server under GPLv3.
-* **Cloud Solver Acceleration (Pro Commercial)**: For large universities with massive multi-department masterlists, institutions can connect to the off-server **Schola Slots Cloud Solver Engine** ([scholaslots.com](https://scholaslots.com)) via LemonSqueezy commercial API key for high-speed solving.
+* **Cloud Solver Acceleration (Pro Commercial)**: For large universities with massive multi-department masterlists, institutions can connect to the off-server **Schola Timetabler Cloud Solver Engine** ([scholaslots.com](https://scholaslots.com)) via LemonSqueezy commercial API key for high-speed solving.
 
 ---
 
@@ -84,7 +84,7 @@ EXIT;
 
 2. **Create Plugin Folder Directly in the Dev Tree:**
    ```bash
-   mkdir -p ~/dev/moodle/local/schola_slots
+   mkdir -p ~/dev/moodle/local/schola_timetabler
    ```
 
 3. **Run Non-Interactive Automated Moodle CLI Installation:**
@@ -223,7 +223,7 @@ To test the timetabling engine under realistic conditions, populate your Moodle 
 
 ```bash
 cd ~/dev/moodle
-php local/schola_slots/cli/populate_academic_data.php
+php local/schola_timetabler/cli/populate_academic_data.php
 ```
 
 #### Custom Scale Parameters
@@ -232,13 +232,13 @@ You can specify custom parameters to represent smaller testing scopes or massive
 
 ```bash
 # Populate a large institution (100 Courses, 50 Faculty, 500 Students)
-php local/schola_slots/cli/populate_academic_data.php --courses=100 --teachers=50 --students=500
+php local/schola_timetabler/cli/populate_academic_data.php --courses=100 --teachers=50 --students=500
 
 # Reset/clear existing rooms and time slots before populating
-php local/schola_slots/cli/populate_academic_data.php --clear
+php local/schola_timetabler/cli/populate_academic_data.php --clear
 
 # View all CLI flags and options
-php local/schola_slots/cli/populate_academic_data.php --help
+php local/schola_timetabler/cli/populate_academic_data.php --help
 ```
 
 #### Generated Resources Overview
@@ -295,13 +295,13 @@ Run the Moodle standard code check against your local plugin workspace:
 
 # Standard check
 ```bash
-phpcs --standard=moodle ~/dev/moodle/local/schola_slots
+phpcs --standard=moodle ~/dev/moodle/local/schola_timetabler
 ```
 
 # Extended check (optional)
 
 ```bash
-phpcs --standard=moodle-extra ~/dev/moodle/local/schola_slots
+phpcs --standard=moodle-extra ~/dev/moodle/local/schola_timetabler
 ```
 
 ---
