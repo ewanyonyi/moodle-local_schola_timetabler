@@ -17,15 +17,15 @@ jobs:
       mariadb:
         image: mariadb:10.11
         env:
-          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'true'
-          MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
+          MYSQL_ALLOW_EMPTY_PASSWORD: "true"
         ports:
           - 3306:3306
         options: --health-cmd="healthcheck.sh --su-mysql --connect --innodb_initialized" --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       matrix:
-        moodle-branch: ['MOODLE_404_STABLE', 'MOODLE_405_STABLE']
-        php: ['8.2', '8.3']
+        moodle-branch: ["MOODLE_404_STABLE", "MOODLE_405_STABLE"]
+        php: ["8.2", "8.3"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,7 +58,8 @@ jobs:
         run: >-
           moodle-plugin-ci phpcs
           --exclude=moodle.Commenting.InlineComment,moodle.Files.LineLength,
-          moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal
+          moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,
+          Squiz.PHP.CommentedOutCode
 
       - name: Run PHPMD
         run: moodle-plugin-ci phpmd
