@@ -45,7 +45,11 @@ if ($action === 'download_template') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="campus_rooms_sample.csv"');
     $output = fopen('php://output', 'w');
-    fputcsv($output, ['Name', 'Capacity', 'Is Lab']);
+    fputcsv($output, [
+        get_string('rooms_csv_name', 'local_schola_timetabler'),
+        get_string('rooms_csv_capacity', 'local_schola_timetabler'),
+        get_string('rooms_csv_is_lab', 'local_schola_timetabler'),
+    ]);
     fputcsv($output, ['Main Auditorium 101', '350', '0']);
     fputcsv($output, ['Computer Science Lab 2', '45', '1']);
     fputcsv($output, ['Engineering Lecture Hall A', '180', '0']);
@@ -67,15 +71,6 @@ if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
 // Action: Import Rooms from CSV File
 // -------------------------------------------------------------------
 if ($action === 'import_csv' && confirm_sesskey()) {
-    if (!\local_schola_timetabler\licensing\license_manager::can_batch_import_rooms()) {
-        redirect(
-            $url,
-            'Batch CSV Room Import Feature Locked: CSV/Excel bulk room import is exclusive to Pro University. Please upgrade your license key to unlock batch importing.',
-            null,
-            \core\output\notification::NOTIFY_ERROR
-        );
-    }
-
     if (!empty($_FILES['room_file']['tmp_name']) && is_uploaded_file($_FILES['room_file']['tmp_name'])) {
         $handle = fopen($_FILES['room_file']['tmp_name'], 'r');
         if ($handle !== false) {

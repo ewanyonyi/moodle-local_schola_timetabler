@@ -35,8 +35,8 @@ $id     = optional_param('id', 0, PARAM_INT);
 $url = new moodle_url('/local/schola_timetabler/templates.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Schedule Templates');
-$PAGE->set_heading('Manage Schedule Templates');
+$PAGE->set_title(get_string('template_saved_title', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('template_saved_title', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
 // Action: Delete Template
@@ -162,8 +162,12 @@ echo \local_schola_timetabler\output\renderer::render_nav_header('templates');
 // -------------------------------------------------------------------
 // Friendly Template Builder Form Card
 // -------------------------------------------------------------------
-$cardtitle = $edittemplate ? 'Edit Schedule Template' : 'Create New Schedule Template';
-$btnlabel  = $edittemplate ? 'Update Template' : 'Save Template';
+$cardtitle = $edittemplate
+    ? get_string('template_edit_title', 'local_schola_timetabler')
+    : get_string('template_create_title', 'local_schola_timetabler');
+$btnlabel  = $edittemplate
+    ? get_string('template_update_button', 'local_schola_timetabler')
+    : get_string('template_save_button', 'local_schola_timetabler');
 
 // Extract initial rows for form
 $initialrows = [];
@@ -216,7 +220,7 @@ if ($edittemplate) {
 
 echo html_writer::start_div('row g-3 mb-3');
 echo html_writer::start_div('col-md-6');
-echo html_writer::tag('label', 'Template Name', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('template_name', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', [
     'type' => 'text', 'name' => 'name', 'class' => 'form-control p-2',
     'placeholder' => 'e.g. Standard Semester 1 Class Grid', 'required' => 'required',
@@ -225,7 +229,7 @@ echo html_writer::empty_tag('input', [
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-6');
-echo html_writer::tag('label', 'Description', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('template_description', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', [
     'type' => 'text', 'name' => 'description', 'class' => 'form-control p-2',
     'placeholder' => 'e.g. Mon-Fri 1.5hr classes with Morning Tea & Lunch breaks',
@@ -236,23 +240,23 @@ echo html_writer::end_div();
 
 // Dynamic Time Slot Rows Table
 echo html_writer::start_div('col-12 mt-3');
-echo html_writer::tag('label', 'Configure Schedule Time Windows', ['class' => 'form-label font-weight-bold text-dark fs-6']);
+echo html_writer::tag('label', get_string('template_configuration', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark fs-6']);
 echo html_writer::start_div('table-responsive border rounded bg-light p-2 mb-2');
 echo html_writer::start_tag('table', ['class' => 'table table-sm align-middle mb-0 bg-white', 'id' => 'slot-builder-table']);
 echo html_writer::start_tag('thead', ['class' => 'table-dark']);
 echo html_writer::start_tag('tr');
-echo html_writer::tag('th', 'Day Schedule');
-echo html_writer::tag('th', 'Start Time', ['style' => 'width: 150px;']);
-echo html_writer::tag('th', 'End Time', ['style' => 'width: 150px;']);
-echo html_writer::tag('th', 'Category / Slot Type');
-echo html_writer::tag('th', 'Action', ['style' => 'width: 90px;', 'class' => 'text-center']);
+echo html_writer::tag('th', get_string('template_day_schedule', 'local_schola_timetabler'));
+echo html_writer::tag('th', get_string('start_time', 'local_schola_timetabler'), ['style' => 'width: 150px;']);
+echo html_writer::tag('th', get_string('end_time', 'local_schola_timetabler'), ['style' => 'width: 150px;']);
+echo html_writer::tag('th', get_string('template_slot_type', 'local_schola_timetabler'));
+echo html_writer::tag('th', get_string('col_action', 'local_schola_timetabler'), ['style' => 'width: 90px;', 'class' => 'text-center']);
 echo html_writer::end_tag('tr');
 echo html_writer::end_tag('thead');
 echo html_writer::tag('tbody', '', ['id' => 'slot-rows-container']);
 echo html_writer::end_tag('table');
 echo html_writer::end_div();
 
-echo html_writer::tag('button', '+ Add Another Time Window', [
+echo html_writer::tag('button', get_string('template_add_row', 'local_schola_timetabler'), [
     'type' => 'button', 'class' => 'btn btn-sm btn-outline-primary font-weight-bold shadow-sm',
     'onclick' => 'addSlotRow();',
 ]);
@@ -261,7 +265,7 @@ echo html_writer::end_div();
 echo html_writer::start_div('mt-4 pt-3 border-top d-flex gap-2');
 echo html_writer::tag('button', $btnlabel, ['type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm']);
 if ($edittemplate) {
-    echo html_writer::link($url, 'Cancel Edit', ['class' => 'btn btn-outline-secondary px-4 py-2']);
+    echo html_writer::link($url, get_string('template_cancel_edit', 'local_schola_timetabler'), ['class' => 'btn btn-outline-secondary px-4 py-2']);
 }
 echo html_writer::end_div();
 
@@ -329,15 +333,22 @@ document.addEventListener("DOMContentLoaded", () => {
 // -------------------------------------------------------------------
 $templates = $DB->get_records('local_schola_timetabler_templates', null, 'name ASC');
 
+$templatesheading = get_string('template_saved_count', 'local_schola_timetabler', count($templates));
 echo html_writer::start_div('d-flex align-items-center justify-content-between mb-3');
-echo html_writer::tag('h4', 'Saved Schedule Templates (' . count($templates) . ')', ['class' => 'mb-0 font-weight-bold']);
+echo html_writer::tag('h4', $templatesheading, ['class' => 'mb-0 font-weight-bold']);
 echo html_writer::end_div();
 
 if (empty($templates)) {
-    echo html_writer::div('No custom schedule templates saved yet. Create a new template above or save your active slots from Manage Time Slots.', 'alert alert-info shadow-sm');
+    echo html_writer::div(get_string('template_empty_state', 'local_schola_timetabler'), 'alert alert-info shadow-sm');
 } else {
     $table = new html_table();
-    $table->head = ['Template Name', 'Description', 'Slots Count', 'Last Modified', 'Actions'];
+    $table->head = [
+        get_string('template_name', 'local_schola_timetabler'),
+        get_string('template_description', 'local_schola_timetabler'),
+        get_string('slots_active_windows', 'local_schola_timetabler'),
+        get_string('lastmodified', 'core'),
+        get_string('col_action', 'local_schola_timetabler'),
+    ];
     $table->attributes = ['class' => 'table table-striped table-bordered align-middle bg-white shadow-sm'];
 
     foreach ($templates as $t) {
@@ -346,16 +357,16 @@ if (empty($templates)) {
         $modified  = date('Y-m-d H:i', $t->timemodified);
 
         $applyurl = new moodle_url($url, ['action' => 'apply', 'id' => $t->id, 'sesskey' => sesskey()]);
-        $applybtn = html_writer::link($applyurl, 'Apply to Active Slots', [
+        $applybtn = html_writer::link($applyurl, get_string('template_apply_button', 'local_schola_timetabler'), [
             'class' => 'btn btn-sm btn-success font-weight-bold me-2',
             'onclick' => "return confirm('Apply template \"{$t->name}\"? This will configure active weekly time slots.');",
         ]);
 
         $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $t->id]);
-        $editbtn = html_writer::link($editurl, 'Edit', ['class' => 'btn btn-sm btn-outline-primary me-2']);
+        $editbtn = html_writer::link($editurl, get_string('template_edit_button', 'local_schola_timetabler'), ['class' => 'btn btn-sm btn-outline-primary me-2']);
 
         $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $t->id, 'sesskey' => sesskey()]);
-        $delbtn = html_writer::link($delurl, 'Delete', [
+        $delbtn = html_writer::link($delurl, get_string('template_delete_button', 'local_schola_timetabler'), [
             'class' => 'btn btn-sm btn-outline-danger',
             'onclick' => "return confirm('Delete template \"{$t->name}\"?');",
         ]);
@@ -363,7 +374,7 @@ if (empty($templates)) {
         $table->data[] = [
             '<strong>' . s($t->name) . '</strong>',
             s($t->description ?: '&mdash;'),
-            '<span class="badge bg-secondary px-2 py-1 fs-6">' . $slotcount . ' Slots</span>',
+            '<span class="badge bg-secondary px-2 py-1 fs-6">' . get_string('template_slot_count', 'local_schola_timetabler', $slotcount) . '</span>',
             $modified,
             $applybtn . $editbtn . $delbtn,
         ];

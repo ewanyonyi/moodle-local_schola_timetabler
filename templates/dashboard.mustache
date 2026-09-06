@@ -3,48 +3,30 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
         <div>
             <div class="d-flex align-items-center gap-2">
-                <h3 class="mb-0 text-dark font-weight-bold tracking-tight">Schola Slots Executive Control Center</h3>
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 font-weight-bold small">v1.0 Pro</span>
+                <h3 class="mb-0 text-dark font-weight-bold tracking-tight">Schola Timetabler Control Center</h3>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 font-weight-bold small">v1.0 Free</span>
             </div>
-            <p class="text-muted small mb-0 mt-1">Real-time scheduling analytics, venue capacity monitoring, and cloud solver engine status.</p>
+            <p class="text-muted small mb-0 mt-1">Local scheduling analytics, venue capacity monitoring, and timetable generation.</p>
         </div>
         <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-            {{#is_pro}}
-                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 rounded-pill shadow-sm d-flex align-items-center gap-2">
-                    <span class="spinner-grow spinner-grow-sm text-success" role="status"></span>
-                    <i class="fa fa-cloud"></i> Cloud Engine Active (scholaslots.com)
-                </span>
-            {{/is_pro}}
-            {{^is_pro}}
-                <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle px-3 py-2 fs-6 rounded-pill shadow-sm d-flex align-items-center gap-2">
-                    <i class="fa fa-server"></i> Native On-Premise Engine
-                </span>
-            {{/is_pro}}
+            <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle px-3 py-2 fs-6 rounded-pill shadow-sm d-flex align-items-center gap-2">
+                <i class="fa fa-server"></i> Free Local Engine
+            </span>
         </div>
     </div>
 
     <!-- Engine Mode Alert -->
-    <div id="license-notice-alert" class="alert fade show {{#is_pro}}alert-success border-0 bg-success-subtle text-dark shadow-sm{{/is_pro}}{{^is_pro}}alert-light border shadow-sm text-dark{{/is_pro}} mb-4 rounded-4 p-3" role="alert">
+    <div id="license-notice-alert" class="alert alert-light border shadow-sm text-dark mb-4 rounded-4 p-3" role="alert">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="d-flex align-items-center gap-2">
-                <div class="p-2 rounded-circle {{#is_pro}}bg-success text-white{{/is_pro}}{{^is_pro}}bg-primary text-white{{/is_pro}} me-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                    <i class="fa {{#is_pro}}fa-bolt{{/is_pro}}{{^is_pro}}fa-info-circle{{/is_pro}} fs-5"></i>
+                <div class="p-2 rounded-circle bg-primary text-white me-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                    <i class="fa fa-info-circle fs-5"></i>
                 </div>
                 <div>
                     <div class="font-weight-bold">{{tier_notice}}</div>
-                    <div class="small text-muted">Cloud Solver Acceleration Engine delivers high-speed conflict satisfaction for large campus masterlists.</div>
+                    <div class="small text-muted">All timetable data stays inside your Moodle installation.</div>
                 </div>
             </div>
-            {{^is_pro}}
-                <div class="d-flex gap-2 flex-wrap align-items-center">
-                    <a href="{{settings_url}}" class="btn btn-sm btn-outline-primary font-weight-bold rounded-pill px-3 py-1.5">
-                        <i class="fa fa-sliders me-1"></i> Engine Settings
-                    </a>
-                    <a href="{{buy_url}}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success text-white font-weight-bold rounded-pill px-3 py-1.5 shadow-sm">
-                        <i class="fa fa-arrow-up me-1"></i> Upgrade to Cloud Pro &rarr;
-                    </a>
-                </div>
-            {{/is_pro}}
         </div>
     </div>
 

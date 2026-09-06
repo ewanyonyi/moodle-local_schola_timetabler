@@ -15,7 +15,7 @@ Welcome to the **Schola Timetabler** administrator user guide. This document pro
    - [Step 4: Generating Timetables (Class vs Exam)](#step-4-generating-timetables-class-vs-exam)
    - [Step 5: Timetable Studio (View, Filter, Export & Print)](#step-5-timetable-studio-view-filter-export--print)
 4. [CSV Batch Import Specifications](#csv-batch-import-specifications)
-5. [Pro Cloud Acceleration Setup](#pro-cloud-acceleration-setup)
+5. [Local Solver Setup](#local-solver-setup)
 6. [Frequently Asked Questions (FAQ) & Troubleshooting](#frequently-asked-questions-faq--troubleshooting)
 7. [Support & Assistance](#support--assistance)
 
@@ -101,13 +101,13 @@ dayofweek, starttime, endtime, type
 
 ---
 
-## ⚡ Pro Cloud Acceleration Setup
+## ⚡ Local Solver Setup
 
-For institutions with large course matrices (> 50 courses, > 25 rooms):
-1. Go to **Site Administration ➔ Plugins ➔ Local plugins ➔ Schola Timetabler Settings**.
-2. Enter your commercial **Pro License Key** from [scholaslots.com](https://scholaslots.com).
-3. Click **Save Changes**.
-4. Once active, solver requests route to the off-server high-speed Cloud Engine, processing complex timetables in under 50ms.
+The plugin runs entirely on your Moodle server. There is no external license or cloud service to configure.
+
+1. Install the plugin in your local Moodle instance.
+2. Configure rooms, slots, breaks, and course categories from the plugin pages.
+3. Generate timetables directly from the built-in solver engine.
 
 ---
 
@@ -127,5 +127,4 @@ For institutions with large course matrices (> 50 courses, > 25 rooms):
 ## 📞 Support & Assistance
 
 - **Support Email**: [wanyonyi.d.emanuel@gmail.com](mailto:wanyonyi.d.emanuel@gmail.com)
-- **Official Website**: [https://scholaslots.com](https://scholaslots.com)
 - **Issue Tracker**: [https://github.com/ewanyonyi/moodle-local_schola_timetabler/issues](https://github.com/ewanyonyi/moodle-local_schola_timetabler/issues)

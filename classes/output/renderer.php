@@ -124,18 +124,10 @@ class renderer extends plugin_renderer_base {
     public function render_dashboard($page) {
         global $DB;
 
-        $tier = license_manager::get_tier();
-        $tiername = license_manager::get_tier_name();
-        $ispro = license_manager::is_pro();
-        $isstarter = ($tier === license_manager::TIER_STARTER);
-        $iscommunity = ($tier === license_manager::TIER_STARTER);
-
         $indexurl = new \moodle_url('/local/schola_timetabler/index.php');
         $roomsurl = new \moodle_url('/local/schola_timetabler/rooms.php');
         $slotsurl = new \moodle_url('/local/schola_timetabler/slots.php');
         $schedulesurl = new \moodle_url('/local/schola_timetabler/schedules.php');
-        $settingsurl = new \moodle_url('/admin/settings.php', ['section' => 'local_schola_timetabler_settings']);
-        $tasksurl = new \moodle_url('/admin/settings.php', ['section' => 'scheduledtasks']);
         $generateurl = new \moodle_url('/local/schola_timetabler/index.php', [
             'action' => 'generate',
             'sesskey' => sesskey(),
@@ -150,27 +142,15 @@ class renderer extends plugin_renderer_base {
 
         $iscourseexceeded = ($maxcourses > 0 && $coursecount > $maxcourses);
 
-        $tiernotice = '';
-        if ($ispro) {
-            $tiernotice = 'Cloud Solver Acceleration Active — Off-server high-performance timetabling enabled for unlimited capacity.';
-        } else {
-            $tiernotice = 'Native Processing Engine Active — Course and exam timetables are processed locally on your server.';
-        }
+        $tiernotice = 'Free Local Processing Engine Active — Course and exam timetables are processed locally on your Moodle server.';
 
         $contextdata = [
-            'is_pro' => $ispro,
-            'is_starter' => $isstarter,
-            'is_community' => $iscommunity,
-            'tier_name' => $tiername,
             'tier_notice' => $tiernotice,
             'index_url' => $indexurl->out(false),
             'rooms_url' => $roomsurl->out(false),
             'slots_url' => $slotsurl->out(false),
             'schedules_url' => $schedulesurl->out(false),
-            'settings_url' => $settingsurl->out(false),
-            'tasks_url' => $tasksurl->out(false),
             'generate_url' => $generateurl->out(false),
-            'buy_url' => license_manager::get_checkout_url(),
             'course_count' => $coursecount,
             'max_courses_label' => $maxcourseslabel,
             'room_count' => $roomcount,

@@ -35,8 +35,8 @@ $id     = optional_param('id', 0, PARAM_INT);
 $url = new moodle_url('/local/schola_timetabler/slots.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Time Slots Management — Schola Timetabler');
-$PAGE->set_heading('Time Slots Management');
+$PAGE->set_title(get_string('slots_management_title', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('slots_management_heading', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
 // Action: Download Sample CSV Template
@@ -45,7 +45,12 @@ if ($action === 'sample_csv') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="schola_timetabler_time_slots_sample.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['dayofweek', 'starttime', 'endtime', 'type']);
+    fputcsv($out, [
+        get_string('day_of_week', 'local_schola_timetabler'),
+        get_string('start_time', 'local_schola_timetabler'),
+        get_string('end_time', 'local_schola_timetabler'),
+        get_string('type', 'core'),
+    ]);
     fputcsv($out, [1, '08:00', '09:00', 'class']);
     fputcsv($out, [1, '09:00', '10:00', 'class']);
     fputcsv($out, [1, '10:00', '10:30', 'break']);
@@ -287,8 +292,8 @@ $sampleurl = new moodle_url($url, ['action' => 'sample_csv']);
 
 echo html_writer::start_div('card border-0 shadow-sm mb-4 bg-white rounded-3');
 echo html_writer::start_div('card-header bg-dark text-white p-3 d-flex align-items-center justify-content-between flex-wrap gap-2');
-echo html_writer::tag('h5', '<i class="fa fa-file-csv me-2"></i>Batch CSV Time Slot Import', ['class' => 'mb-0 font-weight-bold']);
-echo html_writer::link($sampleurl, '<i class="fa fa-download me-1"></i> Download Sample CSV', ['class' => 'btn btn-sm btn-outline-light font-weight-bold']);
+echo html_writer::tag('h5', '<i class="fa fa-file-csv me-2"></i>' . get_string('slots_csv_import_title', 'local_schola_timetabler'), ['class' => 'mb-0 font-weight-bold']);
+echo html_writer::link($sampleurl, '<i class="fa fa-download me-1"></i> ' . get_string('slots_csv_download', 'local_schola_timetabler'), ['class' => 'btn btn-sm btn-outline-light font-weight-bold']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('card-body p-4');
@@ -304,7 +309,7 @@ echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'action', 'v
 echo html_writer::start_div('row g-3 align-items-center');
 
 echo html_writer::start_div('col-md-7');
-echo html_writer::tag('label', 'Select Time Slots CSV File', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_csv_select', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', [
     'type'     => 'file',
     'name'     => 'csv_file',
@@ -312,8 +317,7 @@ echo html_writer::empty_tag('input', [
     'accept'   => '.csv,text/csv',
     'required' => 'required',
 ]);
-$colinfo = 'Supported columns: <code>dayofweek</code> (1-7 or Mon-Sun), ' .
-    '<code>starttime</code> (08:00), <code>endtime</code> (09:00), <code>type</code> (class, lab, break, exam).';
+$colinfo = get_string('slots_csv_supported', 'local_schola_timetabler', '<code>dayofweek</code> (1-7 or Mon-Sun), <code>starttime</code> (08:00), <code>endtime</code> (09:00), <code>type</code> (class, lab, break, exam).');
 echo html_writer::tag('div', $colinfo, ['class' => 'form-text text-muted small mt-1']);
 echo html_writer::end_div();
 
@@ -338,7 +342,7 @@ echo html_writer::end_div(); // card
 // Component 2: Guided Bell Schedule Wizard
 // -------------------------------------------------------------------
 echo html_writer::start_div('card border-0 shadow-sm mb-4 bg-white rounded-3');
-echo html_writer::div(html_writer::tag('h5', 'Guided Bell Schedule Wizard', ['class' => 'mb-0 font-weight-bold text-dark']), 'card-header bg-light p-3 border-bottom');
+echo html_writer::div(html_writer::tag('h5', get_string('slots_guided_wizard', 'local_schola_timetabler'), ['class' => 'mb-0 font-weight-bold text-dark']), 'card-header bg-light p-3 border-bottom');
 echo html_writer::start_div('card-body p-4');
 
 echo html_writer::start_tag('form', ['method' => 'post', 'action' => $url->out(false)]);
@@ -412,7 +416,7 @@ echo html_writer::start_div('mt-4 pt-3 border-top d-flex align-items-center just
 echo html_writer::start_div('form-check d-flex align-items-center gap-2 mb-0');
 echo html_writer::checkbox('wipe_existing', '1', true, ' Wipe existing time slots before applying', ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_existing']);
 echo html_writer::end_div();
-echo html_writer::tag('button', 'Apply Bell Schedule', ['type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm']);
+echo html_writer::tag('button', get_string('slots_apply_schedule', 'local_schola_timetabler'), ['type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm']);
 echo html_writer::end_div();
 
 echo html_writer::end_tag('form');
@@ -424,7 +428,7 @@ echo html_writer::end_div();
 // -------------------------------------------------------------------
 if ($editslot) {
     echo html_writer::start_div('card shadow-sm mb-4 border-primary rounded-3');
-    echo html_writer::div(html_writer::tag('h5', 'Edit Time Slot Window', ['class' => 'mb-0 font-weight-bold text-primary']), 'card-header bg-light');
+    echo html_writer::div(html_writer::tag('h5', get_string('slots_edit_window', 'local_schola_timetabler'), ['class' => 'mb-0 font-weight-bold text-primary']), 'card-header bg-light');
     echo html_writer::start_div('card-body p-4');
 
     echo html_writer::start_tag('form', ['method' => 'post', 'action' => $url->out(false)]);
@@ -478,7 +482,7 @@ if ($editslot) {
 $slots = $DB->get_records('local_schola_timetabler_slots', null, 'dayofweek ASC, starttime ASC');
 
 echo html_writer::start_div('d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2');
-echo html_writer::tag('h4', 'Active Bell Schedule Windows (' . count($slots) . ' Time Slots)', ['class' => 'mb-0 font-weight-bold']);
+echo html_writer::tag('h4', get_string('slots_active_windows', 'local_schola_timetabler') . ' (' . count($slots) . ' ' . get_string('time', 'core') . ' ' . get_string('slots', 'local_schola_timetabler') . ')', ['class' => 'mb-0 font-weight-bold']);
 
 if (!empty($slots)) {
     $clearallurl = new moodle_url($url, ['action' => 'clearall', 'sesskey' => sesskey()]);
@@ -490,8 +494,7 @@ if (!empty($slots)) {
 echo html_writer::end_div();
 
 if (empty($slots)) {
-    $noslotmsg = 'No bell schedule time windows configured yet. Use the <strong>Batch CSV Import</strong> or ' .
-        '<strong>Guided Bell Schedule Wizard</strong> above to get started.';
+    $noslotmsg = get_string('slots_no_data', 'local_schola_timetabler');
     echo html_writer::div($noslotmsg, 'alert alert-info shadow-sm p-4 text-center fs-6 rounded-3');
 } else {
     $days = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'];

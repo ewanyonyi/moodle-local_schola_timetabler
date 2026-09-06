@@ -60,7 +60,7 @@ echo '
              style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;">
             <div class="row align-items-center position-relative" style="z-index: 2;">
                 <div class="col-lg-8">
-                    <span class="badge bg-success text-white font-monospace text-uppercase px-3 py-1 rounded-pill mb-2">SCHOLA SLOTS ENGINE</span>
+                    <span class="badge bg-success text-white font-monospace text-uppercase px-3 py-1 rounded-pill mb-2">FREE LOCAL ENGINE</span>
                     <h2 class="fw-bold text-white mb-2">Schola Timetabler Administrator User Guide</h2>
                     <p class="text-light opacity-75 lead mb-3">
                         Learn how to configure campus venues, set up bell schedule time profiles, batch-import slots via CSV,
@@ -202,7 +202,7 @@ echo '
         <h4 class="fw-bold text-dark mb-1"><i class="fa fa-circle-question text-success me-2"></i>Frequently Asked Questions (FAQ)</h4>
         <p class="text-muted small mb-0">
             Find quick solutions to common administrator questions regarding timetabling, venue setup, solver rules,
-            CSV imports, and cloud solver setup.
+            CSV imports, and local timetable setup.
         </p>
     </div>
 
@@ -312,14 +312,13 @@ echo '
                 <button class="accordion-button collapsed font-weight-bold text-dark bg-light" type="button"
                         data-bs-toggle="collapse" data-target="#collapseFour" data-bs-target="#collapseFour"
                         aria-expanded="false" aria-controls="collapseFour">
-                    <i class="fa fa-bolt text-info me-2"></i>How do I connect the Pro Rust Cloud Solver Acceleration Engine?
+                    <i class="fa fa-bolt text-info me-2"></i>How does the local solver work?
                 </button>
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
                 <div class="accordion-body text-muted small">
-                    Navigate to <a href="' . $setturl->out(false) . '" class="fw-bold">Site Administration &rarr; Schola Timetabler Settings</a>
-                    and enter your commercial Pro License Key. Once validated, solver requests are routed off-server to the high-performance
-                    Rust Cloud Microservice, processing multi-thousand course matrices in under 50ms.
+                    Schola Timetabler runs its timetable generation locally in your Moodle PHP environment. No external API or paid license is required,
+                    and the solver uses the configured rooms, slots, and course data to generate conflict-free schedules on your server.
                 </div>
             </div>
         </div>
@@ -333,9 +332,7 @@ echo '
             <span class="text-uppercase font-monospace text-muted small fw-bold d-block">ACTIVE ENGINE TIER</span>
             <h5 class="fw-bold text-dark mb-1">' . s($tiername) . '</h5>
             <p class="text-muted small mb-0">
-                ' . ($ispro
-                    ? 'Cloud Acceleration Active — High-speed off-server Rust solver processing enabled.'
-                    : 'Native Processing Engine Active — Local PHP constraint solver handling timetabling operations.') . '
+                Free Local Processing Engine Active — Local PHP constraint solver handling timetabling operations.
             </p>
         </div>
         <div class="d-flex gap-2">

@@ -106,30 +106,19 @@ if ($action === 'generate' && confirm_sesskey()) {
         );
     }
 
-    // Strict License Plan Capacity & Feature Enforcement
+    // Free local plugin: enforce the built-in local limits without any paid plan logic.
     $coursecount = count($courses);
     $maxcourses = \local_schola_timetabler\licensing\license_manager::get_max_courses();
     $tiername = \local_schola_timetabler\licensing\license_manager::get_tier_name();
 
     if ($maxcourses > 0 && $coursecount > $maxcourses) {
-        $msg = "License Capacity Exceeded: Your institution has {$coursecount} active courses, but your {$tiername} " .
-            "plan is limited to {$maxcourses} courses. Please upgrade to Pro University to unlock unlimited scheduling.";
+        $msg = "Free local limit exceeded: your institution has {$coursecount} active courses, but the {$tiername} " .
+            "edition is limited to {$maxcourses} courses.";
         redirect(
             new moodle_url('/local/schola_timetabler/index.php'),
             $msg,
             null,
-            \core\output\notification::NOTIFY_ERROR
-        );
-    }
-
-    if ($scheduletype === 'exam' && !\local_schola_timetabler\licensing\license_manager::can_solve_exams()) {
-        $msg = "Examination Timetabling Feature Locked: Examination schedule generation requires a Starter or " .
-            "Pro University plan. Please upgrade your license key to unlock exam scheduling.";
-        redirect(
-            new moodle_url('/local/schola_timetabler/index.php'),
-            $msg,
-            null,
-            \core\output\notification::NOTIFY_ERROR
+            \core\output\notification::NOTIFY_WARNING
         );
     }
 

@@ -124,119 +124,16 @@ class solver {
      * @return bool True if solution found, false otherwise.
      */
     public function solve_all(): bool {
-        if (license_manager::is_pro()) {
-            if ($this->call_cloud_solver()) {
-                return true;
-            }
-            // If Cloud solver call fails during Pro mode, check course count.
-            // If dataset exceeds local PHP capability (> 50 courses), inform user.
-            if (count($this->courses) > license_manager::STARTER_COURSE_LIMIT) {
-                throw new \moodle_exception(
-                    'cloud_offline_limit_err',
-                    'local_schola_timetabler'
-                );
-            }
-        }
-
-        // Native PHP Solver Fallback (for datasets under Starter limit)
         uasort($this->courses, fn($a, $b) => count($b->students) <=> count($a->students));
         return $this->backtrack_classes(0);
     }
 
     /**
-     * Dispatch payload to 100% Rust Cloud Solver Engine over REST API.
+     * Compatibility hook retained for older code paths.
      *
-     * @return bool True if successfully solved by Cloud Engine.
+     * @return bool Always false because the free plugin uses the local solver only.
      */
     public function call_cloud_solver(): bool {
-        global $CFG;
-
-        $coursespayload = [];
-        foreach ($this->courses as $c) {
-            $coursespayload[] = [
-                'id' => (int)$c->id,
-                'code' => 'COURSE_' . $c->id,
-                'name' => 'Course ' . $c->id,
-                'weekly_sessions' => 1,
-                'is_lab_required' => false,
-                'lecturer_id' => (int)$c->teacher_id,
-            ];
-        }
-
-        $roomspayload = [];
-        foreach ($this->rooms as $r) {
-            $roomspayload[] = [
-                'id' => (int)$r->id,
-                'name' => (string)$r->name,
-                'capacity' => (int)$r->capacity,
-                'is_lab' => (!empty($r->is_lab) && $r->is_lab == 1),
-            ];
-        }
-
-        $slotspayload = [];
-        foreach ($this->slots as $s) {
-            if ($s->type === 'break') {
-                continue;
-            }
-            $slotspayload[] = [
-                'id' => (int)$s->id,
-                'day_of_week' => (int)$s->dayofweek,
-                'start_time' => (string)$s->starttime,
-                'end_time' => (string)$s->endtime,
-            ];
-        }
-
-        $licensekey = license_manager::get_license_key();
-
-        $payload = [
-            'courses' => $coursespayload,
-            'rooms' => $roomspayload,
-            'slots' => $slotspayload,
-            'options' => [
-                'day_distribution' => get_config('local_schola_timetabler', 'day_distribution') ?: 'balanced',
-                'max_iterations' => 100000,
-                'license_key' => $licensekey,
-            ],
-        ];
-
-        require_once($CFG->libdir . '/filelib.php');
-        $curl = new \curl(['CURLOPT_TIMEOUT' => 5, 'CURLOPT_CONNECTTIMEOUT' => 3]);
-        $curl->setHeader('Content-Type: application/json');
-        if (!empty($licensekey)) {
-            $curl->setHeader('X-License-Key: ' . $licensekey);
-        }
-        $configuredhost = get_config('local_schola_timetabler', 'solver_url');
-        $cloudurl = !empty($configuredhost) ? trim((string)$configuredhost) : 'https://scholaslots.com/api/v1/solve';
-
-        $response = $curl->post($cloudurl, json_encode($payload));
-        if ($curl->get_errno() || empty($response)) {
-            // Fallback for local development environments running Rust solver locally
-            $localurl = 'http://localhost:8080/api/v1/solve';
-            $response = $curl->post($localurl, json_encode($payload));
-            if ($curl->get_errno() || empty($response)) {
-                return false;
-            }
-        }
-
-        $data = json_decode($response, true);
-        if (!is_array($data) || empty($data['status']) || $data['status'] === 'error') {
-            return false;
-        }
-
-        if (!empty($data['assignments']) && is_array($data['assignments'])) {
-            foreach ($data['assignments'] as $assign) {
-                $cid = $assign['course_id'];
-                $this->solution['classes'][$cid] = [
-                    'course_id' => $cid,
-                    'slot_id'   => $assign['slot_id'],
-                    'room_id'   => $assign['room_id'],
-                    'teacher_id' => $this->courses[$cid]->teacher_id ?? 0,
-                    'note'      => 'Rust Cloud Acceleration Engine',
-                ];
-            }
-            return true;
-        }
-
         return false;
     }
 

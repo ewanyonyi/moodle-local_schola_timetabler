@@ -51,25 +51,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             'privacy:metadata:schedules'
         );
 
-        // External disclosure: LemonSqueezy License Validation API
-        $collection->add_external_location_link(
-            'lemonsqueezy',
-            [
-                'license_key' => 'privacy:metadata:lemonsqueezy:license_key',
-            ],
-            'privacy:metadata:lemonsqueezy'
-        );
-
-        // External disclosure: Schola Timetabler Cloud Solver Engine
-        $collection->add_external_location_link(
-            'solver_service',
-            [
-                'lecturer_id' => 'privacy:metadata:solver_service:lecturer_id',
-                'courseid'    => 'privacy:metadata:solver_service:courseid',
-            ],
-            'privacy:metadata:solver_service'
-        );
-
         return $collection;
     }
 

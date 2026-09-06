@@ -3,13 +3,13 @@
 ## Executive Summary
 **`local_schola_timetabler`** is an enterprise-grade, fully self-contained Moodle local plugin designed to solve both **routine course/class scheduling** (weekly recurring lectures, labs, seminars) and **exam timetabling** (midterms, finals) directly inside a Moodle server environment.
 
-The solution provides an on-premise native PHP solver engine adhering strictly to Moodle Frankensytle standards, GPL-3.0 licensing, and GDPR privacy compliance, with optional cloud solver acceleration (scholaslots.com) for large university workloads.
+The solution provides an on-premise native PHP solver engine adhering strictly to Moodle Frankensytle standards, GPL-3.0 licensing, and GDPR privacy compliance for local institutional timetabling workloads.
 
 ---
 
 ## 1. System Requirements & Constraints
 
-* **Native On-Premise Execution:** Standard computation executes within Moodle's native PHP environment. Large university datasets can optionally connect to the off-server cloud solver engine (scholaslots.com).
+* **Native On-Premise Execution:** Standard computation executes within Moodle's native PHP environment without reliance on external services.
 * **Asynchronous Background Processing:** Heavy constraint-solving routines execute via Moodle's Task API (`\core\task\adhoc_task`) executed via CLI `cron`, preventing web request timeouts (`max_execution_time`).
 * **Zero Student & Teacher Conflicts (Hard Constraints):**
   * No student can be scheduled for two overlapping classes or exams.
@@ -295,12 +295,11 @@ class generate_timetable extends adhoc_task {
 
 ---
 
-## 5. Deployment & Commercial Packaging Strategy
+## 5. Deployment Strategy
 
-| Tier | Target Market | Key Capabilities | Commercial Pricing |
-|---|---|---|---|
-| **Community Edition** | Small Schools / Vocational Institutes | Up to 30 courses, single-room scheduling, basic backtracking solver. | **Free / Open Source (GPL-3.0)** |
-| **Enterprise Edition** | Universities & Multi-Campus Institutions | Infinite courses/students, parallel Genetic Algorithm solver, personal student schedule dashboard block, and downloadable PDF exam hall slips. | **$2,400 – $5,500 / year** (Site License) |
+| Edition | Target Market | Key Capabilities |
+|---|---|---|
+| **Free Local Edition** | Schools and institutions running Moodle locally | Native PHP solver, room and slot management, exam generation, timetable exports, and local-only operation. |
 
 ---
 

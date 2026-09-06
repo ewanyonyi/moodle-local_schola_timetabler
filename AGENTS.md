@@ -8,7 +8,7 @@ This document defines architectural conventions, Moodle coding standards, and de
 
 `local_schola_timetabler` is an administrative Moodle plugin that manages institutional timetabling for courses, campus venues, time slots, and break windows. It features dual constraint satisfaction engines:
 - **Native PHP Engine**: Built-in local constraint solver algorithm for standard timetables.
-- **Pro Rust Cloud Engine**: High-concurrency, off-server Rust solver service accessible via REST API.
+- **Free Local Solver Engine**: Native Moodle-safe PHP scheduling engine that runs entirely on the local server.
 
 ---
 
@@ -35,7 +35,7 @@ local/schola_timetabler/
 ├── version.php       <-- Plugin release version metadata
 ├── classes/          <-- Core OOP classes & business logic
 │   ├── algorithm/    <-- Native PHP solver & Rust Cloud REST client
-│   ├── licensing/    <-- Commercial license key validator & tier manager
+│   ├── licensing/    <-- Free local compatibility and edition metadata
 │   ├── output/       <-- Navigation header & UI renderers
 │   └── profile_manager.php <-- Institutional schedule profile logic
 ├── db/               <-- Database schema (install.xml), upgrade script, and access capabilities
@@ -62,8 +62,8 @@ local/schola_timetabler/
    - **Only update the Moodle plugin version (`version.php`) when generating or packaging a `.zip` release file for distribution.**
    - Do NOT bump `version.php` version numbers during routine code edits, UI polish, or feature development.
 
-4. **REST API & Cloud Data Contract**:
-   - Data structures sent to the Rust Cloud Engine (`classes/algorithm/solver.php`) must maintain exact JSON field name compatibility with `SolveRequest`.
+5. **Local-Only Solver Contract**:
+   - Data structures used by the local solver (`classes/algorithm/solver.php`) must remain compatible with the native Moodle database model.
    - Supported timetable types are strictly limited to `class` (Regular Semester Class Schedule) and `exam` (Examination Schedule).
 
 5. **UI & Navigation Consistency**:

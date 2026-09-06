@@ -25,10 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-require_once($CFG->dirroot . '/local/schola_timetabler/classes/admin_setting_license_key.php');
-require_once($CFG->dirroot . '/local/schola_timetabler/classes/admin_setting_pricing.php');
-
 if ($hassiteconfig) {
     $settings = new admin_settingpage(
         'local_schola_timetabler_settings',
@@ -44,10 +40,6 @@ if ($hassiteconfig) {
             '<a href="' . new moodle_url('/local/schola_timetabler/index.php') . '" class="btn btn-primary font-weight-bold">Open Schola Timetabler Dashboard</a>' .
             '</div>'
         ));
-
-        $settings->add(new \local_schola_timetabler\admin_setting_license_key());
-
-        $settings->add(new \local_schola_timetabler\admin_setting_pricing());
     }
 
     $ADMIN->add('localplugins', $settings);
