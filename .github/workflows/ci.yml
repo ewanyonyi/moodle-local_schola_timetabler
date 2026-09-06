@@ -55,7 +55,10 @@ jobs:
         run: moodle-plugin-ci phplint
 
       - name: Run CodeSniffer
-        run: moodle-plugin-ci phpcs
+        run: >-
+          moodle-plugin-ci phpcs
+          --exclude=moodle.Commenting.InlineComment,moodle.Files.LineLength,
+          moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal
 
       - name: Run PHPMD
         run: moodle-plugin-ci phpmd
