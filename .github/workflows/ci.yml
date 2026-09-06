@@ -56,10 +56,10 @@ jobs:
 
       - name: Run CodeSniffer
         run: >-
-          moodle-plugin-ci phpcs ./plugin
+          moodle-plugin-ci phpcs
           --exclude=moodle.Commenting.InlineComment,moodle.Files.LineLength,
           moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,
-          Squiz.PHP.CommentedOutCode
+          Squiz.PHP.CommentedOutCode ./plugin
 
       - name: Run PHPMD
         run: moodle-plugin-ci phpmd
