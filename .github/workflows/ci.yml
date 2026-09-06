@@ -56,7 +56,7 @@ jobs:
 
       - name: Run CodeSniffer
         run: >-
-          moodle-plugin-ci phpcs
+          moodle-plugin-ci phpcs ./plugin
           --exclude=moodle.Commenting.InlineComment,moodle.Files.LineLength,
           moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,
           Squiz.PHP.CommentedOutCode
