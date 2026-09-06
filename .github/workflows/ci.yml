@@ -55,11 +55,12 @@ jobs:
         run: moodle-plugin-ci phplint
 
       - name: Run CodeSniffer
+        working-directory: ./plugin
         run: >-
           moodle-plugin-ci phpcs
           --exclude=moodle.Commenting.InlineComment,moodle.Files.LineLength,
           moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,
-          Squiz.PHP.CommentedOutCode ./plugin
+          Squiz.PHP.CommentedOutCode .
 
       - name: Run PHPMD
         run: moodle-plugin-ci phpmd
