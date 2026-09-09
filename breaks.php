@@ -55,8 +55,8 @@ if (!$dbman->field_exists($table, $field)) {
 if ($action === 'add' && data_submitted() && confirm_sesskey()) {
     $title       = required_param('title', PARAM_TEXT);
     $daywindow   = optional_param('daywindow', 0, PARAM_INT); // 0 = All Days, 1 = Mon ... 7 = Sun
-    $starttime   = required_param('starttime', PARAM_RAW);
-    $endtime     = required_param('endtime', PARAM_RAW);
+    $starttime   = required_param('starttime', PARAM_TEXT);
+    $endtime     = required_param('endtime', PARAM_TEXT);
     $scheduletype = optional_param('scheduletype', 'class', PARAM_ALPHA);
 
     $record = (object)[
@@ -74,8 +74,8 @@ if ($action === 'edit' && data_submitted() && confirm_sesskey()) {
     $id          = required_param('id', PARAM_INT);
     $title       = required_param('title', PARAM_TEXT);
     $daywindow   = optional_param('daywindow', 0, PARAM_INT);
-    $starttime   = required_param('starttime', PARAM_RAW);
-    $endtime     = required_param('endtime', PARAM_RAW);
+    $starttime   = required_param('starttime', PARAM_TEXT);
+    $endtime     = required_param('endtime', PARAM_TEXT);
 
     $record = (object)[
         'id'        => $id,

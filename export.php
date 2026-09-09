@@ -152,11 +152,22 @@ $csvurl = new moodle_url('/local/schola_timetabler/export.php', [
     'categoryid' => $categoryid,
 ]);
 
-echo '<!DOCTYPE html>
+$printlabel = get_string('export_print_pdf', 'local_schola_timetabler');
+$csvlabel = get_string('export_csv_label', 'local_schola_timetabler');
+$closewindowlabel = get_string('export_close_window', 'local_schola_timetabler');
+$noallocationslabel = get_string('export_no_allocations', 'local_schola_timetabler');
+$timewindowlabel = get_string('export_time_window', 'local_schola_timetabler');
+$breaklabel = get_string('export_break_blockout', 'local_schola_timetabler');
+$unassignedlabel = get_string('export_unassigned', 'local_schola_timetabler');
+$headerlabel = get_string('export_schedule_profile', 'local_schola_timetabler');
+
+$profiletitle = get_string('export_title', 'local_schola_timetabler');
+
+$header = '<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Academic Timetable - ' . s($site->fullname) . '</title>
+    <title>' . $profiletitle . ' - ' . s($site->fullname) . '</title>
     <link rel="stylesheet" href="' . $cssurl . '">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; color: #000; padding: 20px; }
@@ -179,28 +190,30 @@ echo '<!DOCTYPE html>
 
 <div class="no-print mb-4 d-flex gap-2">
     <button onclick="window.print();" class="btn btn-primary font-weight-bold">
-        Print / Save as PDF
+        ' . $printlabel . '
     </button>
     <a href="' . $csvurl->out(false) . '" class="btn btn-success font-weight-bold">
-        Export to CSV
+        ' . $csvlabel . '
     </a>
     <button onclick="window.close();" class="btn btn-outline-secondary">
-        Close Window
+        ' . $closewindowlabel . '
     </button>
 </div>
 
 <div class="header-print">
     <h2>' . s($site->fullname) . '</h2>
-    <p><strong>Official Academic Schedule Profile: ' . strtoupper($scheduletype) . '</strong> | Generated on ' . date('F j, Y, g:i a') . '</p>
+    <p><strong>' . $headerlabel . ': ' . strtoupper($scheduletype) . '</strong> | ' . get_string('export_generated_on', 'local_schola_timetabler') . ' ' . date('F j, Y, g:i a') . '</p>
 </div>';
 
+echo $header;
+
 if (empty($schedules)) {
-    echo '<div class="alert alert-warning text-center">No schedule allocations found matching the selected criteria.</div>';
+    echo '<div class="alert alert-warning text-center">' . $noallocationslabel . '</div>';
 } else {
     echo '<table class="table-matrix">
         <thead>
             <tr>
-                <th style="width: 12%;">Time Window</th>';
+                <th style="width: 12%;">' . $timewindowlabel . '</th>';
     foreach ($matrixdays as $dayname) {
         echo '<th>' . s($dayname) . '</th>';
     }
@@ -213,7 +226,7 @@ if (empty($schedules)) {
             <td style="background:#f9f9f9; font-weight:bold;">' . s($timeblock) . '</td>';
         if ($isbreak) {
             echo '<td colspan="' . count($matrixdays) . '" style="background:#f1f5f9; color:#64748b; font-weight:bold; font-style:italic; padding:10px;">
-                    INSTITUTIONAL BREAK / BLOCKOUT &mdash; NO CLASSES OR EXAMS
+                    ' . $breaklabel . '
                 </td>';
         } else {
             foreach (array_keys($matrixdays) as $day) {
@@ -223,7 +236,7 @@ if (empty($schedules)) {
                     echo '&mdash;';
                 } else {
                     foreach ($entries as $e) {
-                        $teacher = (!empty($e->firstname) || !empty($e->lastname)) ? fullname($e) : 'Unassigned';
+                        $teacher = (!empty($e->firstname) || !empty($e->lastname)) ? fullname($e) : $unassignedlabel;
                         echo '<div class="cell-entry">
                             <strong>' . s($e->coursecode) . '</strong>
                             <small>' . s($e->roomname) . '</small>

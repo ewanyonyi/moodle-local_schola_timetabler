@@ -678,10 +678,10 @@ if (!$showdetails) {
         echo html_writer::start_div($gridcontainercls, ['id' => 'institutionalGridContainer']);
         echo html_writer::start_div('d-flex justify-content-between align-items-center mb-3');
         echo html_writer::start_div();
-        echo html_writer::tag('h5', 'Master Academic Timetable Matrix', ['class' => 'fw-bold text-dark mb-1']);
-        echo html_writer::tag('p', 'Official Institutional View — Sticky Venue Headers, Shaded Vertical Break Columns & Online Classes.', ['class' => 'text-muted small mb-0']);
+        echo html_writer::tag('h5', get_string('schedule_master_matrix', 'local_schola_timetabler'), ['class' => 'fw-bold text-dark mb-1']);
+        echo html_writer::tag('p', get_string('schedule_institutional_view', 'local_schola_timetabler'), ['class' => 'text-muted small mb-0']);
         echo html_writer::end_div();
-        echo html_writer::tag('span', 'online classes highlighted', [
+        echo html_writer::tag('span', get_string('online_classes_highlighted', 'local_schola_timetabler'), [
             'class' => 'badge bg-success-subtle text-success border border-success-subtle px-3 py-1 font-monospace small rounded-pill',
         ]);
         echo html_writer::end_div();
@@ -696,7 +696,7 @@ if (!$showdetails) {
         // Header Row
         echo html_writer::start_tag('thead');
         echo html_writer::start_tag('tr', ['class' => 'text-center font-monospace text-uppercase small bg-light']);
-        echo html_writer::tag('th', 'VENUE / ROOM', ['style' => 'width: 160px; min-width: 160px;', 'class' => 'py-3 px-3 text-start sticky-top-th']);
+        echo html_writer::tag('th', get_string('venue_room', 'local_schola_timetabler'), ['style' => 'width: 160px; min-width: 160px;', 'class' => 'py-3 px-3 text-start sticky-top-th']);
         foreach ($timeblocks as $tb) {
             if (isset($breakwindows[$tb])) {
                 echo html_writer::tag('th', '<div class="fw-bold">' . $tb . '</div>', [

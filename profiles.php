@@ -39,8 +39,8 @@ $slotsurl = new moodle_url('/local/schola_timetabler/slots.php');
 
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Institutional Schedule Profiles');
-$PAGE->set_heading('Institutional Schedule Profiles');
+$PAGE->set_title(get_string('profiles_title', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('profiles_title', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
 // Action: Apply Executive / School Schedule Profile
@@ -166,13 +166,13 @@ echo \local_schola_timetabler\output\renderer::render_nav_header('profiles');
 // -------------------------------------------------------------------
 if ($editingprofile) {
     $formtitle = !empty($editingprofile['name'])
-        ? 'Edit Schedule Profile: ' . s($editingprofile['name'])
-        : 'Create Custom Institutional Schedule Profile';
+        ? get_string('profile_edit_title', 'local_schola_timetabler') . ': ' . s($editingprofile['name'])
+        : get_string('profile_create_title', 'local_schola_timetabler');
 
     echo html_writer::start_div('card border-0 shadow-lg mb-4 bg-white rounded-3');
     echo html_writer::start_div('card-header bg-dark text-white p-3 d-flex align-items-center justify-content-between');
     echo html_writer::tag('h5', '<i class="fa fa-pen-to-square me-2"></i>' . $formtitle, ['class' => 'mb-0 font-weight-bold']);
-    echo html_writer::link($url, '&times; Close Editor', ['class' => 'btn btn-sm btn-outline-light']);
+    echo html_writer::link($url, '&times; ' . get_string('close_editor', 'local_schola_timetabler'), ['class' => 'btn btn-sm btn-outline-light']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('card-body p-4');
@@ -186,19 +186,19 @@ if ($editingprofile) {
 
     // Profile Title
     echo html_writer::start_div('col-md-5');
-    echo html_writer::tag('label', 'Profile Name / Title', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_name_title', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', [
         'type' => 'text', 'name' => 'name', 'value' => s($editingprofile['name']),
-        'class' => 'form-control p-2', 'placeholder' => 'e.g. University Standard', 'required' => 'required',
+        'class' => 'form-control p-2', 'placeholder' => get_string('profile_placeholder_university', 'local_schola_timetabler'), 'required' => 'required',
     ]);
     echo html_writer::end_div();
 
     // Badge Label
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Badge Subtitle', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_badge_subtitle', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', [
         'type' => 'text', 'name' => 'badge', 'value' => s($editingprofile['badge'] ?? ''),
-        'class' => 'form-control p-2', 'placeholder' => 'e.g. 60-Min Periods',
+        'class' => 'form-control p-2', 'placeholder' => get_string('profile_badge_placeholder', 'local_schola_timetabler'),
     ]);
     echo html_writer::end_div();
 
@@ -218,31 +218,31 @@ if ($editingprofile) {
 
     // Icon Selection
     echo html_writer::start_div('col-md-2');
-    echo html_writer::tag('label', 'Profile Icon', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_icon', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     $iconoptions = [
-        'fa-graduation-cap'   => '🎓 Graduation Cap',
-        'fa-building-columns' => '🏛️ Executive Building',
-        'fa-school'           => '🏫 School House',
-        'fa-cubes'            => '⚡ Modular Cubes',
-        'fa-file-signature'   => '📝 Examination',
-        'fa-moon'             => '🌙 Evening Moon',
-        'fa-clock'            => '⏱️ Standard Clock',
+        'fa-graduation-cap'   => get_string('profile_icon_graduation', 'local_schola_timetabler'),
+        'fa-building-columns' => get_string('profile_icon_executive', 'local_schola_timetabler'),
+        'fa-school'           => get_string('profile_icon_school', 'local_schola_timetabler'),
+        'fa-cubes'            => get_string('profile_icon_modular', 'local_schola_timetabler'),
+        'fa-file-signature'   => get_string('profile_icon_exam', 'local_schola_timetabler'),
+        'fa-moon'             => get_string('profile_icon_evening', 'local_schola_timetabler'),
+        'fa-clock'            => get_string('profile_icon_clock', 'local_schola_timetabler'),
     ];
     echo html_writer::select($iconoptions, 'icon', $editingprofile['icon'] ?? 'fa-graduation-cap', false, ['class' => 'form-select p-2']);
     echo html_writer::end_div();
 
     // Description
     echo html_writer::start_div('col-12');
-    echo html_writer::tag('label', 'Profile Description', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_description', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', [
         'type' => 'text', 'name' => 'description', 'value' => s($editingprofile['description'] ?? ''),
-        'class' => 'form-control p-2', 'placeholder' => 'e.g. Standard 60-minute university lecture blocks with morning tea and lunch breaks.',
+        'class' => 'form-control p-2', 'placeholder' => get_string('profile_description_placeholder', 'local_schola_timetabler'),
     ]);
     echo html_writer::end_div();
 
     // Day Start & End
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Daily Day Start Time', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_day_start_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', [
         'type' => 'time', 'name' => 'day_start',
         'value' => s($editingprofile['day_start'] ?? '08:00'),
@@ -251,7 +251,7 @@ if ($editingprofile) {
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Daily Day End Time', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_day_end_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', [
         'type' => 'time', 'name' => 'day_end',
         'value' => s($editingprofile['day_end'] ?? '17:00'),
@@ -261,42 +261,42 @@ if ($editingprofile) {
 
     // Period Duration
     echo html_writer::start_div('col-md-6');
-    echo html_writer::tag('label', 'Period / Lecture Duration', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_period_duration', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     $periodoptions = [
-        45  => '45 Minutes (Secondary / High School Period)',
-        50  => '50 Minutes (Standard School Hour)',
-        60  => '60 Minutes (Standard University Lecture)',
-        90  => '90 Minutes (Extended Modular Block)',
-        120 => '120 Minutes (2-Hour Double Period)',
-        180 => '180 Minutes (3-Hour Block Lecture)',
+        45  => get_string('profile_period_45', 'local_schola_timetabler'),
+        50  => get_string('profile_period_50', 'local_schola_timetabler'),
+        60  => get_string('profile_period_60', 'local_schola_timetabler'),
+        90  => get_string('profile_period_90', 'local_schola_timetabler'),
+        120 => get_string('profile_period_120', 'local_schola_timetabler'),
+        180 => get_string('profile_period_180', 'local_schola_timetabler'),
     ];
     echo html_writer::select($periodoptions, 'period_minutes', (int)($editingprofile['period_minutes'] ?? 60), false, ['class' => 'form-select p-2']);
     echo html_writer::end_div();
 
     // Tea & Lunch Breaks
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Tea Break Start (Optional)', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_tea_start_optional', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'tea_start', 'value' => s($editingprofile['tea_start'] ?? ''), 'class' => 'form-control p-2']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Tea Break End (Optional)', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_tea_end_optional', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'tea_end', 'value' => s($editingprofile['tea_end'] ?? ''), 'class' => 'form-control p-2']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Lunch Break Start (Optional)', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_lunch_start_optional', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'lunch_start', 'value' => s($editingprofile['lunch_start'] ?? ''), 'class' => 'form-control p-2']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Lunch Break End (Optional)', ['class' => 'form-label font-weight-bold text-dark']);
+    echo html_writer::tag('label', get_string('profile_lunch_end_optional', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'lunch_end', 'value' => s($editingprofile['lunch_end'] ?? ''), 'class' => 'form-control p-2']);
     echo html_writer::end_div();
 
     // Active Days
     echo html_writer::start_div('col-12 mt-2');
-    echo html_writer::tag('label', 'Operating School Days', ['class' => 'form-label font-weight-bold text-dark d-block']);
+    echo html_writer::tag('label', get_string('profile_operating_school_days', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark d-block']);
     $dayslist = [1 => 'Mon', 2 => 'Tue', 3 => 'Wed', 4 => 'Thu', 5 => 'Fri', 6 => 'Sat', 7 => 'Sun'];
     $activedays = $editingprofile['days'] ?? [1, 2, 3, 4, 5];
     echo html_writer::start_div('d-flex gap-3 flex-wrap');
@@ -318,14 +318,14 @@ if ($editingprofile) {
         'apply_now',
         '1',
         true,
-        ' Apply this profile to active time slots immediately upon saving',
+        ' ' . get_string('profile_apply_now', 'local_schola_timetabler'),
         ['class' => 'form-check-input me-1', 'id' => 'chk_apply_now']
     );
     echo html_writer::end_div();
 
     echo html_writer::start_div('d-flex gap-2');
-    echo html_writer::tag('button', 'Save Profile', ['type' => 'submit', 'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm']);
-    echo html_writer::link($url, 'Cancel', ['class' => 'btn btn-outline-secondary px-3 py-2']);
+    echo html_writer::tag('button', get_string('profile_save_button', 'local_schola_timetabler'), ['type' => 'submit', 'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm']);
+    echo html_writer::link($url, get_string('cancel', 'core'), ['class' => 'btn btn-outline-secondary px-3 py-2']);
     echo html_writer::end_div();
 
     echo html_writer::end_div();

@@ -25,8 +25,6 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-use local_schola_timetabler\licensing\license_manager;
-
 require_login();
 $context = context_system::instance();
 require_capability('local/schola_timetabler:manage', $context);
@@ -34,16 +32,14 @@ require_capability('local/schola_timetabler:manage', $context);
 $url = new moodle_url('/local/schola_timetabler/help.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
-$PAGE->set_title('Help & Documentation — Schola Timetabler');
-$PAGE->set_heading('Help & User Documentation');
+$PAGE->set_title(get_string('help_title', 'local_schola_timetabler'));
+$PAGE->set_heading(get_string('help_heading', 'local_schola_timetabler'));
 
 echo $OUTPUT->header();
 
 // Render navigation header bar with 'help' active
 echo \local_schola_timetabler\output\renderer::render_nav_header('help');
 
-$ispro       = license_manager::is_pro();
-$tiername    = license_manager::get_tier_name();
 $roomsurl    = new moodle_url('/local/schola_timetabler/rooms.php');
 $profilesurl = new moodle_url('/local/schola_timetabler/profiles.php');
 $slotsurl    = new moodle_url('/local/schola_timetabler/slots.php');

@@ -436,32 +436,32 @@ if ($editslot) {
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'save_slot', 'value' => '1']);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'slotid', 'value' => $editslot->id]);
 
-    $days = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'];
+    $days = [1 => get_string('monday', 'local_schola_timetabler'), 2 => get_string('tuesday', 'local_schola_timetabler'), 3 => get_string('wednesday', 'local_schola_timetabler'), 4 => get_string('thursday', 'local_schola_timetabler'), 5 => get_string('friday', 'local_schola_timetabler'), 6 => get_string('saturday', 'local_schola_timetabler'), 7 => get_string('sunday', 'local_schola_timetabler')];
     $slottypes = [
-        'class' => 'Class Lecture (Standard Teaching Window)',
-        'lab'   => 'Laboratory Practical (Extended Block)',
-        'break' => 'Break / Blockout (Lunch, Tea Break - Excluded from Solver)',
-        'exam'  => 'Examination Period (Dedicated Exam Block)',
+        'class' => get_string('slot_type_class_lecture', 'local_schola_timetabler'),
+        'lab'   => get_string('slot_type_lab_practical', 'local_schola_timetabler'),
+        'break' => get_string('slot_type_break_blockout', 'local_schola_timetabler'),
+        'exam'  => get_string('slot_type_examination_period', 'local_schola_timetabler'),
     ];
 
     echo html_writer::start_div('row g-3');
     echo html_writer::start_div('col-md-3');
-    echo html_writer::tag('label', 'Day of Week', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('day_of_week', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::select($days, 'dayofweek', $editslot->dayofweek, false, ['class' => 'form-select']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-2');
-    echo html_writer::tag('label', 'Start Time', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('start_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'starttime', 'class' => 'form-control', 'value' => s($editslot->starttime), 'required' => 'required']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-2');
-    echo html_writer::tag('label', 'End Time', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('end_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'endtime', 'class' => 'form-control', 'value' => s($editslot->endtime), 'required' => 'required']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-5');
-    echo html_writer::tag('label', 'Slot Type / Category', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('slot_type_category', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::select($slottypes, 'type', $editslot->type, false, ['class' => 'form-select']);
     echo html_writer::end_div();
     echo html_writer::end_div();
@@ -497,10 +497,10 @@ if (empty($slots)) {
     $noslotmsg = get_string('slots_no_data', 'local_schola_timetabler');
     echo html_writer::div($noslotmsg, 'alert alert-info shadow-sm p-4 text-center fs-6 rounded-3');
 } else {
-    $days = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'];
+    $days = [1 => get_string('monday', 'local_schola_timetabler'), 2 => get_string('tuesday', 'local_schola_timetabler'), 3 => get_string('wednesday', 'local_schola_timetabler'), 4 => get_string('thursday', 'local_schola_timetabler'), 5 => get_string('friday', 'local_schola_timetabler'), 6 => get_string('saturday', 'local_schola_timetabler'), 7 => get_string('sunday', 'local_schola_timetabler')];
 
     $table = new html_table();
-    $table->head = ['#', 'Day', 'Time Window', 'Functional Category', 'Actions'];
+    $table->head = ['#', get_string('day_of_week', 'local_schola_timetabler'), get_string('time_window', 'local_schola_timetabler'), get_string('functional_category', 'local_schola_timetabler'), get_string('actions', 'core')];
     $table->attributes = ['class' => 'table table-striped table-bordered align-middle bg-white shadow-sm rounded-3'];
 
     $serial = 1;
@@ -516,10 +516,10 @@ if (empty($slots)) {
         ]);
 
         $typebadge = match ($slot->type) {
-            'break' => '<span class="badge att-badge-break"><i class="fa fa-coffee me-1"></i> INSTITUTIONAL BREAK / BLOCKOUT</span>',
-            'lab'   => '<span class="badge att-badge-lab"><i class="fa fa-flask me-1"></i> LABORATORY PRACTICAL</span>',
-            'exam'  => '<span class="badge att-badge-exam"><i class="fa fa-file-alt me-1"></i> EXAMINATION PERIOD</span>',
-            default => '<span class="badge att-badge-class"><i class="fa fa-book me-1"></i> CLASS LECTURE</span>',
+            'break' => '<span class="badge att-badge-break"><i class="fa fa-coffee me-1"></i> ' . get_string('slot_type_break_blockout', 'local_schola_timetabler') . '</span>',
+            'lab'   => '<span class="badge att-badge-lab"><i class="fa fa-flask me-1"></i> ' . get_string('slot_type_lab_practical', 'local_schola_timetabler') . '</span>',
+            'exam'  => '<span class="badge att-badge-exam"><i class="fa fa-file-alt me-1"></i> ' . get_string('slot_type_examination_period', 'local_schola_timetabler') . '</span>',
+            default => '<span class="badge att-badge-class"><i class="fa fa-book me-1"></i> ' . get_string('slot_type_class_lecture', 'local_schola_timetabler') . '</span>',
         };
 
         $timestr = s($slot->starttime) . ' &mdash; ' . s($slot->endtime);
