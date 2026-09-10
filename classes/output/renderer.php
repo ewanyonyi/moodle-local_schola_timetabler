@@ -16,7 +16,6 @@
 
 namespace local_schola_timetabler\output;
 
-use local_schola_timetabler\licensing\license_manager;
 use plugin_renderer_base;
 
 /**
@@ -137,11 +136,6 @@ class renderer extends plugin_renderer_base {
         $roomcount = $DB->count_records('local_schola_timetabler_rooms');
         $schedulecount = $DB->count_records('local_schola_timetabler_schedules');
 
-        $maxcourses = license_manager::get_max_courses();
-        $maxcourseslabel = ($maxcourses === 0) ? 'Unlimited' : $maxcourses;
-
-        $iscourseexceeded = ($maxcourses > 0 && $coursecount > $maxcourses);
-
         $tiernotice = 'Free Local Processing Engine Active — Course and exam timetables are processed locally on your Moodle server.';
 
         $contextdata = [
@@ -152,10 +146,10 @@ class renderer extends plugin_renderer_base {
             'schedules_url' => $schedulesurl->out(false),
             'generate_url' => $generateurl->out(false),
             'course_count' => $coursecount,
-            'max_courses_label' => $maxcourseslabel,
+            'max_courses_label' => 'Unlimited',
             'room_count' => $roomcount,
             'schedule_count' => $schedulecount,
-            'is_course_exceeded' => $iscourseexceeded,
+            'is_course_exceeded' => false,
         ];
 
         return $this->render_from_template('local_schola_timetabler/dashboard', $contextdata);

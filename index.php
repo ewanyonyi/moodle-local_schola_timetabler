@@ -106,22 +106,6 @@ if ($action === 'generate' && confirm_sesskey()) {
         );
     }
 
-    // Free local plugin: enforce the built-in local limits without any paid plan logic.
-    $coursecount = count($courses);
-    $maxcourses = \local_schola_timetabler\licensing\license_manager::get_max_courses();
-    $tiername = \local_schola_timetabler\licensing\license_manager::get_tier_name();
-
-    if ($maxcourses > 0 && $coursecount > $maxcourses) {
-        $msg = "Free local limit exceeded: your institution has {$coursecount} active courses, but the {$tiername} " .
-            "edition is limited to {$maxcourses} courses.";
-        redirect(
-            new moodle_url('/local/schola_timetabler/index.php'),
-            $msg,
-            null,
-            \core\output\notification::NOTIFY_WARNING
-        );
-    }
-
     try {
         $solver = new \local_schola_timetabler\algorithm\solver($slots, $rooms);
         $solver->set_slot_type(($scheduletype === 'exam') ? 'exam' : 'class');

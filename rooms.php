@@ -170,15 +170,13 @@ $btnlabel = $editroom ? get_string('update_room', 'local_schola_timetabler') : g
 
 $templateurl = new moodle_url($url, ['action' => 'download_template']);
 
-$canimport = \local_schola_timetabler\licensing\license_manager::can_batch_import_rooms();
-
 // -------------------------------------------------------------------
-// Grid Row: Single Room Form (Left) & CSV Import Card (Right - Pro Tier Only)
+// Grid Row: Single Room Form (Left) & CSV Import Card (Right - Free OSS CSV Import)
 // -------------------------------------------------------------------
 echo html_writer::start_div('row g-4 mb-4');
 
 // Manual Single Room Form Column
-$formcol = $canimport ? 'col-lg-7' : 'col-12';
+$formcol = 'col-lg-7';
 echo html_writer::start_div($formcol);
 echo html_writer::start_div('card shadow-sm h-100');
 $cardheaderhtml = html_writer::tag('h5', '<i class="fa fa-plus-circle me-2 text-primary"></i>' . $cardheader, ['class' => 'mb-0 font-weight-bold']);
@@ -237,9 +235,7 @@ echo html_writer::end_div(); // card-body
 echo html_writer::end_div(); // card
 echo html_writer::end_div(); // form col
 
-if ($canimport) {
-    // Right Column: Batch CSV Import (Only visible to Pro tier)
-    echo html_writer::start_div('col-lg-5');
+echo html_writer::start_div('col-lg-5');
     echo html_writer::start_div('card shadow-sm h-100 bg-white border-0 rounded-3 position-relative');
     echo html_writer::start_div('card-header bg-primary-subtle p-3 border-bottom d-flex justify-content-between align-items-center');
     echo html_writer::tag('h5', '<i class="fa fa-file-csv me-2 text-primary"></i>Batch CSV Room Import', ['class' => 'mb-0 font-weight-bold text-primary']);
@@ -287,7 +283,6 @@ if ($canimport) {
     echo html_writer::end_div(); // card-body
     echo html_writer::end_div(); // card
     echo html_writer::end_div(); // col-lg-5
-}
 
 echo html_writer::end_div(); // row
 

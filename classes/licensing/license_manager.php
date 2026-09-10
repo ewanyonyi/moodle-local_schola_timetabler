@@ -25,47 +25,17 @@ namespace local_schola_timetabler\licensing;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class license_manager {
-    /** @var string Free edition tier identifier. */
-    public const TIER_STARTER = 'starter';
-
-    /** @var string Legacy identifier retained for compatibility. */
-    public const TIER_PRO = 'pro';
-
-    /** @var int Default course limit for the free local plugin. */
-    public const STARTER_COURSE_LIMIT = 50;
-
-    /** @var int Default room limit for the free local plugin. */
-    public const STARTER_ROOM_LIMIT = 25;
-
     /**
-     * Legacy checkout URL compatibility hook.
+     * Free OSS plugin is always available locally.
      *
-     * @return string Empty string; free plugin does not use commercial checkout flow.
-     */
-    public static function get_checkout_url(): string {
-        return '';
-    }
-
-    /**
-     * Legacy license key getter. Free plugin does not require external licenses.
-     *
-     * @return string Empty string.
-     */
-    public static function get_license_key(): string {
-        return '';
-    }
-
-    /**
-     * Free local plugin always uses the starter/free tier.
-     *
-     * @return string Active tier.
+     * @return string Active edition identifier.
      */
     public static function get_tier(): string {
-        return self::TIER_STARTER;
+        return 'community';
     }
 
     /**
-     * Human-readable display name for the free edition.
+     * Human-readable display name for the free OSS edition.
      *
      * @return string Display name.
      */
@@ -74,7 +44,7 @@ class license_manager {
     }
 
     /**
-     * Free plugin never uses a paid tier.
+     * This codebase is OSS-only and intentionally has no paid tier.
      *
      * @return bool Always false.
      */
@@ -92,31 +62,31 @@ class license_manager {
     }
 
     /**
-     * Free plugin local limit.
+     * Unlimited local course capacity in the free OSS build.
      *
-     * @return int Max courses allowed locally.
+     * @return int Always 0 meaning unlimited.
      */
     public static function get_max_courses(): int {
-        return self::STARTER_COURSE_LIMIT;
+        return 0;
     }
 
     /**
-     * Free plugin local limit for rooms.
+     * Unlimited local room capacity in the free OSS build.
      *
-     * @return int Max rooms allowed locally.
+     * @return int Always 0 meaning unlimited.
      */
     public static function get_max_rooms(): int {
-        return self::STARTER_ROOM_LIMIT;
+        return 0;
     }
 
     /**
-     * Verify schedule size against the free local limit.
+     * Verify schedule size against constraints configured by the free OSS build.
      *
      * @param int $coursecount Total courses to solve.
-     * @return bool True if supported.
+     * @return bool Always true for the OSS build.
      */
     public static function can_solve_courses(int $coursecount): bool {
-        return $coursecount <= self::STARTER_COURSE_LIMIT;
+        return true;
     }
 
     /**

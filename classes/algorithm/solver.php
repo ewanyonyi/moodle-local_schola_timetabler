@@ -16,8 +16,6 @@
 
 namespace local_schola_timetabler\algorithm;
 
-use local_schola_timetabler\licensing\license_manager;
-
 /**
  * Constraint solver algorithm for local_schola_timetabler.
  *
@@ -61,17 +59,6 @@ class solver {
      * @throws \moodle_exception If license tier course limits are exceeded.
      */
     public function load_courses(array $courses): void {
-        $coursecount = count($courses);
-        if (!license_manager::can_solve_courses($coursecount)) {
-            $limit = license_manager::STARTER_COURSE_LIMIT;
-            throw new \moodle_exception(
-                'license_err_limit',
-                'local_schola_timetabler',
-                '',
-                [$coursecount, $limit]
-            );
-        }
-
         foreach ($courses as $course) {
             $context = \context_course::instance($course->id);
             $students = get_enrolled_users($context, 'moodle/course:view', 0, 'u.id');
@@ -126,15 +113,6 @@ class solver {
     public function solve_all(): bool {
         uasort($this->courses, fn($a, $b) => count($b->students) <=> count($a->students));
         return $this->backtrack_classes(0);
-    }
-
-    /**
-     * Compatibility hook retained for older code paths.
-     *
-     * @return bool Always false because the free plugin uses the local solver only.
-     */
-    public function call_cloud_solver(): bool {
-        return false;
     }
 
     /**

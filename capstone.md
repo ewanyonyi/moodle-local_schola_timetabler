@@ -1,7 +1,7 @@
 # CAPSTONE PROJECT SPECIFICATION: Moodle Academic & Exam Timetabler (`local_schola_timetabler`)
 
 ## Executive Summary
-**`local_schola_timetabler`** is an enterprise-grade, fully self-contained Moodle local plugin designed to solve both **routine course/class scheduling** (weekly recurring lectures, labs, seminars) and **exam timetabling** (midterms, finals) directly inside a Moodle server environment.
+**`local_schola_timetabler`** is a free, open-source, fully self-contained Moodle local plugin designed to solve both **routine course/class scheduling** (weekly recurring lectures, labs, seminars) and **exam timetabling** (midterms, finals) directly inside a Moodle server environment.
 
 The solution provides an on-premise native PHP solver engine adhering strictly to Moodle Frankensytle standards, GPL-3.0 licensing, and GDPR privacy compliance for local institutional timetabling workloads.
 

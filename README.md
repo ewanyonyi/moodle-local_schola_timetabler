@@ -1,6 +1,6 @@
 # Schola Timetabler Moodle Plugin (`local_schola_timetabler`)
 
-**`Schola Timetabler`** is an enterprise-grade Moodle local plugin designed to generate conflict-free schedules for both **weekly course sessions** (lectures, labs) and **examination windows** (midterms, finals).
+**`Schola Timetabler`** is a free, open-source Moodle local plugin designed to generate conflict-free schedules for both **weekly course sessions** (lectures, labs) and **examination windows** (midterms, finals).
 
 This plugin is a free, open-source Moodle local plugin:
 * **Free Local Edition**: Built-in native PHP solver engine for local timetable generation, room management, slot creation, and exam scheduling under GPLv3.

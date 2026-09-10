@@ -34,8 +34,8 @@ local/schola_timetabler/
 ├── help.php          <-- Integrated documentation & administrator guide
 ├── version.php       <-- Plugin release version metadata
 ├── classes/          <-- Core OOP classes & business logic
-│   ├── algorithm/    <-- Native PHP solver & Rust Cloud REST client
-│   ├── licensing/    <-- Free local compatibility and edition metadata
+│   ├── algorithm/    <-- Native PHP solver engine
+│   ├── licensing/    <-- Free OSS compatibility and edition metadata
 │   ├── output/       <-- Navigation header & UI renderers
 │   └── profile_manager.php <-- Institutional schedule profile logic
 ├── db/               <-- Database schema (install.xml), upgrade script, and access capabilities

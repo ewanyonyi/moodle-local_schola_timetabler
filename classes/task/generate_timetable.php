@@ -18,7 +18,6 @@ namespace local_schola_timetabler\task;
 
 use core\task\scheduled_task;
 use local_schola_timetabler\algorithm\solver;
-use local_schola_timetabler\licensing\license_manager;
 
 /**
  * Scheduled task runner for timetabling generation.
@@ -51,8 +50,7 @@ class generate_timetable extends scheduled_task {
         \core_php_time_limit::raise(600);
         raise_memory_limit(MEMORY_EXTRA);
 
-        $tier = license_manager::get_tier();
-        mtrace("Executing native Course and Exam Timetabling Engine [Tier: " . strtoupper($tier) . "]...");
+        mtrace("Executing native Course and Exam Timetabling Engine [Free Local Edition]...");
 
         $courses = $DB->get_records_select('course', 'id > 1 AND visible = 1');
         $slots   = $DB->get_records('local_schola_timetabler_slots');
