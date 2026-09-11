@@ -59,7 +59,8 @@ jobs:
         working-directory: ./plugin
         run: >-
           phpcs --standard=moodle
-          --exclude="moodle.Commenting.InlineComment,moodle.Files.LineLength,moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,Squiz.PHP.CommentedOutCode" .
+          --exclude="moodle.Commenting.InlineComment,moodle.Files.LineLength,moodle.Files.LangFilesOrdering,moodle.Files.MoodleInternal,Squiz.PHP.CommentedOutCode"
+          --ignore="tests/*" .
 
       - name: Run PHPMD
         run: moodle-plugin-ci phpmd

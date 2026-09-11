@@ -284,61 +284,61 @@ echo html_writer::start_div('col-lg-5');
     echo html_writer::end_div(); // card
     echo html_writer::end_div(); // col-lg-5
 
-echo html_writer::end_div(); // row
+    echo html_writer::end_div(); // row
 
-// -------------------------------------------------------------------
-// Component: Configured Campus Venues Table
-// -------------------------------------------------------------------
-$rooms = $DB->get_records('local_schola_timetabler_rooms', null, 'id DESC');
+    // -------------------------------------------------------------------
+    // Component: Configured Campus Venues Table
+    // -------------------------------------------------------------------
+    $rooms = $DB->get_records('local_schola_timetabler_rooms', null, 'id DESC');
 
-echo html_writer::start_div('card border-0 shadow-sm bg-white rounded-3');
-echo html_writer::start_div('card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center');
-echo html_writer::tag('h5', '<i class="fa fa-building me-2 text-secondary"></i>Configured Campus Venues (' . count($rooms) . ')', ['class' => 'mb-0 font-weight-bold text-dark']);
-echo html_writer::end_div();
+    echo html_writer::start_div('card border-0 shadow-sm bg-white rounded-3');
+    echo html_writer::start_div('card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center');
+    echo html_writer::tag('h5', '<i class="fa fa-building me-2 text-secondary"></i>Configured Campus Venues (' . count($rooms) . ')', ['class' => 'mb-0 font-weight-bold text-dark']);
+    echo html_writer::end_div();
 
-echo html_writer::start_div('card-body p-4');
+    echo html_writer::start_div('card-body p-4');
 
-if (empty($rooms)) {
-    echo html_writer::div(get_string('no_rooms', 'local_schola_timetabler'), 'alert alert-info rounded-3 text-center p-4 fs-6');
-} else {
-    $table = new html_table();
-    $table->head = ['ID', 'Room Name', 'Capacity', 'Type', 'Actions'];
-    $table->attributes = ['class' => 'table table-striped table-bordered align-middle mb-0 bg-white'];
+    if (empty($rooms)) {
+        echo html_writer::div(get_string('no_rooms', 'local_schola_timetabler'), 'alert alert-info rounded-3 text-center p-4 fs-6');
+    } else {
+        $table = new html_table();
+        $table->head = ['ID', 'Room Name', 'Capacity', 'Type', 'Actions'];
+        $table->attributes = ['class' => 'table table-striped table-bordered align-middle mb-0 bg-white'];
 
-    foreach ($rooms as $room) {
-        $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $room->id]);
-        $editbtn = html_writer::link($editurl, '<i class="fa fa-pen me-1"></i> Edit', ['class' => 'btn btn-sm btn-outline-primary me-2 font-weight-bold']);
+        foreach ($rooms as $room) {
+            $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $room->id]);
+            $editbtn = html_writer::link($editurl, '<i class="fa fa-pen me-1"></i> Edit', ['class' => 'btn btn-sm btn-outline-primary me-2 font-weight-bold']);
 
-        $deleteurl = new moodle_url($url, ['action' => 'delete', 'id' => $room->id, 'sesskey' => sesskey()]);
-        $deletebtn = html_writer::link($deleteurl, '<i class="fa fa-trash me-1"></i> Delete', [
+            $deleteurl = new moodle_url($url, ['action' => 'delete', 'id' => $room->id, 'sesskey' => sesskey()]);
+            $deletebtn = html_writer::link($deleteurl, '<i class="fa fa-trash me-1"></i> Delete', [
             'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
             'onclick' => 'return confirm("Are you sure you want to delete this room?");',
-        ]);
+            ]);
 
-        $isonline = (stripos($room->name, 'online') !== false
-            || stripos($room->name, 'virtual') !== false
-            || stripos($room->name, 'zoom') !== false
-            || stripos($room->name, 'teams') !== false);
-        if ($isonline) {
-            $typebadge = '<span class="badge online-room-badge"><i class="fa fa-globe me-1"></i> Virtual / Online Space</span>';
-        } else {
-            $typebadge = $room->is_lab
+            $isonline = (stripos($room->name, 'online') !== false
+                || stripos($room->name, 'virtual') !== false
+                || stripos($room->name, 'zoom') !== false
+                || stripos($room->name, 'teams') !== false);
+            if ($isonline) {
+                $typebadge = '<span class="badge online-room-badge"><i class="fa fa-globe me-1"></i> Virtual / Online Space</span>';
+            } else {
+                $typebadge = $room->is_lab
                 ? '<span class="badge att-badge-lab"><i class="fa fa-flask me-1"></i> Lab / Studio</span>'
                 : '<span class="badge att-badge-lecture"><i class="fa fa-chalkboard me-1"></i> Lecture Hall</span>';
-        }
+            }
 
-        $table->data[] = [
+            $table->data[] = [
             '<span class="font-weight-bold text-dark">#' . $room->id . '</span>',
             '<strong class="text-dark fs-6">' . s($room->name) . '</strong>',
             '<span class="badge att-badge-capacity"><i class="fa fa-users me-1"></i> ' . $room->capacity . ' Seats</span>',
             $typebadge,
             $editbtn . $deletebtn,
-        ];
+            ];
+        }
+        echo html_writer::table($table);
     }
-    echo html_writer::table($table);
-}
 
-echo html_writer::end_div(); // card-body
-echo html_writer::end_div(); // card
+    echo html_writer::end_div(); // card-body
+    echo html_writer::end_div(); // card
 
-echo $OUTPUT->footer();
+    echo $OUTPUT->footer();
