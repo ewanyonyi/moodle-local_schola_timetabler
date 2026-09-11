@@ -228,43 +228,26 @@ echo html_writer::start_tag('form', ['method' => 'post', 'action' => (new moodle
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'action', 'value' => 'generate']);
 
-if (!function_exists('schola_get_string')) {
-    /**
-     * Helper function to retrieve a string safely with fallback.
-     *
-     * @param string $identifier String key identifier.
-     * @param string $fallback Default fallback text.
-     * @return string Localized or fallback text.
-     */
-    function schola_get_string(string $identifier, string $fallback): string {
-        $str = get_string($identifier, 'local_schola_timetabler');
-        if (strpos($str, '[[') === 0 || strpos($str, 'a_slots:') !== false) {
-            return $fallback;
-        }
-        return $str;
-    }
-}
-
 // Fetch course categories (departments)
 $categories = $DB->get_records_menu('course_categories', null, 'name ASC', 'id, name');
-$catoptions = [0 => schola_get_string('all_departments', '-- Entire Institution (All Departments) --')] + $categories;
+$catoptions = [0 => get_string('all_departments', 'local_schola_timetabler')] + $categories;
 
 $typeoptions = [
-    'class' => schola_get_string('regular_class_schedule', 'Regular Semester Class Schedule'),
-    'exam'  => schola_get_string('examination_schedule', 'Examination Schedule'),
+    'class' => get_string('regular_class_schedule', 'local_schola_timetabler'),
+    'exam'  => get_string('examination_schedule', 'local_schola_timetabler'),
 ];
 
 $modeoptions = [
-    'version'       => schola_get_string('version_mode', 'Save as Named Version (Keep Other Timetables Intact)'),
-    'overwrite_all' => schola_get_string('overwrite_all_mode', 'Overwrite ALL Timetables of Selected Type'),
-    'append'        => schola_get_string('append_existing_mode', 'Append Mode (Preserve Existing Timetables & Schedule Around Them)'),
+    'version'       => get_string('version_mode', 'local_schola_timetabler'),
+    'overwrite_all' => get_string('overwrite_all_mode', 'local_schola_timetabler'),
+    'append'        => get_string('append_existing_mode', 'local_schola_timetabler'),
 ];
 
-$titlelabel = schola_get_string('timetable_title', 'Timetable Name / Title');
-$titlehelp  = schola_get_string('timetable_title_help', 'Optional. e.g. Semester III 2026, Midterm Exam Matrix');
-$typelabel  = schola_get_string('timetable_profile_type', 'Timetable Profile / Type');
-$deptlabel  = schola_get_string('department_scope', 'Department / Course Category Scope');
-$modelabel  = schola_get_string('generation_conflict_mode', 'Generation & Conflict Mode');
+$titlelabel = get_string('timetable_title', 'local_schola_timetabler');
+$titlehelp  = get_string('timetable_title_help', 'local_schola_timetabler');
+$typelabel  = get_string('timetable_profile_type', 'local_schola_timetabler');
+$deptlabel  = get_string('department_scope', 'local_schola_timetabler');
+$modelabel  = get_string('generation_conflict_mode', 'local_schola_timetabler');
 
 echo html_writer::start_div('row g-3 mb-3');
 echo html_writer::start_div('col-md-6');

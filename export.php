@@ -254,11 +254,7 @@ if (empty($schedules)) {
 }
 
 if ($autoprint) {
-    echo '<script>
-        window.addEventListener("DOMContentLoaded", () => {
-            window.print();
-        });
-    </script>';
+    $PAGE->requires->js_call_amd('local_schola_timetabler/autoprint', 'init');
 }
 
 echo '</body>

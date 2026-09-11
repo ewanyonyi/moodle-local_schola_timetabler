@@ -874,41 +874,24 @@ HTML;
 // -------------------------------------------------------------------
 // Render Generate Timetable Modal
 // -------------------------------------------------------------------
-if (!function_exists('schola_get_string')) {
-    /**
-     * Helper function to retrieve a string safely with fallback.
-     *
-     * @param string $identifier String key identifier.
-     * @param string $fallback Default fallback text.
-     * @return string Localized or fallback text.
-     */
-    function schola_get_string(string $identifier, string $fallback): string {
-        $str = get_string($identifier, 'local_schola_timetabler');
-        if (strpos($str, '[[') === 0 || strpos($str, 'a_slots:') !== false) {
-            return $fallback;
-        }
-        return $str;
-    }
-}
-
 $categories = $DB->get_records_menu('course_categories', null, 'name ASC', 'id, name');
-$catoptions = [0 => schola_get_string('all_departments', '-- Entire Institution (All Departments) --')] + $categories;
+$catoptions = [0 => get_string('all_departments', 'local_schola_timetabler')] + $categories;
 $typeoptions = [
-    'class' => schola_get_string('regular_class_schedule', 'Regular Semester Class Schedule'),
-    'exam'  => schola_get_string('examination_schedule', 'Examination Schedule'),
+    'class' => get_string('regular_class_schedule', 'local_schola_timetabler'),
+    'exam'  => get_string('examination_schedule', 'local_schola_timetabler'),
 ];
 $modeoptions = [
-    'version'       => schola_get_string('version_mode', 'Save as Named Version (Keep Other Timetables Intact)'),
-    'overwrite_all' => schola_get_string('overwrite_all_mode', 'Overwrite ALL Timetables of Selected Type'),
-    'append'        => schola_get_string('append_existing_mode', 'Append Mode (Preserve Existing Timetables & Schedule Around Them)'),
+    'version'       => get_string('version_mode', 'local_schola_timetabler'),
+    'overwrite_all' => get_string('overwrite_all_mode', 'local_schola_timetabler'),
+    'append'        => get_string('append_existing_mode', 'local_schola_timetabler'),
 ];
 
-$titlelabel = schola_get_string('timetable_title', 'Timetable Name / Title');
-$titlehelp  = schola_get_string('timetable_title_help', 'Optional. e.g. Semester III 2026, Midterm Exam Matrix');
-$typelabel  = schola_get_string('timetable_profile_type', 'Timetable Profile / Type');
-$deptlabel  = schola_get_string('department_scope', 'Department / Course Category Scope');
-$modelabel  = schola_get_string('generation_conflict_mode', 'Generation & Conflict Mode');
-$noticetext = schola_get_string('conflict_prevention_notice', 'Cross-schedule conflict prevention will automatically protect active venue and instructor bookings.');
+$titlelabel = get_string('timetable_title', 'local_schola_timetabler');
+$titlehelp  = get_string('timetable_title_help', 'local_schola_timetabler');
+$typelabel  = get_string('timetable_profile_type', 'local_schola_timetabler');
+$deptlabel  = get_string('department_scope', 'local_schola_timetabler');
+$modelabel  = get_string('generation_conflict_mode', 'local_schola_timetabler');
+$noticetext = get_string('conflict_prevention_notice', 'local_schola_timetabler');
 
 echo '
 <div class="modal fade" id="generateTimetableModal" tabindex="-1" aria-labelledby="generateTimetableModalLabel" aria-hidden="true">
@@ -958,55 +941,10 @@ echo '
 </div>
 ';
 
-echo '<script>' . "\n";
-echo 'function filterTimetableEntries() {' . "\n";
-echo '    var query = document.getElementById("scholaLiveSearch").value.toLowerCase().trim();' . "\n";
-echo '    var cards = document.querySelectorAll(".schola-entry-card");' . "\n";
-echo '    cards.forEach(function(card) {' . "\n";
-echo '        var text = card.innerText.toLowerCase();' . "\n";
-echo '        if (!query || text.indexOf(query) !== -1) {' . "\n";
-echo '            card.style.display = "";' . "\n";
-echo '        } else {' . "\n";
-echo '            card.style.display = "none";' . "\n";
-echo '        }' . "\n";
-echo '    });' . "\n";
-echo '}' . "\n";
-
-echo 'function toggleEditMode(e) {' . "\n";
-echo '    if (e) e.preventDefault();' . "\n";
-echo '    var container = document.getElementById("institutionalGridContainer");' . "\n";
-echo '    var btn = document.getElementById("enableEditModeBtn");' . "\n";
-echo '    if (!container || !btn) return;' . "\n";
-echo '    if (container.classList.contains("edit-mode-active")) {' . "\n";
-echo '        container.classList.remove("edit-mode-active");' . "\n";
-echo '        btn.className = "btn btn-outline-emerald d-inline-flex align-items-center";' . "\n";
-echo '        btn.innerHTML = \'<i class="fa fa-pencil me-1"></i> Enable Edit Mode\';' . "\n";
-echo '    } else {' . "\n";
-echo '        container.classList.add("edit-mode-active");' . "\n";
-echo '        btn.className = "btn btn-emerald d-inline-flex align-items-center";' . "\n";
-echo '        btn.innerHTML = \'<i class="fa fa-check me-1"></i> Disable Edit Mode\';' . "\n";
-echo '    }' . "\n";
-echo '}' . "\n";
-
 $openmodal = optional_param('open_modal', 0, PARAM_INT);
-if ($openmodal || !empty($openbreaks)) {
-    echo 'document.addEventListener("DOMContentLoaded", function() {' . "\n";
-    if ($openmodal) {
-        echo '    var genModalElem = document.getElementById("generateTimetableModal");' . "\n";
-        echo '    if (genModalElem && typeof bootstrap !== "undefined") {' . "\n";
-        echo '        var myGenModal = new bootstrap.Modal(genModalElem);' . "\n";
-        echo '        myGenModal.show();' . "\n";
-        echo '    }' . "\n";
-    }
-    if (!empty($openbreaks)) {
-        echo '    var modalElem = document.getElementById("manageBreaksModal");' . "\n";
-        echo '    if (modalElem && typeof bootstrap !== "undefined") {' . "\n";
-        echo '        var myModal = new bootstrap.Modal(modalElem);' . "\n";
-        echo '        myModal.show();' . "\n";
-        echo '    }' . "\n";
-    }
-    echo '});' . "\n";
-}
-echo '</script>' . "\n";
+$PAGE->requires->js_call_amd('local_schola_timetabler/schedule_matrix', 'init', [[
+    'openModal'  => (bool)$openmodal,
+    'openBreaks' => (bool)$openbreaks,
+]]);
 
 echo $OUTPUT->footer();

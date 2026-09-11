@@ -366,22 +366,9 @@ echo '
         </div>
       </form>
     </div>
-  </div>
 </div>
+';
 
-<script>
-function filterBreaks() {
-    var query = document.getElementById("breakSearchInput").value.toLowerCase().trim();
-    var rows = document.querySelectorAll("#breaksMasterTable tbody tr.break-table-row");
-    rows.forEach(function(row) {
-        var text = row.innerText.toLowerCase();
-        if (!query || text.indexOf(query) !== -1) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
-    });
-}
-</script>';
+$PAGE->requires->js_call_amd('local_schola_timetabler/break_filter', 'init');
 
 echo $OUTPUT->footer();
