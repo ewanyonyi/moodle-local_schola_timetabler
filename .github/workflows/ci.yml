@@ -17,7 +17,7 @@ jobs:
       COMPOSER_IGNORE_PLATFORM_REQS: "1"
     services:
       mariadb:
-        image: mariadb:10.11
+        image: mariadb:11.4
         env:
           MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
           MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -28,6 +28,9 @@ jobs:
       matrix:
         moodle-branch: ["MOODLE_404_STABLE", "MOODLE_405_STABLE"]
         php: ["8.2", "8.3"]
+        exclude:
+          - moodle-branch: "MOODLE_405_STABLE"
+            php: "8.2"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
