@@ -13,6 +13,8 @@ on:
 jobs:
   moodle-plugin-ci:
     runs-on: ubuntu-latest
+    env:
+      COMPOSER_IGNORE_PLATFORM_REQS: "1"
     services:
       mariadb:
         image: mariadb:10.11
