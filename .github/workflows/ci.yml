@@ -39,7 +39,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, mysqli, gd, xml, zip, curl, intl, soap
+          extensions: mbstring, mysqli, pdo_mysql, gd, xml, zip, curl, intl, soap
+          ini-values: max_input_vars=5000
           coverage: none
 
       - name: Setup moodle-plugin-ci
@@ -51,7 +52,7 @@ jobs:
 
       - name: Install Moodle CI environment
         run: |
-          moodle-plugin-ci install --plugin ./plugin --db-type mysqli --db-host 127.0.0.1 --db-user root --branch ${{ github.ref_name }} --moodle ${{ matrix.moodle-branch }}
+          moodle-plugin-ci install --plugin ./plugin --db-type mariadb --db-host 127.0.0.1 --db-user root --branch ${{ github.ref_name }} --moodle ${{ matrix.moodle-branch }}
 
       - name: Run PHP lint check
         run: moodle-plugin-ci phplint
