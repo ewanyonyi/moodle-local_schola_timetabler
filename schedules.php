@@ -208,33 +208,34 @@ if ($editschedule) {
       ORDER BY u.firstname ASC, u.lastname ASC
     ");
 
-    $teacheropts = [0 => '-- Unassigned --'];
+    $teacheropts = [0 => '-- ' . get_string('unassigned', 'local_schola_timetabler') . ' --'];
     foreach ($allteachers as $t) {
-        $prefix = isset($courseteachers[$t->id]) ? '[Course Teacher] ' : '';
+        $prefix = isset($courseteachers[$t->id]) ? get_string('course_teacher_prefix', 'local_schola_timetabler') : '';
         $teacheropts[$t->id] = $prefix . fullname($t);
     }
 
     echo html_writer::start_div('row g-3');
     echo html_writer::start_div('col-md-4');
-    echo html_writer::tag('label', 'Assigned Room / Venue', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('assigned_room_venue', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::select($roomopts, 'edit_roomid', $editschedule->roomid, false, ['class' => 'form-select']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-4');
-    echo html_writer::tag('label', 'Assigned Day & Time Slot', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('assigned_day_timeslot', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::select($slotopts, 'edit_slotid', $editschedule->slotid, false, ['class' => 'form-select']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('col-md-4');
-    echo html_writer::tag('label', 'Assigned Instructor', ['class' => 'form-label font-weight-bold']);
+    echo html_writer::tag('label', get_string('assigned_instructor', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold']);
     echo html_writer::select($teacheropts, 'edit_teacherid', $editschedule->teacherid, false, ['class' => 'form-select']);
     echo html_writer::end_div();
     echo html_writer::end_div();
 
     echo html_writer::start_div('mt-3 d-flex gap-2');
-    echo html_writer::tag('button', 'Save Schedule Allocation', ['type' => 'submit', 'class' => 'btn btn-primary']);
-    echo html_writer::link($url, 'Cancel Edit', ['class' => 'btn btn-outline-secondary']);
+    echo html_writer::tag('button', get_string('save_schedule_allocation', 'local_schola_timetabler'), ['type' => 'submit', 'class' => 'btn btn-primary']);
+    echo html_writer::link($url, get_string('cancel_edit', 'local_schola_timetabler'), ['class' => 'btn btn-outline-secondary']);
     echo html_writer::end_div();
+
 
     echo html_writer::end_tag('form');
     echo html_writer::end_div();
@@ -359,8 +360,8 @@ if (!$showdetails) {
         'class' => 'badge bg-success-subtle text-success border border-success-subtle px-3 py-1 font-monospace small rounded-pill mb-2',
         'style' => 'background-color: #ecfdf5 !important; color: #047857 !important; border-color: #a7f3d0 !important;',
     ]);
-    echo html_writer::tag('h4', 'Timetable Management Studio', ['class' => 'fw-bold text-dark mb-1']);
-    echo html_writer::tag('p', 'Generate, view, edit, and manage timetable schedules directly in Moodle using the local solver engine.', ['class' => 'text-muted small mb-0']);
+    echo html_writer::tag('h4', get_string('timetable_management_studio', 'local_schola_timetabler'), ['class' => 'fw-bold text-dark mb-1']);
+    echo html_writer::tag('p', get_string('timetable_management_studio_desc', 'local_schola_timetabler'), ['class' => 'text-muted small mb-0']);
     echo html_writer::end_div();
     echo html_writer::end_div();
     echo html_writer::end_div();
@@ -399,7 +400,8 @@ if (!$showdetails) {
     // Saved Timetables Masterlist Table
     echo html_writer::start_div('card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white');
     echo html_writer::start_div('d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom');
-    echo html_writer::tag('h5', 'Saved Timetables', ['class' => 'fw-bold text-dark mb-0']);
+    echo html_writer::tag('h5', get_string('saved_timetables', 'local_schola_timetabler'), ['class' => 'fw-bold text-dark mb-0']);
+
     echo html_writer::tag('span', $savedtimetablescount . ' Schedules', ['class' => 'badge bg-light text-dark border font-monospace px-3 py-1 rounded-pill']);
     echo html_writer::end_div();
 

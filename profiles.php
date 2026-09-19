@@ -375,19 +375,21 @@ $profiles = profile_manager::get_profiles();
 echo html_writer::start_div('card border-0 shadow-sm mb-4 bg-white rounded-3');
 echo html_writer::start_div('card-header bg-dark text-white p-3 d-flex align-items-center justify-content-between flex-wrap gap-2');
 echo html_writer::start_div('d-flex align-items-center gap-2');
-echo html_writer::tag('h5', 'Institutional Schedule Profiles', ['class' => 'mb-0 font-weight-bold']);
+echo html_writer::tag('h5', get_string('profiles_title', 'local_schola_timetabler'), ['class' => 'mb-0 font-weight-bold']);
 echo html_writer::tag('span', count($profiles) . ' Profiles', ['class' => 'badge bg-secondary px-2 py-1 fs-7']);
 echo html_writer::end_div();
 
 // Action Toolbar Top-Right
 echo html_writer::start_div('d-flex align-items-center gap-2');
-$addprofileurl = new moodle_url($url, ['action' => 'add_profile']);
-echo html_writer::link($addprofileurl, '+ Add Custom Profile', ['class' => 'btn btn-sm btn-light text-dark font-weight-bold shadow-sm']);
+$addprofilelabel = '+ ' . get_string('profile_create_title', 'local_schola_timetabler');
+echo html_writer::link($addprofileurl, $addprofilelabel, ['class' => 'btn btn-sm btn-light text-dark font-weight-bold shadow-sm']);
+
 
 $reseturl = new moodle_url($url, ['action' => 'reset_profiles']);
-echo html_writer::link($reseturl, 'Reset Defaults', [
+echo html_writer::link($reseturl, get_string('reset_defaults', 'local_schola_timetabler'), [
     'class' => 'btn btn-sm btn-outline-light opacity-75',
 ]);
+
 echo html_writer::end_div();
 echo html_writer::end_div();
 

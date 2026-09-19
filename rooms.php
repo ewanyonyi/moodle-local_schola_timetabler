@@ -203,16 +203,16 @@ if ($editroom) {
 
 echo html_writer::start_div('row g-3');
 echo html_writer::start_div('col-md-6');
-echo html_writer::tag('label', 'Room / Venue Name', ['class' => 'form-label font-weight-bold small']);
+echo html_writer::tag('label', get_string('rooms_venue_name', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold small']);
 echo html_writer::empty_tag('input', [
     'type' => 'text', 'name' => 'name', 'class' => 'form-control',
-    'placeholder' => 'e.g. Science Complex 101', 'required' => 'required',
+    'placeholder' => get_string('rooms_venue_name_placeholder', 'local_schola_timetabler'), 'required' => 'required',
     'value' => $editroom ? s($editroom->name) : '',
 ]);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-6');
-echo html_writer::tag('label', 'Seating Capacity', ['class' => 'form-label font-weight-bold small']);
+echo html_writer::tag('label', get_string('rooms_seating_capacity', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold small']);
 echo html_writer::empty_tag('input', [
     'type' => 'number', 'name' => 'capacity', 'class' => 'form-control',
     'placeholder' => '100', 'required' => 'required', 'min' => '1',
@@ -230,7 +230,7 @@ if ($editroom && $editroom->is_lab) {
     $checkboxattrs['checked'] = 'checked';
 }
 echo html_writer::empty_tag('input', $checkboxattrs);
-echo html_writer::tag('label', 'Laboratory / Computer Studio / Specialized Venue', ['class' => 'form-check-label font-weight-bold small', 'for' => 'is_lab_check']);
+echo html_writer::tag('label', get_string('rooms_is_lab_label', 'local_schola_timetabler'), ['class' => 'form-check-label font-weight-bold small', 'for' => 'is_lab_check']);
 echo html_writer::end_div();
 echo html_writer::end_div();
 echo html_writer::end_div();
@@ -238,7 +238,7 @@ echo html_writer::end_div();
 echo html_writer::start_div('mt-4 pt-3 border-top');
 echo html_writer::tag('button', '<i class="fa fa-save me-1"></i> ' . $btnlabel, ['type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 me-2']);
 if ($editroom) {
-    echo html_writer::link($url, 'Cancel Edit', ['class' => 'btn btn-secondary px-3 py-2']);
+    echo html_writer::link($url, get_string('cancel_edit', 'local_schola_timetabler'), ['class' => 'btn btn-secondary px-3 py-2']);
 }
 echo html_writer::end_div();
 echo html_writer::end_tag('form');
@@ -249,18 +249,18 @@ echo html_writer::end_div(); // form col
 
 echo html_writer::start_div('col-lg-5');
     echo html_writer::start_div('card shadow-sm h-100 bg-white border-0 rounded-3 position-relative');
-    echo html_writer::start_div('card-header bg-primary-subtle p-3 border-bottom d-flex justify-content-between align-items-center');
-    echo html_writer::tag('h5', '<i class="fa fa-file-csv me-2 text-primary"></i>Batch CSV Room Import', ['class' => 'mb-0 font-weight-bold text-primary']);
-    echo html_writer::link($templateurl, '<i class="fa fa-download me-1"></i> Sample CSV', [
+    $importhead = '<i class="fa fa-file-csv me-2 text-primary"></i>' . get_string('rooms_csv_import_title', 'local_schola_timetabler');
+    echo html_writer::tag('h5', $importhead, ['class' => 'mb-0 font-weight-bold text-primary']);
+
+    echo html_writer::link($templateurl, '<i class="fa fa-download me-1"></i> ' . get_string('sample_csv', 'local_schola_timetabler'), [
         'class' => 'btn btn-sm btn-outline-primary font-weight-bold',
-        'title' => 'Download sample CSV template for venue import',
+        'title' => get_string('rooms_download_sample_title', 'local_schola_timetabler'),
     ]);
     echo html_writer::end_div();
 
     echo html_writer::start_div('card-body p-4 d-flex flex-column justify-content-between');
 
-    $importdesc = 'Upload a structured <code>.csv</code> or Excel CSV file to instantly import ' .
-        'your campus rooms and seating capacities in bulk.';
+    $importdesc = get_string('rooms_import_desc', 'local_schola_timetabler');
     echo html_writer::tag('p', $importdesc, ['class' => 'text-muted small mb-3']);
 
     echo html_writer::start_tag('form', [
@@ -272,7 +272,7 @@ echo html_writer::start_div('col-lg-5');
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'action', 'value' => 'import_csv']);
 
     echo html_writer::start_div('mb-3');
-    echo html_writer::tag('label', 'Select CSV / Text File', ['class' => 'form-label font-weight-bold small']);
+    echo html_writer::tag('label', get_string('select_csv_file', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold small']);
     echo html_writer::empty_tag('input', [
         'type' => 'file', 'name' => 'room_file', 'class' => 'form-control',
         'accept' => '.csv,.txt', 'required' => 'required',
@@ -281,12 +281,12 @@ echo html_writer::start_div('col-lg-5');
 
     // Required columns box
     echo html_writer::start_div('bg-light p-3 rounded mb-3 border');
-    echo html_writer::div('<strong>Required CSV Format:</strong>', 'small text-dark mb-1');
+    echo html_writer::div('<strong>' . get_string('rooms_csv_header_required', 'local_schola_timetabler') . '</strong>', 'small text-dark mb-1');
     echo html_writer::div('<code>Name, Capacity, Is Lab</code>', 'small text-primary font-weight-bold mb-1');
-    echo html_writer::div('Example: <code>Science Lab 101, 40, 1</code>', 'text-muted extra-small');
+    echo html_writer::div(get_string('rooms_csv_example', 'local_schola_timetabler', '<code>Science Lab 101, 40, 1</code>'), 'text-muted extra-small');
     echo html_writer::end_div();
 
-    echo html_writer::tag('button', '<i class="fa fa-upload me-1"></i> Import Rooms from CSV', [
+    echo html_writer::tag('button', '<i class="fa fa-upload me-1"></i> ' . get_string('import_rooms_csv', 'local_schola_timetabler'), [
         'type' => 'submit', 'class' => 'btn btn-primary w-100 font-weight-bold py-2 shadow-sm',
     ]);
 

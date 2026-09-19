@@ -343,11 +343,12 @@ echo html_writer::tag('div', $colinfo, ['class' => 'form-text text-muted small m
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-5 d-flex flex-column align-items-start gap-2 pt-3');
-echo html_writer::start_div('form-check d-flex align-items-center gap-2 mb-2');
-echo html_writer::checkbox('wipe_existing', '1', true, ' Wipe existing slots before importing CSV', ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_csv']);
+$wipelabel = ' ' . get_string('slots_wipe_before_import', 'local_schola_timetabler');
+echo html_writer::checkbox('wipe_existing', '1', true, $wipelabel, ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_csv']);
+
 echo html_writer::end_div();
 
-echo html_writer::tag('button', '<i class="fa fa-upload me-1"></i> Import Time Slots CSV', [
+echo html_writer::tag('button', '<i class="fa fa-upload me-1"></i> ' . get_string('slots_import_csv_button', 'local_schola_timetabler'), [
     'type'  => 'submit',
     'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm',
 ]);
@@ -378,53 +379,61 @@ echo html_writer::start_div('row g-3');
 
 // School Hours & Period Length
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Day Start Time', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_day_start_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'day_start', 'value' => '08:00', 'class' => 'form-control p-2', 'required' => 'required']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Day End Time', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_day_end_time', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'day_end', 'value' => '17:00', 'class' => 'form-control p-2', 'required' => 'required']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-6');
-echo html_writer::tag('label', 'Lesson / Period Duration', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_lesson_period_duration', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 $periodoptions = [
-    45  => '45 Minutes (Secondary / High School Period)',
-    50  => '50 Minutes (Standard School Hour)',
-    60  => '60 Minutes (Standard University Lecture)',
-    90  => '90 Minutes (Extended Modular Lecture)',
-    120 => '120 Minutes (2-Hour Double Period)',
-    180 => '180 Minutes (3-Hour Block Lecture)',
+    45  => get_string('profile_period_45', 'local_schola_timetabler'),
+    50  => get_string('profile_period_50', 'local_schola_timetabler'),
+    60  => get_string('profile_period_60', 'local_schola_timetabler'),
+    90  => get_string('profile_period_90', 'local_schola_timetabler'),
+    120 => get_string('profile_period_120', 'local_schola_timetabler'),
+    180 => get_string('profile_period_180', 'local_schola_timetabler'),
 ];
 echo html_writer::select($periodoptions, 'period_minutes', 60, false, ['class' => 'form-select p-2']);
 echo html_writer::end_div();
 
 // Break Windows
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Morning Tea Break Start', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_morning_tea_start', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'tea_start', 'value' => '10:00', 'class' => 'form-control p-2']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Morning Tea Break End', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_morning_tea_end', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'tea_end', 'value' => '10:30', 'class' => 'form-control p-2']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Lunch Break Start', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_lunch_start', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'lunch_start', 'value' => '12:30', 'class' => 'form-control p-2']);
 echo html_writer::end_div();
 
 echo html_writer::start_div('col-md-3');
-echo html_writer::tag('label', 'Lunch Break End', ['class' => 'form-label font-weight-bold text-dark']);
+echo html_writer::tag('label', get_string('slots_lunch_end', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark']);
 echo html_writer::empty_tag('input', ['type' => 'time', 'name' => 'lunch_end', 'value' => '13:30', 'class' => 'form-control p-2']);
 echo html_writer::end_div();
 
 // Active Days Selection
 echo html_writer::start_div('col-12 mt-3');
-echo html_writer::tag('label', 'Operating School Days', ['class' => 'form-label font-weight-bold text-dark d-block']);
-$dayslist = [1 => 'Mon', 2 => 'Tue', 3 => 'Wed', 4 => 'Thu', 5 => 'Fri', 6 => 'Sat', 7 => 'Sun'];
+echo html_writer::tag('label', get_string('profile_operating_school_days', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark d-block']);
+$dayslist = [
+    1 => get_string('mon', 'core'),
+    2 => get_string('tue', 'core'),
+    3 => get_string('wed', 'core'),
+    4 => get_string('thu', 'core'),
+    5 => get_string('fri', 'core'),
+    6 => get_string('sat', 'core'),
+    7 => get_string('sun', 'core'),
+];
 echo html_writer::start_div('d-flex gap-3 flex-wrap');
 foreach ($dayslist as $dnum => $dname) {
     $checked = ($dnum <= 5);
@@ -437,9 +446,9 @@ echo html_writer::end_div();
 
 echo html_writer::end_div(); // row
 
-echo html_writer::start_div('mt-4 pt-3 border-top d-flex align-items-center justify-content-between flex-wrap gap-2');
-echo html_writer::start_div('form-check d-flex align-items-center gap-2 mb-0');
-echo html_writer::checkbox('wipe_existing', '1', true, ' Wipe existing time slots before applying', ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_existing']);
+$wipeapplylbl = ' ' . get_string('slots_wipe_before_applying', 'local_schola_timetabler');
+echo html_writer::checkbox('wipe_existing', '1', true, $wipeapplylbl, ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_existing']);
+
 echo html_writer::end_div();
 echo html_writer::tag('button', get_string('slots_apply_schedule', 'local_schola_timetabler'), [
     'type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm',
@@ -506,9 +515,10 @@ if ($editslot) {
     echo html_writer::end_div();
 
     echo html_writer::start_div('mt-3 d-flex gap-2');
-    echo html_writer::tag('button', 'Update Time Slot', ['type' => 'submit', 'class' => 'btn btn-primary font-weight-bold']);
-    echo html_writer::link($url, 'Cancel Edit', ['class' => 'btn btn-outline-secondary']);
+    echo html_writer::tag('button', get_string('slots_update_button', 'local_schola_timetabler'), ['type' => 'submit', 'class' => 'btn btn-primary font-weight-bold']);
+    echo html_writer::link($url, get_string('cancel_edit', 'local_schola_timetabler'), ['class' => 'btn btn-outline-secondary']);
     echo html_writer::end_div();
+
 
     echo html_writer::end_tag('form');
     echo html_writer::end_div();
