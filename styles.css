@@ -1,29 +1,55 @@
-/* local_schola_timetabler custom styling */
+/* local_schola_timetabler custom styling - Scoped to Schola pages & dashboard */
 
-.att-profile-card {
+/* 1. Component Cards & Profiles */
+.path-local-schola-timetabler .att-profile-card,
+.path-local-schola_timetabler .att-profile-card,
+.schola-slots-dashboard .att-profile-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
-.att-profile-card:hover {
+.path-local-schola-timetabler .att-profile-card:hover,
+.path-local-schola_timetabler .att-profile-card:hover,
+.schola-slots-dashboard .att-profile-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }
 
-.att-profile-card .card-header-accent {
+.path-local-schola-timetabler .att-profile-card .card-header-accent,
+.path-local-schola_timetabler .att-profile-card .card-header-accent,
+.schola-slots-dashboard .att-profile-card .card-header-accent {
     height: 6px;
     width: 100%;
 }
 
-.att-accent-primary { background: linear-gradient(90deg, #0d6efd, #0b5ed7); }
-.att-accent-success { background: linear-gradient(90deg, #198754, #157347); }
-.att-accent-info { background: linear-gradient(90deg, #0dcaf0, #0bacce); }
-.att-accent-purple { background: linear-gradient(90deg, #6f42c1, #59359a); }
-.att-accent-warning { background: linear-gradient(90deg, #ffc107, #fd7e14); }
-.att-accent-dark { background: linear-gradient(90deg, #212529, #343a40); }
+.path-local-schola-timetabler .att-accent-primary,
+.path-local-schola_timetabler .att-accent-primary,
+.schola-slots-dashboard .att-accent-primary { background: linear-gradient(90deg, #0d6efd, #0b5ed7); }
 
-.att-icon-box {
+.path-local-schola-timetabler .att-accent-success,
+.path-local-schola_timetabler .att-accent-success,
+.schola-slots-dashboard .att-accent-success { background: linear-gradient(90deg, #198754, #157347); }
+
+.path-local-schola-timetabler .att-accent-info,
+.path-local-schola_timetabler .att-accent-info,
+.schola-slots-dashboard .att-accent-info { background: linear-gradient(90deg, #0dcaf0, #0bacce); }
+
+.path-local-schola-timetabler .att-accent-purple,
+.path-local-schola_timetabler .att-accent-purple,
+.schola-slots-dashboard .att-accent-purple { background: linear-gradient(90deg, #6f42c1, #59359a); }
+
+.path-local-schola-timetabler .att-accent-warning,
+.path-local-schola_timetabler .att-accent-warning,
+.schola-slots-dashboard .att-accent-warning { background: linear-gradient(90deg, #ffc107, #fd7e14); }
+
+.path-local-schola-timetabler .att-accent-dark,
+.path-local-schola_timetabler .att-accent-dark,
+.schola-slots-dashboard .att-accent-dark { background: linear-gradient(90deg, #212529, #343a40); }
+
+.path-local-schola-timetabler .att-icon-box,
+.path-local-schola_timetabler .att-icon-box,
+.schola-slots-dashboard .att-icon-box {
     width: 44px;
     height: 44px;
     border-radius: 10px;
@@ -34,14 +60,33 @@
     font-weight: bold;
 }
 
-.att-icon-primary { background-color: #e7f1ff; color: #0d6efd; }
-.att-icon-success { background-color: #e6f4ea; color: #198754; }
-.att-icon-info { background-color: #e0f7fa; color: #00838f; }
-.att-icon-purple { background-color: #f3e5f5; color: #6f42c1; }
-.att-icon-warning { background-color: #fff8e1; color: #b78103; }
-.att-icon-dark { background-color: #e9ecef; color: #212529; }
+.path-local-schola-timetabler .att-icon-primary,
+.path-local-schola_timetabler .att-icon-primary,
+.schola-slots-dashboard .att-icon-primary { background-color: #e7f1ff; color: #0d6efd; }
 
-.att-meta-pill {
+.path-local-schola-timetabler .att-icon-success,
+.path-local-schola_timetabler .att-icon-success,
+.schola-slots-dashboard .att-icon-success { background-color: #e6f4ea; color: #198754; }
+
+.path-local-schola-timetabler .att-icon-info,
+.path-local-schola_timetabler .att-icon-info,
+.schola-slots-dashboard .att-icon-info { background-color: #e0f7fa; color: #00838f; }
+
+.path-local-schola-timetabler .att-icon-purple,
+.path-local-schola_timetabler .att-icon-purple,
+.schola-slots-dashboard .att-icon-purple { background-color: #f3e5f5; color: #6f42c1; }
+
+.path-local-schola-timetabler .att-icon-warning,
+.path-local-schola_timetabler .att-icon-warning,
+.schola-slots-dashboard .att-icon-warning { background-color: #fff8e1; color: #b78103; }
+
+.path-local-schola-timetabler .att-icon-dark,
+.path-local-schola_timetabler .att-icon-dark,
+.schola-slots-dashboard .att-icon-dark { background-color: #e9ecef; color: #212529; }
+
+.path-local-schola-timetabler .att-meta-pill,
+.path-local-schola_timetabler .att-meta-pill,
+.schola-slots-dashboard .att-meta-pill {
     background-color: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 6px;
@@ -53,40 +98,54 @@
     gap: 6px;
 }
 
-.att-meta-pill strong {
+.path-local-schola-timetabler .att-meta-pill strong,
+.path-local-schola_timetabler .att-meta-pill strong,
+.schola-slots-dashboard .att-meta-pill strong {
     color: #212529;
 }
 
-/* Pricing & Plan Cards */
-.att-pricing-card {
-    transition: transform 0.25 ease, box-shadow 0.25s ease;
+/* 2. Pricing & Plan Cards */
+.path-local-schola-timetabler .att-pricing-card,
+.path-local-schola_timetabler .att-pricing-card,
+.schola-slots-dashboard .att-pricing-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     border-radius: 14px;
     border: 1px solid #e2e8f0;
 }
 
-.att-pricing-card:hover {
+.path-local-schola-timetabler .att-pricing-card:hover,
+.path-local-schola_timetabler .att-pricing-card:hover,
+.schola-slots-dashboard .att-pricing-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
 }
 
-.att-pricing-card.att-pricing-popular {
+.path-local-schola-timetabler .att-pricing-card.att-pricing-popular,
+.path-local-schola_timetabler .att-pricing-card.att-pricing-popular,
+.schola-slots-dashboard .att-pricing-card.att-pricing-popular {
     border: 2px solid #0d6efd !important;
     box-shadow: 0 8px 24px rgba(13, 110, 253, 0.15) !important;
 }
 
-.att-price-amount {
+.path-local-schola-timetabler .att-price-amount,
+.path-local-schola_timetabler .att-price-amount,
+.schola-slots-dashboard .att-price-amount {
     font-size: 2.25rem;
     font-weight: 800;
     line-height: 1;
 }
 
-.att-feature-list {
+.path-local-schola-timetabler .att-feature-list,
+.path-local-schola_timetabler .att-feature-list,
+.schola-slots-dashboard .att-feature-list {
     list-style: none;
     padding-left: 0;
     margin-bottom: 0;
 }
 
-.att-feature-list li {
+.path-local-schola-timetabler .att-feature-list li,
+.path-local-schola_timetabler .att-feature-list li,
+.schola-slots-dashboard .att-feature-list li {
     padding: 6px 0;
     font-size: 0.88rem;
     display: flex;
@@ -94,20 +153,22 @@
     gap: 8px;
 }
 
-.att-feature-list li i {
+.path-local-schola-timetabler .att-feature-list li i,
+.path-local-schola_timetabler .att-feature-list li i,
+.schola-slots-dashboard .att-feature-list li i {
     color: #198754;
 }
 
-/* High Contrast Badges & Legibility Enhancements */
-.text-muted {
-    color: #475569 !important;
-}
-
-.extra-small {
+/* 3. Badges & Legibility Enhancements */
+.path-local-schola-timetabler .extra-small,
+.path-local-schola_timetabler .extra-small,
+.schola-slots-dashboard .extra-small {
     font-size: 0.78rem;
 }
 
-.att-badge-capacity {
+.path-local-schola-timetabler .att-badge-capacity,
+.path-local-schola_timetabler .att-badge-capacity,
+.schola-slots-dashboard .att-badge-capacity {
     background-color: #1e293b !important;
     color: #ffffff !important;
     font-weight: 700 !important;
@@ -117,7 +178,9 @@
     display: inline-block !important;
 }
 
-.att-badge-lab {
+.path-local-schola-timetabler .att-badge-lab,
+.path-local-schola_timetabler .att-badge-lab,
+.schola-slots-dashboard .att-badge-lab {
     background-color: #6b21a8 !important;
     color: #ffffff !important;
     font-weight: 700 !important;
@@ -127,7 +190,9 @@
     display: inline-block !important;
 }
 
-.att-badge-lecture {
+.path-local-schola-timetabler .att-badge-lecture,
+.path-local-schola_timetabler .att-badge-lecture,
+.schola-slots-dashboard .att-badge-lecture {
     background-color: #0f766e !important;
     color: #ffffff !important;
     font-weight: 700 !important;
@@ -137,37 +202,58 @@
     display: inline-block !important;
 }
 
-.att-badge-break {
+.path-local-schola-timetabler .att-badge-break,
+.path-local-schola_timetabler .att-badge-break,
+.schola-slots-dashboard .att-badge-break {
     background-color: #475569 !important;
     color: #ffffff !important;
     font-weight: 700 !important;
 }
 
-.att-badge-exam {
+.path-local-schola-timetabler .att-badge-exam,
+.path-local-schola_timetabler .att-badge-exam,
+.schola-slots-dashboard .att-badge-exam {
     background-color: #d97706 !important;
     color: #ffffff !important;
     font-weight: 700 !important;
 }
 
-.att-badge-class {
+.path-local-schola-timetabler .att-badge-class,
+.path-local-schola_timetabler .att-badge-class,
+.schola-slots-dashboard .att-badge-class {
     background-color: #2563eb !important;
     color: #ffffff !important;
     font-weight: 700 !important;
 }
 
-.table th {
+/* 4. Scoped Bootstrap Overrides for Tables & Forms */
+.path-local-schola-timetabler .table th,
+.path-local-schola_timetabler .table th,
+.schola-slots-dashboard .table th {
     color: #0f172a !important;
     font-weight: 700 !important;
     background-color: #f1f5f9 !important;
 }
 
-.table td {
+.path-local-schola-timetabler .table td,
+.path-local-schola_timetabler .table td,
+.schola-slots-dashboard .table td {
     color: #1e293b !important;
     font-weight: 500 !important;
 }
 
-/* High Contrast Form Selects & Inputs */
-.form-select, select.form-select, select.form-control, .form-control {
+.path-local-schola-timetabler .form-select,
+.path-local-schola_timetabler .form-select,
+.schola-slots-dashboard .form-select,
+.path-local-schola-timetabler select.form-select,
+.path-local-schola_timetabler select.form-select,
+.schola-slots-dashboard select.form-select,
+.path-local-schola-timetabler select.form-control,
+.path-local-schola_timetabler select.form-control,
+.schola-slots-dashboard select.form-control,
+.path-local-schola-timetabler .form-control,
+.path-local-schola_timetabler .form-control,
+.schola-slots-dashboard .form-control {
     color: #0f172a !important;
     background-color: #ffffff !important;
     font-weight: 600 !important;
@@ -175,77 +261,105 @@
     opacity: 1 !important;
 }
 
-.form-select option, select.form-select option {
+.path-local-schola-timetabler .form-select option,
+.path-local-schola_timetabler .form-select option,
+.schola-slots-dashboard .form-select option,
+.path-local-schola-timetabler select.form-select option,
+.path-local-schola_timetabler select.form-select option,
+.schola-slots-dashboard select.form-select option {
     color: #0f172a !important;
     background-color: #ffffff !important;
 }
 
-/* High Contrast Text & Sub-text */
-.text-muted {
+.path-local-schola-timetabler .text-muted,
+.path-local-schola_timetabler .text-muted,
+.schola-slots-dashboard .text-muted {
     color: #334155 !important;
 }
 
-.text-dark {
+.path-local-schola-timetabler .text-dark,
+.path-local-schola_timetabler .text-dark,
+.schola-slots-dashboard .text-dark {
     color: #0f172a !important;
 }
 
-/* Explicit Subtle Badge Classes for Moodle Boost Theme */
-.bg-primary-subtle {
+/* 5. Scoped Subtle Badge Overrides */
+.path-local-schola-timetabler .bg-primary-subtle,
+.path-local-schola_timetabler .bg-primary-subtle,
+.schola-slots-dashboard .bg-primary-subtle {
     background-color: #dbeafe !important;
     color: #1e40af !important;
     border: 1px solid #93c5fd !important;
 }
 
-.bg-secondary-subtle {
+.path-local-schola-timetabler .bg-secondary-subtle,
+.path-local-schola_timetabler .bg-secondary-subtle,
+.schola-slots-dashboard .bg-secondary-subtle {
     background-color: #f1f5f9 !important;
     color: #334155 !important;
     border: 1px solid #cbd5e1 !important;
 }
 
-.bg-success-subtle {
+.path-local-schola-timetabler .bg-success-subtle,
+.path-local-schola_timetabler .bg-success-subtle,
+.schola-slots-dashboard .bg-success-subtle {
     background-color: #dcfce7 !important;
     color: #166534 !important;
     border: 1px solid #86efac !important;
 }
 
-.bg-danger-subtle {
+.path-local-schola-timetabler .bg-danger-subtle,
+.path-local-schola_timetabler .bg-danger-subtle,
+.schola-slots-dashboard .bg-danger-subtle {
     background-color: #fee2e2 !important;
     color: #991b1b !important;
     border: 1px solid #fca5a5 !important;
 }
 
-.bg-info-subtle {
+.path-local-schola-timetabler .bg-info-subtle,
+.path-local-schola_timetabler .bg-info-subtle,
+.schola-slots-dashboard .bg-info-subtle {
     background-color: #ccfbf1 !important;
     color: #115e59 !important;
     border: 1px solid #5eead4 !important;
 }
 
-/* High Contrast Action Buttons */
-.btn-success {
+/* 6. Scoped Button Styling */
+.path-local-schola-timetabler .btn-success,
+.path-local-schola_timetabler .btn-success,
+.schola-slots-dashboard .btn-success {
     background-color: #15803d !important;
     border-color: #15803d !important;
     color: #ffffff !important;
 }
 
-.btn-success:hover {
+.path-local-schola-timetabler .btn-success:hover,
+.path-local-schola_timetabler .btn-success:hover,
+.schola-slots-dashboard .btn-success:hover {
     background-color: #166534 !important;
     border-color: #166534 !important;
     color: #ffffff !important;
 }
 
-.btn-outline-primary {
+.path-local-schola-timetabler .btn-outline-primary,
+.path-local-schola_timetabler .btn-outline-primary,
+.schola-slots-dashboard .btn-outline-primary {
     color: #1d4ed8 !important;
     border-color: #2563eb !important;
     background-color: #ffffff !important;
 }
 
-.btn-outline-primary:hover {
+.path-local-schola-timetabler .btn-outline-primary:hover,
+.path-local-schola_timetabler .btn-outline-primary:hover,
+.schola-slots-dashboard .btn-outline-primary:hover {
     color: #ffffff !important;
     background-color: #2563eb !important;
 }
 
-/* Sticky Headers & Matrix Controls for Timetable Grid */
-.schola-slots-matrix-table th.sticky-top-th {
+/* 7. Matrix Grid & Architectural Layout Styling */
+.path-local-schola-timetabler .schola-slots-matrix-table th.sticky-top-th,
+.path-local-schola_timetabler .schola-slots-matrix-table th.sticky-top-th,
+.schola-slots-dashboard .schola-slots-matrix-table th.sticky-top-th {
     position: sticky;
     top: 0;
     z-index: 10;
@@ -255,16 +369,21 @@
     border-bottom: 2px solid #e2e8f0 !important;
 }
 
-/* Card Edit/Delete Action Buttons - Hidden by default unless Edit Mode is active */
-.cell-action-buttons {
+.path-local-schola-timetabler .cell-action-buttons,
+.path-local-schola_timetabler .cell-action-buttons,
+.schola-slots-dashboard .cell-action-buttons {
     display: none !important;
 }
 
-.edit-mode-active .cell-action-buttons {
+.path-local-schola-timetabler .edit-mode-active .cell-action-buttons,
+.path-local-schola_timetabler .edit-mode-active .cell-action-buttons,
+.schola-slots-dashboard .edit-mode-active .cell-action-buttons {
     display: flex !important;
 }
 
-.schola-slots-matrix-table td.venue-sticky-td {
+.path-local-schola-timetabler .schola-slots-matrix-table td.venue-sticky-td,
+.path-local-schola_timetabler .schola-slots-matrix-table td.venue-sticky-td,
+.schola-slots-dashboard .schola-slots-matrix-table td.venue-sticky-td {
     position: sticky;
     left: 0;
     z-index: 5;
@@ -272,7 +391,9 @@
     font-weight: 700;
 }
 
-.online-room-badge {
+.path-local-schola-timetabler .online-room-badge,
+.path-local-schola_timetabler .online-room-badge,
+.schola-slots-dashboard .online-room-badge {
     background-color: #dcfce7 !important;
     color: #166534 !important;
     border: 1px solid #86efac !important;
@@ -282,20 +403,25 @@
     padding: 0.2rem 0.5rem;
 }
 
-.break-column-strip {
+.path-local-schola-timetabler .break-column-strip,
+.path-local-schola_timetabler .break-column-strip,
+.schola-slots-dashboard .break-column-strip {
     background-color: #f1f5f9 !important;
     border-left: 1px dashed #cbd5e1 !important;
     border-right: 1px dashed #cbd5e1 !important;
 }
 
-.search-filter-input {
+.path-local-schola-timetabler .search-filter-input,
+.path-local-schola_timetabler .search-filter-input,
+.schola-slots-dashboard .search-filter-input {
     height: 36px !important;
     font-size: 0.85rem !important;
     border-radius: 8px !important;
 }
 
-/* Schola Timetabler Rust Matrix Grid Architectural Styling */
-.day-banner-cell {
+.path-local-schola-timetabler .day-banner-cell,
+.path-local-schola_timetabler .day-banner-cell,
+.schola-slots-dashboard .day-banner-cell {
     background-color: #f1f5f9 !important;
     color: #0f172a !important;
     font-size: 0.85rem !important;
@@ -307,7 +433,9 @@
     padding: 0.5rem 1rem !important;
 }
 
-.grid-cell-card {
+.path-local-schola-timetabler .grid-cell-card,
+.path-local-schola_timetabler .grid-cell-card,
+.schola-slots-dashboard .grid-cell-card {
     background: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 8px !important;
@@ -317,25 +445,33 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
 }
 
-.grid-cell-card:hover {
+.path-local-schola-timetabler .grid-cell-card:hover,
+.path-local-schola_timetabler .grid-cell-card:hover,
+.schola-slots-dashboard .grid-cell-card:hover {
     border-color: #16a34a !important;
     box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15) !important;
 }
 
-.grid-cell-course {
+.path-local-schola-timetabler .grid-cell-course,
+.path-local-schola_timetabler .grid-cell-course,
+.schola-slots-dashboard .grid-cell-course {
     font-weight: 700 !important;
     font-size: 0.82rem !important;
     color: #0f172a !important;
     line-height: 1.1 !important;
 }
 
-.grid-cell-lecturer {
+.path-local-schola-timetabler .grid-cell-lecturer,
+.path-local-schola_timetabler .grid-cell-lecturer,
+.schola-slots-dashboard .grid-cell-lecturer {
     font-size: 0.72rem !important;
     color: #475569 !important;
     font-weight: 500 !important;
 }
 
-.break-column-vertical {
+.path-local-schola-timetabler .break-column-vertical,
+.path-local-schola_timetabler .break-column-vertical,
+.schola-slots-dashboard .break-column-vertical {
     writing-mode: vertical-lr !important;
     text-orientation: upright !important;
     color: #059669 !important;
@@ -348,8 +484,10 @@
     opacity: 0.9 !important;
 }
 
-/* Brand Buttons matching Schola Timetabler Rust design */
-.btn-emerald {
+/* 8. Brand Action Buttons & Badges */
+.path-local-schola-timetabler .btn-emerald,
+.path-local-schola_timetabler .btn-emerald,
+.schola-slots-dashboard .btn-emerald {
     background-color: #059669 !important;
     border-color: #059669 !important;
     color: #ffffff !important;
@@ -359,14 +497,18 @@
     transition: all 0.2s ease !important;
 }
 
-.btn-emerald:hover {
+.path-local-schola-timetabler .btn-emerald:hover,
+.path-local-schola_timetabler .btn-emerald:hover,
+.schola-slots-dashboard .btn-emerald:hover {
     background-color: #047857 !important;
     border-color: #047857 !important;
     color: #ffffff !important;
     box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
 }
 
-.btn-outline-emerald {
+.path-local-schola-timetabler .btn-outline-emerald,
+.path-local-schola_timetabler .btn-outline-emerald,
+.schola-slots-dashboard .btn-outline-emerald {
     background-color: #ffffff !important;
     border: 1.5px solid #10b981 !important;
     color: #059669 !important;
@@ -376,13 +518,17 @@
     transition: all 0.2s ease !important;
 }
 
-.btn-outline-emerald:hover {
+.path-local-schola-timetabler .btn-outline-emerald:hover,
+.path-local-schola_timetabler .btn-outline-emerald:hover,
+.schola-slots-dashboard .btn-outline-emerald:hover {
     background-color: #ecfdf5 !important;
     color: #047857 !important;
     border-color: #059669 !important;
 }
 
-.btn-outline-red {
+.path-local-schola-timetabler .btn-outline-red,
+.path-local-schola_timetabler .btn-outline-red,
+.schola-slots-dashboard .btn-outline-red {
     background-color: #ffffff !important;
     border: 1.5px solid #f87171 !important;
     color: #dc2626 !important;
@@ -392,13 +538,17 @@
     transition: all 0.2s ease !important;
 }
 
-.btn-outline-red:hover {
+.path-local-schola-timetabler .btn-outline-red:hover,
+.path-local-schola_timetabler .btn-outline-red:hover,
+.schola-slots-dashboard .btn-outline-red:hover {
     background-color: #fef2f2 !important;
     color: #991b1b !important;
     border-color: #dc2626 !important;
 }
 
-.btn-outline-slate {
+.path-local-schola-timetabler .btn-outline-slate,
+.path-local-schola_timetabler .btn-outline-slate,
+.schola-slots-dashboard .btn-outline-slate {
     background-color: #ffffff !important;
     border: 1.5px solid #cbd5e1 !important;
     color: #475569 !important;
@@ -408,14 +558,17 @@
     transition: all 0.2s ease !important;
 }
 
-.btn-outline-slate:hover {
+.path-local-schola-timetabler .btn-outline-slate:hover,
+.path-local-schola_timetabler .btn-outline-slate:hover,
+.schola-slots-dashboard .btn-outline-slate:hover {
     background-color: #f8fafc !important;
     color: #0f172a !important;
     border-color: #94a3b8 !important;
 }
 
-/* Badges matching Schola Timetabler Rust brand colors */
-.badge-fitness-score {
+.path-local-schola-timetabler .badge-fitness-score,
+.path-local-schola_timetabler .badge-fitness-score,
+.schola-slots-dashboard .badge-fitness-score {
     background-color: #ecfdf5 !important;
     color: #047857 !important;
     border: 1px solid #a7f3d0 !important;
@@ -426,7 +579,9 @@
     padding: 0.35rem 0.85rem !important;
 }
 
-.badge-id-num {
+.path-local-schola-timetabler .badge-id-num,
+.path-local-schola_timetabler .badge-id-num,
+.schola-slots-dashboard .badge-id-num {
     background-color: #f1f5f9 !important;
     color: #475569 !important;
     border: 1px solid #cbd5e1 !important;
@@ -437,7 +592,9 @@
     padding: 0.35rem 0.85rem !important;
 }
 
-.badge-class-schedule {
+.path-local-schola-timetabler .badge-class-schedule,
+.path-local-schola_timetabler .badge-class-schedule,
+.schola-slots-dashboard .badge-class-schedule {
     background-color: #059669 !important;
     color: #ffffff !important;
     font-family: monospace;
@@ -448,7 +605,9 @@
     text-transform: uppercase !important;
 }
 
-.badge-license-key {
+.path-local-schola-timetabler .badge-license-key,
+.path-local-schola_timetabler .badge-license-key,
+.schola-slots-dashboard .badge-license-key {
     background-color: #fef3c7 !important;
     color: #b45309 !important;
     font-family: monospace;
@@ -457,9 +616,12 @@
     border-radius: 4px !important;
 }
 
-/* Tighten top spacing between main page navigation and page heading for Schola Timetabler */
+/* 9. Page Header Spacing Overrides */
+#page.path-local-schola-timetabler #page-header,
 #page.path-local-schola_timetabler #page-header,
+body.path-local-schola-timetabler #page-header,
 body.path-local-schola_timetabler #page-header,
+.path-local-schola-timetabler #page-header,
 .path-local-schola_timetabler #page-header {
     margin-top: 0.25rem !important;
     padding-top: 0.25rem !important;
@@ -467,16 +629,23 @@ body.path-local-schola_timetabler #page-header,
     padding-bottom: 0 !important;
 }
 
+#page.path-local-schola-timetabler #page-header .h2,
 #page.path-local-schola_timetabler #page-header .h2,
+#page.path-local-schola-timetabler #page-header h2,
 #page.path-local-schola_timetabler #page-header h2,
+.path-local-schola-timetabler #page-header .page-header-headings h1,
 .path-local-schola_timetabler #page-header .page-header-headings h1 {
     margin-top: 0 !important;
     margin-bottom: 0.25rem !important;
 }
 
+#page.path-local-schola-timetabler #page-content,
 #page.path-local-schola_timetabler #page-content,
+.path-local-schola-timetabler #page-content,
 .path-local-schola_timetabler #page-content,
+.path-local-schola-timetabler #region-main-box,
 .path-local-schola_timetabler #region-main-box,
+.path-local-schola-timetabler #region-main,
 .path-local-schola_timetabler #region-main {
     padding-top: 0 !important;
     margin-top: 0 !important;
