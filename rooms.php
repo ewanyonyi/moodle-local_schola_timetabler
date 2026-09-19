@@ -62,9 +62,21 @@ if ($action === 'download_template') {
 // -------------------------------------------------------------------
 // Action: Delete Single Room
 // -------------------------------------------------------------------
-if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_rooms', ['id' => $id]);
-    redirect($url, 'Room deleted successfully.');
+if ($action === 'delete' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    $room = $DB->get_record('local_schola_timetabler_rooms', ['id' => $id]);
+    if ($room) {
+        if ($confirm && confirm_sesskey()) {
+            $DB->delete_records('local_schola_timetabler_rooms', ['id' => $id]);
+            redirect($url, 'Room deleted successfully.');
+        }
+        $confirmurl = new moodle_url($url, ['action' => 'delete', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_delete_room', 'local_schola_timetabler', s($room->name));
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
+    }
 }
 
 // -------------------------------------------------------------------
@@ -310,10 +322,9 @@ echo html_writer::start_div('col-lg-5');
             $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $room->id]);
             $editbtn = html_writer::link($editurl, '<i class="fa fa-pen me-1"></i> Edit', ['class' => 'btn btn-sm btn-outline-primary me-2 font-weight-bold']);
 
-            $deleteurl = new moodle_url($url, ['action' => 'delete', 'id' => $room->id, 'sesskey' => sesskey()]);
+            $deleteurl = new moodle_url($url, ['action' => 'delete', 'id' => $room->id]);
             $deletebtn = html_writer::link($deleteurl, '<i class="fa fa-trash me-1"></i> Delete', [
-            'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
-            'onclick' => 'return confirm("Are you sure you want to delete this room?");',
+                'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
             ]);
 
             $isonline = (stripos($room->name, 'online') !== false

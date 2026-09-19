@@ -57,26 +57,47 @@ $PAGE->set_heading(get_string('manage_schedules', 'local_schola_timetabler'));
 // -------------------------------------------------------------------
 // Action: Clear Timetable Group or All
 // -------------------------------------------------------------------
-if (($action === 'cleargroup' || $action === 'clearall') && confirm_sesskey()) {
-    $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
-    if (!empty($titleparam) && $scheduletype !== 'all' && $hastitlecol) {
-        $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $titleparam]);
-        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), "Timetable '{$titleparam}' cleared successfully.");
-    } else if ($scheduletype !== 'all') {
-        $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
-        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), strtoupper($scheduletype) . ' timetables cleared successfully.');
-    } else {
-        $DB->delete_records('local_schola_timetabler_schedules');
-        redirect(new moodle_url('/local/schola_timetabler/schedules.php'), 'All generated timetables cleared successfully.');
+if ($action === 'cleargroup' || $action === 'clearall') {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    if ($confirm && confirm_sesskey()) {
+        $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
+        if (!empty($titleparam) && $scheduletype !== 'all' && $hastitlecol) {
+            $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $titleparam]);
+            redirect(new moodle_url('/local/schola_timetabler/schedules.php'), "Timetable '{$titleparam}' cleared successfully.");
+        } else if ($scheduletype !== 'all') {
+            $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
+            redirect(new moodle_url('/local/schola_timetabler/schedules.php'), strtoupper($scheduletype) . ' timetables cleared successfully.');
+        } else {
+            $DB->delete_records('local_schola_timetabler_schedules');
+            redirect(new moodle_url('/local/schola_timetabler/schedules.php'), 'All generated timetables cleared successfully.');
+        }
     }
+    $confirmurl = new moodle_url($url, array_merge($urlparams, ['action' => $action, 'confirm' => 1, 'sesskey' => sesskey()]));
+    $cleartitleparam = s($titleparam);
+    $msg = (!empty($titleparam) && $scheduletype !== 'all')
+        ? get_string('confirm_clear_timetables', 'local_schola_timetabler') . " ('{$cleartitleparam}')"
+        : get_string('confirm_clear_timetables', 'local_schola_timetabler');
+    echo $OUTPUT->header();
+    echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+    echo $OUTPUT->footer();
+    exit;
 }
 
 // -------------------------------------------------------------------
 // Action: Delete Single Schedule Entry
 // -------------------------------------------------------------------
-if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_schedules', ['id' => $id]);
-    redirect($url, 'Schedule allocation deleted successfully.');
+if ($action === 'delete' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    if ($confirm && confirm_sesskey()) {
+        $DB->delete_records('local_schola_timetabler_schedules', ['id' => $id]);
+        redirect($url, 'Schedule allocation deleted successfully.');
+    }
+    $confirmurl = new moodle_url($url, array_merge($urlparams, ['action' => 'delete', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]));
+    $msg = get_string('confirm_delete_schedule_entry', 'local_schola_timetabler');
+    echo $OUTPUT->header();
+    echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+    echo $OUTPUT->footer();
+    exit;
 }
 
 // -------------------------------------------------------------------
@@ -469,7 +490,6 @@ if (!$showdetails) {
             ]);
             echo html_writer::link($deltargeturl, 'Delete', [
                 'class' => 'btn btn-sm btn-outline-danger rounded-pill px-3 py-1 extra-small',
-                'onclick' => "return confirm('Are you sure you want to delete this generated timetable?');",
             ]);
             echo html_writer::end_tag('td');
 
@@ -780,8 +800,7 @@ if (!$showdetails) {
                                 echo html_writer::start_div('cell-action-buttons gap-1 border-top pt-1 mt-1');
                                 echo html_writer::link($editurl, 'Edit', ['class' => 'btn btn-sm btn-outline-primary py-0 px-1.5 extra-small']);
                                 echo html_writer::link($delurl, 'Delete', [
-                                'class' => 'btn btn-sm btn-outline-danger py-0 px-1.5 extra-small',
-                                'onclick' => 'return confirm("Delete allocation?");',
+                                    'class' => 'btn btn-sm btn-outline-danger py-0 px-1.5 extra-small',
                                 ]);
                                 echo html_writer::end_div();
                                 echo html_writer::end_div();

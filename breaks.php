@@ -89,9 +89,21 @@ if ($action === 'edit' && data_submitted() && confirm_sesskey()) {
     redirect($url, get_string('break_updated_success', 'local_schola_timetabler'), null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
-if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_slots', ['id' => $id, 'type' => 'break']);
-    redirect($url, get_string('break_deleted_success', 'local_schola_timetabler'), null, \core\output\notification::NOTIFY_SUCCESS);
+if ($action === 'delete' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    $break = $DB->get_record('local_schola_timetabler_slots', ['id' => $id, 'type' => 'break']);
+    if ($break) {
+        if ($confirm && confirm_sesskey()) {
+            $DB->delete_records('local_schola_timetabler_slots', ['id' => $id, 'type' => 'break']);
+            redirect($url, get_string('break_deleted_success', 'local_schola_timetabler'), null, \core\output\notification::NOTIFY_SUCCESS);
+        }
+        $confirmurl = new moodle_url($url, ['action' => 'delete', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_delete_break', 'local_schola_timetabler');
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
+    }
 }
 
 echo $OUTPUT->header();
@@ -242,8 +254,7 @@ if (empty($breaks)) {
                                 data-bs-toggle="modal" data-bs-target="#editBreakModal' . $b->id . '">
                             ' . get_string('edit', 'local_schola_timetabler') . '
                         </button>
-                        <a href="' . $editurl . '" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 extra-small"
-                           onclick="return confirm(\'' . s(get_string('confirm_delete_break', 'local_schola_timetabler')) . '\');">
+                        <a href="' . $editurl . '" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 extra-small">
                             ' . get_string('delete', 'local_schola_timetabler') . '
                         </a>
                     </td>

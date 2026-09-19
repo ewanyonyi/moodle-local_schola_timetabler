@@ -97,14 +97,12 @@ class renderer extends plugin_renderer_base {
         }
 
         if ($showclearall) {
-            $clearurl = new \moodle_url($schedulesurl, ['action' => 'clearall', 'type' => $scheduletype, 'sesskey' => sesskey()]);
+            $clearurl = new \moodle_url($schedulesurl, ['action' => 'clearall', 'type' => $scheduletype]);
             $cleartitle = ($scheduletype !== 'all')
                 ? get_string('clear_timetables', 'local_schola_timetabler') . ' (' . strtoupper($scheduletype) . ')'
                 : get_string('clear_timetables', 'local_schola_timetabler');
-            $confirmmsg = s(get_string('confirm_clear_timetables', 'local_schola_timetabler'));
             $html .= \html_writer::link($clearurl, $cleartitle, [
                 'class' => 'btn btn-outline-danger font-weight-bold px-3 py-2',
-                'onclick' => 'return confirm("' . $confirmmsg . '");',
             ]);
         }
         $html .= \html_writer::end_div();

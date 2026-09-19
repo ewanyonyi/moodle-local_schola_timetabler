@@ -70,17 +70,35 @@ if ($action === 'sample_csv') {
 // -------------------------------------------------------------------
 // Action: Delete Single Time Slot
 // -------------------------------------------------------------------
-if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_slots', ['id' => $id]);
-    redirect($url, 'Time slot deleted successfully.');
+if ($action === 'delete' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    if ($confirm && confirm_sesskey()) {
+        $DB->delete_records('local_schola_timetabler_slots', ['id' => $id]);
+        redirect($url, 'Time slot deleted successfully.');
+    }
+    $confirmurl = new moodle_url($url, ['action' => 'delete', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]);
+    $msg = get_string('confirm_delete_slot', 'local_schola_timetabler');
+    echo $OUTPUT->header();
+    echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+    echo $OUTPUT->footer();
+    exit;
 }
 
 // -------------------------------------------------------------------
 // Action: Clear All Slots
 // -------------------------------------------------------------------
-if ($action === 'clearall' && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_slots');
-    redirect($url, 'All time slots cleared successfully.');
+if ($action === 'clearall') {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    if ($confirm && confirm_sesskey()) {
+        $DB->delete_records('local_schola_timetabler_slots');
+        redirect($url, 'All time slots cleared successfully.');
+    }
+    $confirmurl = new moodle_url($url, ['action' => 'clearall', 'confirm' => 1, 'sesskey' => sesskey()]);
+    $msg = get_string('confirm_clear_all_slots', 'local_schola_timetabler');
+    echo $OUTPUT->header();
+    echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+    echo $OUTPUT->footer();
+    exit;
 }
 
 // -------------------------------------------------------------------
@@ -509,10 +527,9 @@ $activeheader = get_string('slots_active_windows', 'local_schola_timetabler') . 
 echo html_writer::tag('h4', $activeheader, ['class' => 'mb-0 font-weight-bold']);
 
 if (!empty($slots)) {
-    $clearallurl = new moodle_url($url, ['action' => 'clearall', 'sesskey' => sesskey()]);
+    $clearallurl = new moodle_url($url, ['action' => 'clearall']);
     echo html_writer::link($clearallurl, 'Clear All Slots', [
         'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
-        'onclick' => 'return confirm("Clear all configured time slots?");',
     ]);
 }
 echo html_writer::end_div();
@@ -546,10 +563,9 @@ if (empty($slots)) {
         $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $slot->id]);
         $editbtn = html_writer::link($editurl, '<i class="fa fa-pen me-1"></i> Edit', ['class' => 'btn btn-sm btn-outline-primary font-weight-bold me-2']);
 
-        $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $slot->id, 'sesskey' => sesskey()]);
+        $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $slot->id]);
         $delbtn = html_writer::link($delurl, '<i class="fa fa-trash me-1"></i> Delete', [
             'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
-            'onclick' => 'return confirm("Delete this time slot?");',
         ]);
 
         $typebadge = match ($slot->type) {
