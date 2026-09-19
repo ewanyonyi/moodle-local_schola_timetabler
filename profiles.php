@@ -45,12 +45,21 @@ $PAGE->set_heading(get_string('profiles_title', 'local_schola_timetabler'));
 // -------------------------------------------------------------------
 // Action: Apply Executive / School Schedule Profile
 // -------------------------------------------------------------------
-if ($action === 'preset' && !empty($pkey) && confirm_sesskey()) {
+if ($action === 'preset' && !empty($pkey)) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
     $profile = profile_manager::get_profile($pkey);
     if ($profile) {
-        $count = profile_manager::apply_profile($pkey);
-        $pname = s($profile['name']);
-        redirect($slotsurl, "Schedule Profile '{$pname}' applied successfully! {$count} active time slots generated.");
+        if ($confirm && confirm_sesskey()) {
+            $count = profile_manager::apply_profile($pkey);
+            $pname = s($profile['name']);
+            redirect($slotsurl, "Schedule Profile '{$pname}' applied successfully! {$count} active time slots generated.");
+        }
+        $confirmurl = new moodle_url($url, ['action' => 'preset', 'key' => $pkey, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_apply_profile', 'local_schola_timetabler', s($profile['name']));
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
     } else {
         redirect($url, 'Invalid profile key specified.', null, \core\output\notification::NOTIFY_ERROR);
     }
@@ -115,17 +124,38 @@ if ($action === 'save_profile' && confirm_sesskey() && data_submitted()) {
 // -------------------------------------------------------------------
 // Action: Reset Profiles to System Defaults
 // -------------------------------------------------------------------
-if ($action === 'reset_profiles' && confirm_sesskey()) {
-    profile_manager::reset_defaults();
-    redirect($url, 'Schedule profiles reset to system default institutional profiles.');
+if ($action === 'reset_profiles') {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    if ($confirm && confirm_sesskey()) {
+        profile_manager::reset_defaults();
+        redirect($url, 'Schedule profiles reset to system default institutional profiles.');
+    }
+    $confirmurl = new moodle_url($url, ['action' => 'reset_profiles', 'confirm' => 1, 'sesskey' => sesskey()]);
+    $msg = get_string('confirm_reset_profiles', 'local_schola_timetabler');
+    echo $OUTPUT->header();
+    echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+    echo $OUTPUT->footer();
+    exit;
 }
 
 // -------------------------------------------------------------------
 // Action: Delete Custom Profile
 // -------------------------------------------------------------------
-if ($action === 'delete_profile' && !empty($pkey) && confirm_sesskey()) {
-    profile_manager::delete_profile($pkey);
-    redirect($url, 'Custom schedule profile removed.');
+if ($action === 'delete_profile' && !empty($pkey)) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    $profile = profile_manager::get_profile($pkey);
+    if ($profile) {
+        if ($confirm && confirm_sesskey()) {
+            profile_manager::delete_profile($pkey);
+            redirect($url, 'Custom schedule profile removed.');
+        }
+        $confirmurl = new moodle_url($url, ['action' => 'delete_profile', 'key' => $pkey, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_delete_profile', 'local_schola_timetabler', s($profile['name']));
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
+    }
 }
 
 // -------------------------------------------------------------------
@@ -354,10 +384,9 @@ echo html_writer::start_div('d-flex align-items-center gap-2');
 $addprofileurl = new moodle_url($url, ['action' => 'add_profile']);
 echo html_writer::link($addprofileurl, '+ Add Custom Profile', ['class' => 'btn btn-sm btn-light text-dark font-weight-bold shadow-sm']);
 
-$reseturl = new moodle_url($url, ['action' => 'reset_profiles', 'sesskey' => sesskey()]);
+$reseturl = new moodle_url($url, ['action' => 'reset_profiles']);
 echo html_writer::link($reseturl, 'Reset Defaults', [
     'class' => 'btn btn-sm btn-outline-light opacity-75',
-    'onclick' => 'return confirm("Reset all schedule profiles back to institutional defaults?");',
 ]);
 echo html_writer::end_div();
 echo html_writer::end_div();
@@ -426,7 +455,6 @@ foreach ($profiles as $pk => $pinfo) {
     // Apply Profile Button
     echo html_writer::link($applyurl, '<i class="fa fa-bolt me-1"></i> Apply Profile', [
         'class' => 'btn btn-' . ($theme === 'purple' ? 'primary' : $theme) . ' btn-sm flex-grow-1 font-weight-bold shadow-sm py-2',
-        'onclick' => "return confirm('Apply profile \"{$name}\"? This will configure active slots.');",
     ]);
 
     // Edit Profile Button
@@ -440,7 +468,6 @@ foreach ($profiles as $pk => $pinfo) {
         echo html_writer::link($delprofurl, '<i class="fa fa-trash"></i>', [
             'class' => 'btn btn-outline-danger btn-sm px-2 py-2',
             'title' => 'Delete custom profile',
-            'onclick' => "return confirm('Delete custom profile \"{$name}\"?');",
         ]);
     }
 

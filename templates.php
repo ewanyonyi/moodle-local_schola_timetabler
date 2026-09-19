@@ -41,35 +41,57 @@ $PAGE->set_heading(get_string('template_saved_title', 'local_schola_timetabler')
 // -------------------------------------------------------------------
 // Action: Delete Template
 // -------------------------------------------------------------------
-if ($action === 'delete' && $id > 0 && confirm_sesskey()) {
-    $DB->delete_records('local_schola_timetabler_templates', ['id' => $id]);
-    redirect($url, 'Schedule template deleted successfully.');
+if ($action === 'delete' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
+    $template = $DB->get_record('local_schola_timetabler_templates', ['id' => $id]);
+    if ($template) {
+        if ($confirm && confirm_sesskey()) {
+            $DB->delete_records('local_schola_timetabler_templates', ['id' => $id]);
+            redirect($url, 'Schedule template deleted successfully.');
+        }
+        $confirmurl = new moodle_url($url, ['action' => 'delete', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_delete_template', 'local_schola_timetabler', s($template->name));
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
+    }
 }
 
 // -------------------------------------------------------------------
 // Action: Apply Template to Active Time Slots
 // -------------------------------------------------------------------
-if ($action === 'apply' && $id > 0 && confirm_sesskey()) {
+if ($action === 'apply' && $id > 0) {
+    $confirm = optional_param('confirm', 0, PARAM_INT);
     $template = $DB->get_record('local_schola_timetabler_templates', ['id' => $id]);
     if ($template && !empty($template->slots_json)) {
-        $slotsdata = json_decode($template->slots_json, true);
-        if (is_array($slotsdata)) {
-            $DB->delete_records('local_schola_timetabler_slots');
-            $count = 0;
-            foreach ($slotsdata as $s) {
-                $day = isset($s['dayofweek']) ? (int)$s['dayofweek'] : 1;
-                $DB->insert_record('local_schola_timetabler_slots', (object)[
-                    'dayofweek' => $day,
-                    'starttime' => $s['starttime'] ?? '08:00',
-                    'endtime'   => $s['endtime'] ?? '09:30',
-                    'type'      => $s['type'] ?? 'class',
-                ]);
-                $count++;
-            }
+        if ($confirm && confirm_sesskey()) {
+            $slotsdata = json_decode($template->slots_json, true);
+            if (is_array($slotsdata)) {
+                $DB->delete_records('local_schola_timetabler_slots');
+                $count = 0;
+                foreach ($slotsdata as $s) {
+                    $day = isset($s['dayofweek']) ? (int)$s['dayofweek'] : 1;
+                    $DB->insert_record('local_schola_timetabler_slots', (object)[
+                        'dayofweek' => $day,
+                        'starttime' => $s['starttime'] ?? '08:00',
+                        'endtime'   => $s['endtime'] ?? '09:30',
+                        'type'      => $s['type'] ?? 'class',
+                    ]);
+                    $count++;
+                }
 
-            $slotsurl = new moodle_url('/local/schola_timetabler/slots.php');
-            redirect($slotsurl, "Template '{$template->name}' applied successfully! {$count} time slots configured.");
+                $slotsurl = new moodle_url('/local/schola_timetabler/slots.php');
+                $pname = s($template->name);
+                redirect($slotsurl, "Template '{$pname}' applied successfully! {$count} time slots configured.");
+            }
         }
+        $confirmurl = new moodle_url($url, ['action' => 'apply', 'id' => $id, 'confirm' => 1, 'sesskey' => sesskey()]);
+        $msg = get_string('confirm_apply_template', 'local_schola_timetabler', s($template->name));
+        echo $OUTPUT->header();
+        echo html_writer::div($OUTPUT->confirm($msg, $confirmurl, $url), 'mt-4');
+        echo $OUTPUT->footer();
+        exit;
     }
     redirect($url, 'Failed to apply template or invalid template format.', null, \core\output\notification::NOTIFY_ERROR);
 }
@@ -303,19 +325,19 @@ if (empty($templates)) {
         $slotcount = is_array($slotsarr) ? count($slotsarr) : 0;
         $modified  = date('Y-m-d H:i', $t->timemodified);
 
-        $applyurl = new moodle_url($url, ['action' => 'apply', 'id' => $t->id, 'sesskey' => sesskey()]);
+        $applyurl = new moodle_url($url, ['action' => 'apply', 'id' => $t->id]);
         $applybtn = html_writer::link($applyurl, get_string('template_apply_button', 'local_schola_timetabler'), [
             'class' => 'btn btn-sm btn-success font-weight-bold me-2',
-            'onclick' => "return confirm('Apply template \"{$t->name}\"? This will configure active weekly time slots.');",
         ]);
 
         $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $t->id]);
-        $editbtn = html_writer::link($editurl, get_string('template_edit_button', 'local_schola_timetabler'), ['class' => 'btn btn-sm btn-outline-primary me-2']);
+        $editbtn = html_writer::link($editurl, get_string('template_edit_button', 'local_schola_timetabler'), [
+            'class' => 'btn btn-sm btn-outline-primary me-2',
+        ]);
 
-        $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $t->id, 'sesskey' => sesskey()]);
+        $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $t->id]);
         $delbtn = html_writer::link($delurl, get_string('template_delete_button', 'local_schola_timetabler'), [
             'class' => 'btn btn-sm btn-outline-danger',
-            'onclick' => "return confirm('Delete template \"{$t->name}\"?');",
         ]);
 
         $table->data[] = [
