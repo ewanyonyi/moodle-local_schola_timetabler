@@ -426,13 +426,13 @@ echo html_writer::end_div();
 echo html_writer::start_div('col-12 mt-3');
 echo html_writer::tag('label', get_string('profile_operating_school_days', 'local_schola_timetabler'), ['class' => 'form-label font-weight-bold text-dark d-block']);
 $dayslist = [
-    1 => get_string('mon', 'core'),
-    2 => get_string('tue', 'core'),
-    3 => get_string('wed', 'core'),
-    4 => get_string('thu', 'core'),
-    5 => get_string('fri', 'core'),
-    6 => get_string('sat', 'core'),
-    7 => get_string('sun', 'core'),
+    1 => get_string('mon', 'local_schola_timetabler'),
+    2 => get_string('tue', 'local_schola_timetabler'),
+    3 => get_string('wed', 'local_schola_timetabler'),
+    4 => get_string('thu', 'local_schola_timetabler'),
+    5 => get_string('fri', 'local_schola_timetabler'),
+    6 => get_string('sat', 'local_schola_timetabler'),
+    7 => get_string('sun', 'local_schola_timetabler'),
 ];
 echo html_writer::start_div('d-flex gap-3 flex-wrap');
 foreach ($dayslist as $dnum => $dname) {
@@ -538,7 +538,7 @@ echo html_writer::tag('h4', $activeheader, ['class' => 'mb-0 font-weight-bold'])
 
 if (!empty($slots)) {
     $clearallurl = new moodle_url($url, ['action' => 'clearall']);
-    echo html_writer::link($clearallurl, 'Clear All Slots', [
+    echo html_writer::link($clearallurl, get_string('slots_clear_all', 'local_schola_timetabler'), [
         'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
     ]);
 }
@@ -569,12 +569,16 @@ if (empty($slots)) {
 
     $serial = 1;
     foreach ($slots as $slot) {
-        $dayname = $days[$slot->dayofweek] ?? ('Day ' . $slot->dayofweek);
+        $dayname = (!empty($slot->dayofweek) && isset($days[$slot->dayofweek]))
+            ? $days[$slot->dayofweek]
+            : get_string('all_days', 'local_schola_timetabler');
         $editurl = new moodle_url($url, ['action' => 'edit', 'id' => $slot->id]);
-        $editbtn = html_writer::link($editurl, '<i class="fa fa-pen me-1"></i> Edit', ['class' => 'btn btn-sm btn-outline-primary font-weight-bold me-2']);
+        $editlabel = '<i class="fa fa-pen me-1"></i> ' . get_string('edit', 'local_schola_timetabler');
+        $editbtn = html_writer::link($editurl, $editlabel, ['class' => 'btn btn-sm btn-outline-primary font-weight-bold me-2']);
 
         $delurl = new moodle_url($url, ['action' => 'delete', 'id' => $slot->id]);
-        $delbtn = html_writer::link($delurl, '<i class="fa fa-trash me-1"></i> Delete', [
+        $dellabel = '<i class="fa fa-trash me-1"></i> ' . get_string('delete', 'local_schola_timetabler');
+        $delbtn = html_writer::link($delurl, $dellabel, [
             'class' => 'btn btn-sm btn-outline-danger font-weight-bold',
         ]);
 

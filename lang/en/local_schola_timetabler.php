@@ -258,8 +258,16 @@ $string['slots_lunch_end'] = 'Lunch Break End';
 $string['slots_lunch_start'] = 'Lunch Break Start';
 $string['slots_management_heading'] = 'Time Slots Management';
 $string['slots_management_title'] = 'Time Slots Management';
-$string['slots_morning_tea_end'] = 'Morning Tea Break Start';
+$string['slots_morning_tea_end'] = 'Morning Tea Break End';
 $string['slots_morning_tea_start'] = 'Morning Tea Break Start';
+$string['mon'] = 'Mon';
+$string['tue'] = 'Tue';
+$string['wed'] = 'Wed';
+$string['thu'] = 'Thu';
+$string['fri'] = 'Fri';
+$string['sat'] = 'Sat';
+$string['sun'] = 'Sun';
+
 $string['slots_no_data'] = 'No bell schedule time windows configured yet. Use the <strong>Batch CSV Import</strong> or <strong>Guided Bell Schedule Wizard</strong> above to get started.';
 $string['slots_update_button'] = 'Update Time Slot';
 $string['slots_wipe_before_applying'] = 'Wipe existing time slots before applying';
