@@ -696,7 +696,9 @@ if (!$showdetails) {
         // Header Row
         echo html_writer::start_tag('thead');
         echo html_writer::start_tag('tr', ['class' => 'text-center font-monospace text-uppercase small bg-light']);
-        echo html_writer::tag('th', get_string('venue_room', 'local_schola_timetabler'), ['style' => 'width: 160px; min-width: 160px;', 'class' => 'py-3 px-3 text-start sticky-top-th']);
+        echo html_writer::tag('th', get_string('venue_room', 'local_schola_timetabler'), [
+            'style' => 'width: 160px; min-width: 160px;', 'class' => 'py-3 px-3 text-start sticky-top-th',
+        ]);
         foreach ($timeblocks as $tb) {
             if (isset($breakwindows[$tb])) {
                 echo html_writer::tag('th', '<div class="fw-bold">' . $tb . '</div>', [

@@ -58,15 +58,15 @@ define([], function() {
             // Auto-open modals if requested
             if (config.openModal) {
                 const genModalElem = document.getElementById('generateTimetableModal');
-                if (genModalElem && typeof bootstrap !== 'undefined') {
-                    const myGenModal = new bootstrap.Modal(genModalElem);
+                if (genModalElem && typeof window.bootstrap !== 'undefined') {
+                    const myGenModal = new window.bootstrap.Modal(genModalElem);
                     myGenModal.show();
                 }
             }
             if (config.openBreaks) {
                 const modalElem = document.getElementById('manageBreaksModal');
-                if (modalElem && typeof bootstrap !== 'undefined') {
-                    const myModal = new bootstrap.Modal(modalElem);
+                if (modalElem && typeof window.bootstrap !== 'undefined') {
+                    const myModal = new window.bootstrap.Modal(modalElem);
                     myModal.show();
                 }
             }

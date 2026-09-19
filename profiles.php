@@ -324,7 +324,9 @@ if ($editingprofile) {
     echo html_writer::end_div();
 
     echo html_writer::start_div('d-flex gap-2');
-    echo html_writer::tag('button', get_string('profile_save_button', 'local_schola_timetabler'), ['type' => 'submit', 'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm']);
+    echo html_writer::tag('button', get_string('profile_save_button', 'local_schola_timetabler'), [
+        'type' => 'submit', 'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm',
+    ]);
     echo html_writer::link($url, get_string('cancel', 'core'), ['class' => 'btn btn-outline-secondary px-3 py-2']);
     echo html_writer::end_div();
 

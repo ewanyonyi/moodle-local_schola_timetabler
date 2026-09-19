@@ -37,14 +37,22 @@ define([], function() {
                 + '<option value="5" ' + (day == 5 ? 'selected' : '') + '>Friday</option>'
                 + '<option value="6" ' + (day == 6 ? 'selected' : '') + '>Saturday</option>'
                 + '<option value="7" ' + (day == 7 ? 'selected' : '') + '>Sunday</option></select></td>'
-                + '<td><input type="time" name="slot_start[]" value="' + start + '" class="form-control form-control-sm" required></td>'
-                + '<td><input type="time" name="slot_end[]" value="' + end + '" class="form-control form-control-sm" required></td>'
+                + '<td><input type="time" name="slot_start[]" value="' + start + '" '
+                + 'class="form-control form-control-sm" required></td>'
+                + '<td><input type="time" name="slot_end[]" value="' + end + '" '
+                + 'class="form-control form-control-sm" required></td>'
                 + '<td><select name="slot_type[]" class="form-select form-select-sm">'
-                + '<option value="class" ' + (type === 'class' ? 'selected' : '') + '>Class Lecture (Standard Teaching Window)</option>'
-                + '<option value="lab" ' + (type === 'lab' ? 'selected' : '') + '>Laboratory Practical (Extended Block)</option>'
-                + '<option value="break" ' + (type === 'break' ? 'selected' : '') + '>Break / Blockout (Lunch, Tea Break, Assembly)</option>'
-                + '<option value="exam" ' + (type === 'exam' ? 'selected' : '') + '>Examination Period (Dedicated Exam Block)</option></select></td>'
-                + '<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger py-0 px-2 btn-remove-row" title="Remove slot window">&times;</button></td>';
+                + '<option value="class" ' + (type === 'class' ? 'selected' : '') + '>'
+                + 'Class Lecture (Standard Teaching Window)</option>'
+                + '<option value="lab" ' + (type === 'lab' ? 'selected' : '') + '>'
+                + 'Laboratory Practical (Extended Block)</option>'
+                + '<option value="break" ' + (type === 'break' ? 'selected' : '') + '>'
+                + 'Break / Blockout (Lunch, Tea Break, Assembly)</option>'
+                + '<option value="exam" ' + (type === 'exam' ? 'selected' : '') + '>'
+                + 'Examination Period (Dedicated Exam Block)</option></select></td>'
+                + '<td class="text-center">'
+                + '<button type="button" class="btn btn-sm btn-outline-danger py-0 px-2 btn-remove-row" '
+                + 'title="Remove slot window">&times;</button></td>';
 
             const removeBtn = tr.querySelector('.btn-remove-row');
             if (removeBtn) {

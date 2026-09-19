@@ -293,7 +293,8 @@ echo html_writer::start_div('col-lg-5');
 
     echo html_writer::start_div('card border-0 shadow-sm bg-white rounded-3');
     echo html_writer::start_div('card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center');
-    echo html_writer::tag('h5', '<i class="fa fa-building me-2 text-secondary"></i>Configured Campus Venues (' . count($rooms) . ')', ['class' => 'mb-0 font-weight-bold text-dark']);
+    $titlelabel = '<i class="fa fa-building me-2 text-secondary"></i>Configured Campus Venues (' . count($rooms) . ')';
+    echo html_writer::tag('h5', $titlelabel, ['class' => 'mb-0 font-weight-bold text-dark']);
     echo html_writer::end_div();
 
     echo html_writer::start_div('card-body p-4');

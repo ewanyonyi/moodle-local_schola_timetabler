@@ -202,7 +202,8 @@ $header = '<!DOCTYPE html>
 
 <div class="header-print">
     <h2>' . s($site->fullname) . '</h2>
-    <p><strong>' . $headerlabel . ': ' . strtoupper($scheduletype) . '</strong> | ' . get_string('export_generated_on', 'local_schola_timetabler') . ' ' . date('F j, Y, g:i a') . '</p>
+    <p><strong>' . $headerlabel . ': ' . strtoupper($scheduletype) . '</strong> | ' .
+    get_string('export_generated_on', 'local_schola_timetabler') . ' ' . date('F j, Y, g:i a') . '</p>
 </div>';
 
 echo $header;
