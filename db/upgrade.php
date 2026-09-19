@@ -49,7 +49,7 @@ function xmldb_local_schola_timetabler_upgrade($oldversion) {
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Conditionally launch create table for local_schola_timetabler_templates.
-        upgrade_plugin_savepoint(true, 2026081300, 'local', 'academic_timetabler');
+        upgrade_plugin_savepoint(true, 2026081300, 'local', 'schola_timetabler');
     }
 
     if ($oldversion < 2026081401) {
@@ -116,7 +116,30 @@ function xmldb_local_schola_timetabler_upgrade($oldversion) {
             $dbman->create_table($templates);
         }
 
-        upgrade_plugin_savepoint(true, 2026081401, 'local', 'academic_timetabler');
+        upgrade_plugin_savepoint(true, 2026081401, 'local', 'schola_timetabler');
+    }
+
+    if ($oldversion < 2026091100) {
+        // Ensure name field exists in local_schola_timetabler_slots.
+        $slots = new xmldb_table('local_schola_timetabler_slots');
+        $slotname = new xmldb_field('name', XMLDB_TYPE_CHAR, '100', null, false, false, '');
+        if (!$dbman->field_exists($slots, $slotname)) {
+            $dbman->add_field($slots, $slotname);
+        }
+
+        // Ensure title and timecreated fields exist in local_schola_timetabler_schedules.
+        $schedules = new xmldb_table('local_schola_timetabler_schedules');
+        $schedtitle = new xmldb_field('title', XMLDB_TYPE_CHAR, '100', null, false, false, null);
+        if (!$dbman->field_exists($schedules, $schedtitle)) {
+            $dbman->add_field($schedules, $schedtitle);
+        }
+
+        $schedtime = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, false, false, '0');
+        if (!$dbman->field_exists($schedules, $schedtime)) {
+            $dbman->add_field($schedules, $schedtime);
+        }
+
+        upgrade_plugin_savepoint(true, 2026091100, 'local', 'schola_timetabler');
     }
 
     return true;

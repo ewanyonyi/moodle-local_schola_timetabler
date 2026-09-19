@@ -36,20 +36,7 @@ $PAGE->set_heading(get_string('pluginname', 'local_schola_timetabler'));
 
 $action = optional_param('action', '', PARAM_ALPHA);
 
-// Schema auto-migration check for title & timecreated columns
-global $DB;
-$dbman = $DB->get_manager();
-$schedtable = new xmldb_table('local_schola_timetabler_schedules');
-if ($dbman->table_exists($schedtable)) {
-    $fieldtitle = new xmldb_field('title', XMLDB_TYPE_CHAR, '100', null, false, false, null);
-    if (!$dbman->field_exists($schedtable, $fieldtitle)) {
-        $dbman->add_field($schedtable, $fieldtitle);
-    }
-    $fieldtimecreated = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, false, false, '0');
-    if (!$dbman->field_exists($schedtable, $fieldtimecreated)) {
-        $dbman->add_field($schedtable, $fieldtimecreated);
-    }
-}
+
 
 if ($action === 'generate' && confirm_sesskey()) {
     \core_php_time_limit::raise(600);
@@ -61,62 +48,66 @@ if ($action === 'generate' && confirm_sesskey()) {
     $rawtitle     = trim(optional_param('title', '', PARAM_TEXT));
 
     // Fallback default title if empty
-    if (empty($rawtitle)) {
-        $year = date('Y');
-        $typecaps = ucfirst($scheduletype);
-        $rawtitle = "Master {$typecaps} Timetable {$year}";
-    }
+if (empty($rawtitle)) {
+    $year = date('Y');
+    $typecaps = ucfirst($scheduletype);
+    $rawtitle = "Master {$typecaps} Timetable {$year}";
+}
 
     // Build course query based on category scope
     $params = [];
     $select = 'id > 1 AND visible = 1';
-    if ($categoryid > 0) {
-        $select .= ' AND category = :categoryid';
-        $params['categoryid'] = $categoryid;
-    }
+if ($categoryid > 0) {
+    $select .= ' AND category = :categoryid';
+    $params['categoryid'] = $categoryid;
+}
 
     $courses = $DB->get_records_select('course', $select, $params, 'id ASC');
     $slots   = $DB->get_records('local_schola_timetabler_slots');
     $rooms   = $DB->get_records('local_schola_timetabler_rooms');
 
-    if (empty($rooms)) {
-        redirect(
-            new moodle_url('/local/schola_timetabler/rooms.php'),
-            'Please configure at least one room before generating timetables.',
-            null,
-            \core\output\notification::NOTIFY_WARNING
-        );
-    }
+if (empty($rooms)) {
+    redirect(
+        new moodle_url('/local/schola_timetabler/rooms.php'),
+        'Please configure at least one room before generating timetables.',
+        null,
+        \core\output\notification::NOTIFY_WARNING
+    );
+}
 
-    if (empty($slots)) {
-        redirect(
-            new moodle_url('/local/schola_timetabler/slots.php'),
-            'Please configure time slots before generating timetables.',
-            null,
-            \core\output\notification::NOTIFY_WARNING
-        );
-    }
+if (empty($slots)) {
+    redirect(
+        new moodle_url('/local/schola_timetabler/slots.php'),
+        'Please configure time slots before generating timetables.',
+        null,
+        \core\output\notification::NOTIFY_WARNING
+    );
+}
 
-    if (empty($courses)) {
-        redirect(
-            new moodle_url('/local/schola_timetabler/index.php'),
-            'No active courses found in the selected department category.',
-            null,
-            \core\output\notification::NOTIFY_WARNING
-        );
-    }
+if (empty($courses)) {
+    redirect(
+        new moodle_url('/local/schola_timetabler/index.php'),
+        'No active courses found in the selected department category.',
+        null,
+        \core\output\notification::NOTIFY_WARNING
+    );
+}
 
-    try {
-        $solver = new \local_schola_timetabler\algorithm\solver($slots, $rooms);
-        $solver->set_slot_type(($scheduletype === 'exam') ? 'exam' : 'class');
-        $solver->load_courses($courses);
+try {
+    $solver = new \local_schola_timetabler\algorithm\solver($slots, $rooms);
+    $solver->set_slot_type(($scheduletype === 'exam') ? 'exam' : 'class');
+    $solver->load_courses($courses);
+    $rawtitle     = optional_param('timetable_title', '', PARAM_TEXT);
 
-        if ($genmode === 'append') {
-            // Load ALL existing schedule entries as hard occupied blockouts
-            $existingschedules = $DB->get_records('local_schola_timetabler_schedules');
-            $solver->load_existing_schedules($existingschedules);
-        } else if ($genmode === 'overwrite_all') {
-            // Overwrite ALL mode: Delete all schedules of selected type
+    // Filter courses by category if specified
+    $courses = $categoryid > 0
+    ? $DB->get_records('course', ['category' => $categoryid, 'visible' => 1])
+    : $DB->get_records_select('course', 'id > 1 AND visible = 1');
+
+    $solver = new \local_schola_timetabler\algorithm\solver($scheduletype, $courses);
+
+    if (!empty($courses)) {
+        if ($genmode === 'overwrite') {
             if ($categoryid > 0) {
                 $catcourseids = array_keys($courses);
                 if (!empty($catcourseids)) {
@@ -127,21 +118,25 @@ if ($action === 'generate' && confirm_sesskey()) {
             } else {
                 $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype]);
             }
-
-            // Load remaining non-deleted schedules as occupied blockouts
             $othersexisting = $DB->get_records_select('local_schola_timetabler_schedules', 'schedule_type != :stype', ['stype' => $scheduletype]);
             $solver->load_existing_schedules($othersexisting);
+        } else if ($genmode === 'append') {
+            $allactive = $DB->get_records('local_schola_timetabler_schedules');
+            $solver->load_existing_schedules($allactive);
         } else {
             // Version mode (default): Save as new named version or replace version with same title
-            $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
-            if ($hastitlecol && !empty($rawtitle)) {
+            if (!empty($rawtitle)) {
                 if ($categoryid > 0) {
                     $catcourseids = array_keys($courses);
                     if (!empty($catcourseids)) {
                         [$insql, $inparams] = $DB->get_in_or_equal($catcourseids, SQL_PARAMS_NAMED);
                         $inparams['stype']  = $scheduletype;
                         $inparams['stitle'] = $rawtitle;
-                        $DB->delete_records_select('local_schola_timetabler_schedules', "schedule_type = :stype AND title = :stitle AND courseid {$insql}", $inparams);
+                        $DB->delete_records_select(
+                            'local_schola_timetabler_schedules',
+                            "schedule_type = :stype AND title = :stitle AND courseid {$insql}",
+                            $inparams
+                        );
                     }
                 } else {
                     $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $rawtitle]);

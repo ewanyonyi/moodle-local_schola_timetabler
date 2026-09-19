@@ -40,18 +40,9 @@ $PAGE->set_title(get_string('breaks_masterlist_title', 'local_schola_timetabler'
 $PAGE->set_heading(get_string('breaks_masterlist_title', 'local_schola_timetabler'));
 
 // -------------------------------------------------------------------
-// Ensure Table Schema Support (name field on local_schola_timetabler_slots)
-// -------------------------------------------------------------------
-$dbman = $DB->get_manager();
-$table = new xmldb_table('local_schola_timetabler_slots');
-$field = new xmldb_field('name', XMLDB_TYPE_CHAR, '100', null, false, false, '');
-if (!$dbman->field_exists($table, $field)) {
-    $dbman->add_field($table, $field);
-}
-
-// -------------------------------------------------------------------
 // Handle Actions: Add, Edit, Delete
 // -------------------------------------------------------------------
+
 if ($action === 'add' && data_submitted() && confirm_sesskey()) {
     $title       = required_param('title', PARAM_TEXT);
     $daywindow   = optional_param('daywindow', 0, PARAM_INT); // 0 = All Days, 1 = Mon ... 7 = Sun

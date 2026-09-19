@@ -60,8 +60,7 @@ $PAGE->set_heading(get_string('manage_schedules', 'local_schola_timetabler'));
 if ($action === 'cleargroup' || $action === 'clearall') {
     $confirm = optional_param('confirm', 0, PARAM_INT);
     if ($confirm && confirm_sesskey()) {
-        $hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
-        if (!empty($titleparam) && $scheduletype !== 'all' && $hastitlecol) {
+        if (!empty($titleparam) && $scheduletype !== 'all') {
             $DB->delete_records('local_schola_timetabler_schedules', ['schedule_type' => $scheduletype, 'title' => $titleparam]);
             redirect(new moodle_url('/local/schola_timetabler/schedules.php'), "Timetable '{$titleparam}' cleared successfully.");
         } else if ($scheduletype !== 'all') {
@@ -287,18 +286,10 @@ $viewgrid   = optional_param('viewgrid', 0, PARAM_INT);
 // -------------------------------------------------------------------
 // Build List of Saved Generated Timetables (for Timetable Studio view)
 // -------------------------------------------------------------------
-$hastitlecol = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title');
-$hastimecol  = $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'timecreated');
-
-$groupsql = $hastitlecol
-    ? "SELECT MIN(id) AS id, schedule_type, COALESCE(title, '') AS title, " . ($hastimecol ? "MAX(timecreated)" : "0") . " AS timecreated
+$groupsql = "SELECT MIN(id) AS id, schedule_type, COALESCE(title, '') AS title, MAX(timecreated) AS timecreated
        FROM {local_schola_timetabler_schedules}
-       GROUP BY schedule_type, COALESCE(title, '')
-       ORDER BY MIN(id) ASC"
-    : "SELECT MIN(id) AS id, schedule_type, '' AS title, 0 AS timecreated
-       FROM {local_schola_timetabler_schedules}
-       GROUP BY schedule_type
-       ORDER BY MIN(id) ASC";
+   GROUP BY schedule_type, COALESCE(title, '')
+   ORDER BY MIN(id) ASC";
 
 $groups = $DB->get_records_sql($groupsql);
 
@@ -624,7 +615,7 @@ if (!$showdetails) {
         $where[] = 's.schedule_type = :stype';
         $params['stype'] = $scheduletype;
     }
-    if (!empty($titleparam) && $DB->get_manager()->field_exists('local_schola_timetabler_schedules', 'title')) {
+    if (!empty($titleparam)) {
         $where[] = 's.title = :stitle';
         $params['stitle'] = $titleparam;
     }
