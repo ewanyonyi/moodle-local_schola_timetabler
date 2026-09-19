@@ -248,17 +248,16 @@ echo html_writer::end_div(); // card
 echo html_writer::end_div(); // form col
 
 echo html_writer::start_div('col-lg-5');
-    echo html_writer::start_div('card shadow-sm h-100 bg-white border-0 rounded-3 position-relative');
-    $importhead = '<i class="fa fa-file-csv me-2 text-primary"></i>' . get_string('rooms_csv_import_title', 'local_schola_timetabler');
-    echo html_writer::tag('h5', $importhead, ['class' => 'mb-0 font-weight-bold text-primary']);
+echo html_writer::start_div('card shadow-sm h-100 bg-white rounded-3');
+$importhead = '<i class="fa fa-file-csv me-2 text-primary"></i>' . get_string('rooms_csv_import_title', 'local_schola_timetabler');
+$headerh5 = html_writer::tag('h5', $importhead, ['class' => 'mb-0 font-weight-bold text-primary']);
+$samplebtn = html_writer::link($templateurl, '<i class="fa fa-download me-1"></i> ' . get_string('sample_csv', 'local_schola_timetabler'), [
+    'class' => 'btn btn-sm btn-outline-primary font-weight-bold',
+    'title' => get_string('rooms_download_sample_title', 'local_schola_timetabler'),
+]);
+echo html_writer::div($headerh5 . $samplebtn, 'card-header bg-light p-3 border-bottom d-flex justify-content-between align-items-center');
 
-    echo html_writer::link($templateurl, '<i class="fa fa-download me-1"></i> ' . get_string('sample_csv', 'local_schola_timetabler'), [
-        'class' => 'btn btn-sm btn-outline-primary font-weight-bold',
-        'title' => get_string('rooms_download_sample_title', 'local_schola_timetabler'),
-    ]);
-    echo html_writer::end_div();
-
-    echo html_writer::start_div('card-body p-4 d-flex flex-column justify-content-between');
+echo html_writer::start_div('card-body p-4 d-flex flex-column justify-content-between');
 
     $importdesc = get_string('rooms_import_desc', 'local_schola_timetabler');
     echo html_writer::tag('p', $importdesc, ['class' => 'text-muted small mb-3']);
