@@ -286,10 +286,16 @@ $viewgrid   = optional_param('viewgrid', 0, PARAM_INT);
 // -------------------------------------------------------------------
 // Build List of Saved Generated Timetables (for Timetable Studio view)
 // -------------------------------------------------------------------
-$groupsql = "SELECT MIN(id) AS id, schedule_type, COALESCE(title, '') AS title, MAX(timecreated) AS timecreated
-       FROM {local_schola_timetabler_schedules}
-   GROUP BY schedule_type, COALESCE(title, '')
-   ORDER BY MIN(id) ASC";
+$groupsql = "SELECT MIN(id) AS id,
+                    schedule_type,
+                    COALESCE(title, '') AS title,
+                    MAX(timecreated) AS timecreated,
+                    COUNT(DISTINCT courseid) AS course_count,
+                    COUNT(DISTINCT roomid) AS room_count,
+                    COUNT(DISTINCT slotid) AS slot_count
+               FROM {local_schola_timetabler_schedules}
+           GROUP BY schedule_type, COALESCE(title, '')
+           ORDER BY MIN(id) ASC";
 
 $groups = $DB->get_records_sql($groupsql);
 
@@ -302,18 +308,6 @@ foreach ($groups as $g) {
         $rawtitle = "Master {$typecaps} Timetable 2026";
     }
 
-    if ($hastitlecol && !empty($g->title)) {
-        $wherestr = "schedule_type = :stype AND title = :stitle";
-        $wparams  = ['stype' => $stype, 'stitle' => $g->title];
-    } else {
-        $wherestr = "schedule_type = :stype";
-        $wparams  = ['stype' => $stype];
-    }
-
-    $ccourses = $DB->count_records_sql("SELECT COUNT(DISTINCT courseid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
-    $crooms   = $DB->count_records_sql("SELECT COUNT(DISTINCT roomid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
-    $cslots   = $DB->count_records_sql("SELECT COUNT(DISTINCT slotid) FROM {local_schola_timetabler_schedules} WHERE {$wherestr}", $wparams);
-
     $dateformatted = (!empty($g->timecreated) && $g->timecreated > 0)
         ? userdate($g->timecreated, '%Y-%m-%d %H:%M')
         : date('Y-m-d H:i');
@@ -323,13 +317,14 @@ foreach ($groups as $g) {
         'title'        => $rawtitle,
         'type'         => $stype,
         'raw_title'    => $g->title,
-        'course_count' => $ccourses,
-        'room_count'   => $crooms,
-        'slot_count'   => $cslots,
+        'course_count' => (int)$g->course_count,
+        'room_count'   => (int)$g->room_count,
+        'slot_count'   => (int)$g->slot_count,
         'fitness'      => '100 Score',
         'created_date' => $dateformatted,
     ];
 }
+
 
 $savedtimetablescount = count($savedschedules);
 $generateurl = new moodle_url('/local/schola_timetabler/index.php', ['action' => 'generate', 'sesskey' => sesskey()]);
