@@ -87,6 +87,7 @@ function xmldb_local_schola_timetabler_upgrade($oldversion) {
             $slots->add_field('exactdate', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
             $slots->add_field('starttime', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
             $slots->add_field('endtime', XMLDB_TYPE_CHAR, '5', null, XMLDB_NOTNULL, null, null);
+            $slots->add_field('name', XMLDB_TYPE_CHAR, '100', null, null, null, null);
             $slots->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
             $dbman->create_table($slots);
         }
@@ -94,12 +95,14 @@ function xmldb_local_schola_timetabler_upgrade($oldversion) {
         $schedules = new xmldb_table('local_schola_timetabler_schedules');
         if (!$dbman->table_exists($schedules)) {
             $schedules->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-            $schedules->add_field('schedule_type', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+            $schedules->add_field('schedule_type', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
+            $schedules->add_field('title', XMLDB_TYPE_CHAR, '100', null, null, null, null);
             $schedules->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
             $schedules->add_field('quizid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
             $schedules->add_field('roomid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
             $schedules->add_field('slotid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
             $schedules->add_field('teacherid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+            $schedules->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
             $schedules->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
             $dbman->create_table($schedules);
         }
@@ -127,8 +130,13 @@ function xmldb_local_schola_timetabler_upgrade($oldversion) {
             $dbman->add_field($slots, $slotname);
         }
 
-        // Ensure title and timecreated fields exist in local_schola_timetabler_schedules.
+        // Ensure title, schedule_type length 50, and timecreated fields exist in local_schola_timetabler_schedules.
         $schedules = new xmldb_table('local_schola_timetabler_schedules');
+        $schedtype = new xmldb_field('schedule_type', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
+        if ($dbman->field_exists($schedules, $schedtype)) {
+            $dbman->change_field_precision($schedules, $schedtype);
+        }
+
         $schedtitle = new xmldb_field('title', XMLDB_TYPE_CHAR, '100', null, false, false, null);
         if (!$dbman->field_exists($schedules, $schedtitle)) {
             $dbman->add_field($schedules, $schedtitle);
