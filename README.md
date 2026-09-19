@@ -120,7 +120,16 @@ EXIT;
 >   --adminemail=admin@example.com
 > ```
 
+> [!TIP]
+> **Resetting Admin Password**:
+> To reset the development environment admin password via CLI, run:
+> ```bash
+> cd ~/dev/moodle
+> php admin/cli/reset_password.php --username=admin --password=Password123!
+> ```
+
 ---
+
 
 ### 4. Configure Apache Virtual Host for `~/dev/moodle`
 
