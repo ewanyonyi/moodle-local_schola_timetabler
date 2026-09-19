@@ -342,19 +342,20 @@ $colinfo = get_string('slots_csv_supported', 'local_schola_timetabler', $a);
 echo html_writer::tag('div', $colinfo, ['class' => 'form-text text-muted small mt-1']);
 echo html_writer::end_div();
 
-echo html_writer::start_div('col-md-5 d-flex flex-column align-items-start gap-2 pt-3');
+echo html_writer::start_div('col-md-5 d-flex align-items-center pt-3');
 $wipelabel = ' ' . get_string('slots_wipe_before_import', 'local_schola_timetabler');
 echo html_writer::checkbox('wipe_existing', '1', true, $wipelabel, ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_csv']);
-
 echo html_writer::end_div();
 
+echo html_writer::end_div(); // row
+
+echo html_writer::start_div('mt-3 pt-3 border-top');
 echo html_writer::tag('button', '<i class="fa fa-upload me-1"></i> ' . get_string('slots_import_csv_button', 'local_schola_timetabler'), [
     'type'  => 'submit',
     'class' => 'btn btn-primary font-weight-bold px-4 py-2 shadow-sm',
 ]);
 echo html_writer::end_div();
 
-echo html_writer::end_div(); // row
 echo html_writer::end_tag('form');
 
 echo html_writer::end_div(); // card-body
@@ -446,11 +447,12 @@ echo html_writer::end_div();
 
 echo html_writer::end_div(); // row
 
+echo html_writer::start_div('mt-4 pt-3 border-top');
 $wipeapplylbl = ' ' . get_string('slots_wipe_before_applying', 'local_schola_timetabler');
+echo html_writer::start_div('mb-3');
 echo html_writer::checkbox('wipe_existing', '1', true, $wipeapplylbl, ['class' => 'form-check-input me-1', 'id' => 'chk_wipe_existing']);
-
 echo html_writer::end_div();
-echo html_writer::tag('button', get_string('slots_apply_schedule', 'local_schola_timetabler'), [
+echo html_writer::tag('button', '<i class="fa fa-check-circle me-1"></i> ' . get_string('slots_apply_schedule', 'local_schola_timetabler'), [
     'type' => 'submit', 'class' => 'btn btn-success font-weight-bold px-4 py-2 shadow-sm',
 ]);
 echo html_writer::end_div();
