@@ -40,7 +40,15 @@ if ($hassiteconfig) {
             '<a href="' . new moodle_url('/local/schola_timetabler/index.php') . '" class="btn btn-primary font-weight-bold">Open Schola Timetabler Dashboard</a>' .
             '</div>'
         ));
+
+        $settings->add(new admin_setting_configcheckbox(
+            'local_schola_timetabler/enable_cron_generation',
+            get_string('setting_enable_cron_generation', 'local_schola_timetabler'),
+            get_string('setting_enable_cron_generation_desc', 'local_schola_timetabler'),
+            0
+        ));
     }
+
 
     $ADMIN->add('localplugins', $settings);
 

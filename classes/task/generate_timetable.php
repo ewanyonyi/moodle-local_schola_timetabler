@@ -45,6 +45,11 @@ class generate_timetable extends scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
+        if (!get_config('local_schola_timetabler', 'enable_cron_generation')) {
+            mtrace('Automated daily timetable regeneration is disabled by default.');
+            return;
+        }
+
         require_once($CFG->dirroot . '/calendar/lib.php');
 
         \core_php_time_limit::raise(600);
@@ -62,6 +67,8 @@ class generate_timetable extends scheduled_task {
         if ($solver->solve_all()) {
             $solution = $solver->get_solution();
             $DB->delete_records('local_schola_timetabler_schedules');
+            $DB->delete_records('event', ['modulename' => 'local_schola_timetabler']);
+            $DB->delete_records('event', ['eventtype' => 'schola_timetable']);
 
             foreach ($solution['classes'] ?? [] as $courseid => $sched) {
                 $DB->insert_record('local_schola_timetabler_schedules', (object)[
@@ -72,12 +79,19 @@ class generate_timetable extends scheduled_task {
                     'teacherid'    => $sched['teacher_id'],
                 ]);
 
+                $roomname = isset($rooms[$sched['room_id']]) ? $rooms[$sched['room_id']]->name : '';
                 $event = new \stdClass();
-                $event->name        = 'Weekly Lecture - Room ' . $rooms[$sched['room_id']]->name;
+                $event->name        = get_string('weekly_lecture_room', 'local_schola_timetabler', $roomname);
+                $event->description = get_string('weekly_lecture_event_desc', 'local_schola_timetabler');
                 $event->courseid    = $courseid;
-                $event->eventtype   = 'course';
+                $event->groupid     = 0;
+                $event->userid      = 0;
+                $event->modulename  = 'local_schola_timetabler';
+                $event->instance    = $courseid;
+                $event->eventtype   = 'schola_timetable';
                 $event->timestart   = time();
-                $event->timeduration = 5400;
+                $event->timeduration = 3600;
+                $event->visible     = 1;
                 \calendar_event::create($event);
             }
 
